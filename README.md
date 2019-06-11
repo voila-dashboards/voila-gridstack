@@ -1,6 +1,21 @@
 # voila-gridstack
 
-Gridstack template for voila.
+A gridstack-based template for [voila](https://github.com/QuantStack/voila/).
+
+
+## Installation
+
+`voila-gridstack` can be installed from pypi
+
+```
+pip install voila-gridstack
+```
+
+## Example usage
+
+To use the `gridstack` template, just pass `--template=gridstack` to the `voila` command line.
+
+![voila-gridstack](voila-gridstack.gif)
 
 ## License
 

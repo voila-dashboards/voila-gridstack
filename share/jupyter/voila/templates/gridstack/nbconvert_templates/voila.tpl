@@ -45,6 +45,10 @@
     background: var(--jp-layout-color3);
     color: var(--jp-ui-font-color0);
 }
+
+body {
+    overflow: scroll;
+}
 </style>
 
 {{ mathjax() }}
