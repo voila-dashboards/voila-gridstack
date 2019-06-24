@@ -1,4 +1,4 @@
-{%- extends 'base.tpl' -%}
+{%- extends 'voila/templates/default/base.tpl' -%}
 {% from 'mathjax.tpl' import mathjax %}
 
 {% block html_head_js %}
