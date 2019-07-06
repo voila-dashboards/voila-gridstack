@@ -1,6 +1,36 @@
 {%- extends 'base.tpl' -%}
 {% from 'mathjax.tpl' import mathjax %}
 
+{% block html_head_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js"></script>
+<script src="http://gridstackjs.com/dist/gridstack.js"></script>
+<script src="http://gridstackjs.com/dist/gridstack.jQueryUI.js"></script>
+<script type="text/javascript">
+    // bqplot doesn't resize when resizing the tile, fix: fake a resize event
+    var resize_workaround = _.debounce(() => {
+        window.dispatchEvent(new Event('resize'));
+    }, 100)
+    $(function () {
+        $('.grid-stack').gridstack({
+            width: 12,
+            alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+            resizable: {
+                handles: 'e, se, s, sw, w'
+            },
+            draggable: {
+                handle: '.gridhandle',
+            }
+        }).on('resizestop', function(event, elem) {
+            resize_workaround()
+        });
+    });
+</script>
+{{ super() }}
+{% endblock html_head_js%}
+
 {% block html_head_css %}
 <link href="http://gridstackjs.com/dist/gridstack.css" rel="stylesheet">
 
@@ -105,33 +135,3 @@ body {
 </div>
 {% endblock codecell %}
 
-{% block footer_js %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js"></script>
-<script src="http://gridstackjs.com/dist/gridstack.js"></script>
-<script src="http://gridstackjs.com/dist/gridstack.jQueryUI.js"></script>
-<script type="text/javascript">
-    // bqplot doesn't resize when resizing the tile, fix: fake a resize event
-    var resize_workaround = _.debounce(() => {
-        window.dispatchEvent(new Event('resize'));
-    }, 100)
-    $(function () {
-        $('.grid-stack').gridstack({
-            width: 12,
-            alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
-            resizable: {
-                handles: 'e, se, s, sw, w'
-            },
-            draggable: {
-                handle: '.gridhandle',
-            }
-        }).on('resizestop', function(event, elem) {
-            resize_workaround()
-        });
-    });
-</script>
-
-{{ super() }}
-
-{% endblock footer_js %}
