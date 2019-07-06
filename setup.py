@@ -8,11 +8,11 @@ for root, dirs, files in os.walk('share'):
 
 setup_args = {
     'name': 'voila-gridstack',
-    'version': '0.0.4',
+    'version': '0.0.5',
     'packages': [],
     'data_files': data_files,
     'install_requires': [
-        'voila'
+        'voila>=0.1.5,<0.2'
     ],
     'author': 'QuantStack',
     'author_email': 'info@quantstack.net',
