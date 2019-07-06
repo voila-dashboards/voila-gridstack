@@ -32,7 +32,7 @@
 {% endblock html_head_js%}
 
 {% block html_head_css %}
-<link href="http://gridstackjs.com/dist/gridstack.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{{resources.base_url}}voila/static/index.css"></link>
 
 {% if resources.theme == 'dark' %}
     <link rel="stylesheet" type="text/css" href="{{resources.base_url}}voila/static/theme-dark.css"></link>
@@ -45,6 +45,8 @@
     {{ css }}
     </style>
 {% endfor %}
+
+<link href="http://gridstackjs.com/dist/gridstack.css" rel="stylesheet">
 
 {{ super() }}
 
@@ -86,9 +88,9 @@ body {
 
 {% block body %}
 {% if resources.theme == 'dark' %}
-<body class="jp-Notebook theme-dark" data-base-url="{{resources.base_url}}voila/">
+<body class="theme-dark" data-base-url="{{resources.base_url}}voila/">
 {% else %}
-<body class="jp-Notebook theme-light" data-base-url="{{resources.base_url}}voila/">
+<body class="theme-light" data-base-url="{{resources.base_url}}voila/">
 {% endif %}
 <section id="demo" class="voila-gridstack">
     <div class="container">

@@ -12,7 +12,7 @@ setup_args = {
     'packages': [],
     'data_files': data_files,
     'install_requires': [
-        'voila>=0.1.5,<0.2'
+        'voila>=0.1.6,<0.2'
     ],
     'author': 'QuantStack',
     'author_email': 'info@quantstack.net',
