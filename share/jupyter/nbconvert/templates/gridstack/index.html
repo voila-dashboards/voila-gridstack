@@ -1,5 +1,4 @@
-{%- extends 'voila/templates/default/base.tpl' -%}
-{% from 'mathjax.tpl' import mathjax %}
+{%- extends 'lab/index.html' -%}
 
 {% block html_head_js %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
@@ -8,6 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js"></script>
 <script src="http://gridstackjs.com/dist/gridstack.js"></script>
 <script src="http://gridstackjs.com/dist/gridstack.jQueryUI.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script type="text/javascript">
     // bqplot doesn't resize when resizing the tile, fix: fake a resize event
     var resize_workaround = _.debounce(() => {
@@ -29,27 +29,21 @@
     });
 </script>
 {{ super() }}
+{{ resources.include_css("static/index.css") }}
 {% endblock html_head_js%}
 
+
+{%- block html_head_js_requirejs -%}
+{%- endblock html_head_js_requirejs -%}
+
+
 {% block html_head_css %}
-<link rel="stylesheet" type="text/css" href="{{resources.base_url}}voila/static/index.css"></link>
-
-{% if resources.theme == 'dark' %}
-    <link rel="stylesheet" type="text/css" href="{{resources.base_url}}voila/static/theme-dark.css"></link>
-{% else %}
-    <link rel="stylesheet" type="text/css" href="{{resources.base_url}}voila/static/theme-light.css"></link>
-{% endif %}
-
-{% for css in resources.inlining.css %}
-    <style type="text/css">
-    {{ css }}
-    </style>
-{% endfor %}
-
 <link href="http://gridstackjs.com/dist/gridstack.css" rel="stylesheet">
-
 {{ super() }}
+{% endblock html_head_css %}
 
+{% block html_head %}
+{{ super() }}
 <style>
 .cell, .output_wrapper, .output, .output_area, .output_subarea, .widget-subarea {
     display: flex;
@@ -80,18 +74,15 @@
 
 body {
     overflow: scroll;
+    
+}
+.jp-Notebook {
+    background: var(--jp-layout-color3);
 }
 </style>
+{% endblock html_head %}
 
-{{ mathjax() }}
-{% endblock html_head_css %}
-
-{% block body %}
-{% if resources.theme == 'dark' %}
-<body class="theme-dark" data-base-url="{{resources.base_url}}voila/">
-{% else %}
-<body class="theme-light" data-base-url="{{resources.base_url}}voila/">
-{% endif %}
+{% block body_content %}
 <section id="demo" class="voila-gridstack">
     <div class="container">
         <div class="row">
@@ -102,7 +93,9 @@ body {
         </div>
 
         <div class="grid-stack" data-gs-width="12" data-gs-animate="yes">
-                {{ super() }}
+                {%- block body_cells -%}
+                    {{ super() }}
+                {%- endblock body_cells -%}
                 <!-- <div class="grid-stack-item" data-gs-x="0" data-gs-y="0" data-gs-width="4" data-gs-height="2">
                 <div class="grid-stack-item-content">
                 </div> -->
@@ -110,8 +103,7 @@ body {
         </div>
     </div>
 </section>
-</body>
-{% endblock body %}
+{% endblock body_content %}
 
 {% block markdowncell scoped %}
 <div class="grid-stack-item" data-gs-width="12" data-gs-height="2" data-gs-auto-position='true'>
@@ -136,4 +128,3 @@ body {
     </div>
 </div>
 {% endblock codecell %}
-
