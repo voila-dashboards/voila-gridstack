@@ -6,7 +6,13 @@ A gridstack-based template for [voila](https://github.com/QuantStack/voila/).
 
 ## Installation
 
-`voila-gridstack` can be installed from pypi
+`voila-gridstack` can be installed with the conda package manager
+
+```
+conda install -c conda-forge voila-gridstack
+```
+
+or from pypi
 
 ```
 pip install voila-gridstack
@@ -14,7 +20,7 @@ pip install voila-gridstack
 
 ## Example usage
 
-To use the `gridstack` template, just pass `--template=gridstack` to the `voila` command line.
+To use the `gridstack` template, pass option `--template=gridstack` to the `voila` command line.
 
 ![voila-gridstack](voila-gridstack.gif)
 
