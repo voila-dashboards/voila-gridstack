@@ -16,7 +16,7 @@ setup_args = {
     ],
     'author': 'QuantStack',
     'author_email': 'info@quantstack.net',
-    'url': 'https://github.com/QuantStack/voila-gridstack/'
+    'url': 'https://github.com/voila-dashboards/voila-gridstack/'
 }
 
 if __name__ == '__main__':

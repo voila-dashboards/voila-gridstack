@@ -2,7 +2,7 @@
 
 [![Join the Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/QuantStack/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-A gridstack-based template for [voila](https://github.com/QuantStack/voila/).
+A gridstack-based template for [Voilà](https://github.com/voila-gridstack/voila/).
 
 ## Installation
 
@@ -12,13 +12,13 @@ A gridstack-based template for [voila](https://github.com/QuantStack/voila/).
 conda install -c conda-forge voila-gridstack
 ```
 
-or from pypi
+or from PyPI
 
 ```
 pip install voila-gridstack
 ```
 
-## Example usage
+## Usage
 
 To use the `gridstack` template, pass option `--template=gridstack` to the `voila` command line.
 
