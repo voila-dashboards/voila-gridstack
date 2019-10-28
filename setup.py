@@ -14,6 +14,12 @@ setup_args = {
     'install_requires': [
         'voila>=0.1.6,<0.2'
     ],
+    'extras_require': {
+        'test': [
+            'pytest',
+            'pytest-tornado'
+        ]
+    },
     'author': 'QuantStack',
     'author_email': 'info@quantstack.net',
     'url': 'https://github.com/voila-dashboards/voila-gridstack/'
