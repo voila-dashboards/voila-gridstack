@@ -3,6 +3,7 @@ import os
 import pytest
 
 import voila.app
+from lxml import etree
 
 BASE_DIR = os.path.dirname(__file__)
 
@@ -50,5 +51,10 @@ def test_template_test(http_client, base_url):
     response = yield http_client.fetch(base_url)
     assert response.code == 200
     html_body = response.body.decode('utf-8')
-    assert 'data-gs-width="4"' in html_body
-    assert 'data-gs-height="4"' in html_body
+    assert 'data-gs-width="6"' in html_body
+    assert 'data-gs-height="5"' in html_body
+    parser = etree.HTMLParser()
+    tree = etree.fromstring(html_body, parser=parser)
+    elem = tree.xpath("//pre[text()='Hi !\n']/ancestor::div[@class='grid-stack-item']")[0]
+    assert elem.attrib['data-gs-width'] == '6'
+    assert elem.attrib['data-gs-height'] == '5'

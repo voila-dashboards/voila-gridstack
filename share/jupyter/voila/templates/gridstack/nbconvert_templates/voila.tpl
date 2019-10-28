@@ -121,8 +121,8 @@ body {
 {% endblock markdowncell %}
 
 {% block codecell %}
-{% if cell.metadata.grid_rows %}
-<div class="grid-stack-item" data-gs-width="{{ cell.metadata.grid_columns }}" data-gs-height="{{ cell.metadata.grid_rows }}" data-gs-auto-position='true'>
+{% if cell.metadata.extensions.jupyter_dashboards %}
+<div class="grid-stack-item" data-gs-width="{{ cell.metadata.extensions.jupyter_dashboards.views.grid_default.width }}" data-gs-height="{{ cell.metadata.extensions.jupyter_dashboards.views.grid_default.height }}" data-gs-auto-position='true'>
     <!-- custom width/height -->
 {% else %}
 <div class="grid-stack-item" data-gs-width="4" data-gs-height="4" data-gs-auto-position='true'>
