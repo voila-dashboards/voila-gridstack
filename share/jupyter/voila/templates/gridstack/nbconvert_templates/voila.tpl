@@ -112,17 +112,24 @@ body {
 </body>
 {% endblock body %}
 
+{% set active_view = nb.metadata.extensions.jupyter_dashboards.activeView %}
+
 {% block markdowncell scoped %}
-<div class="grid-stack-item" data-gs-width="12" data-gs-height="2" data-gs-auto-position='true'>
-    <div class="grid-stack-item-content">
-        {{ super() }}
+    {% set view_data = cell.metadata.extensions.jupyter_dashboards.views[active_view] %}
+    {%- if not view_data.hidden %} 
+    <div class="grid-stack-item" data-gs-width="12" data-gs-height="2" data-gs-auto-position='true'>
+        <div class="grid-stack-item-content">
+            {{ super() }}
+        </div>
     </div>
-</div>
+    {% endif %}
 {% endblock markdowncell %}
 
-{% block codecell %}
+{% block codecell scoped %}
+{% set view_data = cell.metadata.extensions.jupyter_dashboards.views[active_view] %}
+{% if not view_data.hidden %} 
 {% if cell.metadata.extensions.jupyter_dashboards %}
-<div class="grid-stack-item" data-gs-width="{{ cell.metadata.extensions.jupyter_dashboards.views.grid_default.width }}" data-gs-height="{{ cell.metadata.extensions.jupyter_dashboards.views.grid_default.height }}" data-gs-auto-position='true'>
+<div class="grid-stack-item" data-gs-width="{{ view_data.width }}" data-gs-height="{{ view_data.height }}" data-gs-auto-position='true'>
     <!-- custom width/height -->
 {% else %}
 <div class="grid-stack-item" data-gs-width="4" data-gs-height="4" data-gs-auto-position='true'>
@@ -134,4 +141,5 @@ body {
     {{ super() }}
     </div>
 </div>
+{% endif %}
 {% endblock codecell %}
