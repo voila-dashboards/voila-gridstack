@@ -32,12 +32,12 @@
 {% endblock html_head_js%}
 
 {% block html_head_css %}
-<link rel="stylesheet" type="text/css" href="{{resources.base_url}}voila/static/index.css"></link>
+<link rel="stylesheet" type="text/css" href="{{resources.base_url}}voila/static/index.css" />
 
 {% if resources.theme == 'dark' %}
-    <link rel="stylesheet" type="text/css" href="{{resources.base_url}}voila/static/theme-dark.css"></link>
+    <link rel="stylesheet" type="text/css" href="{{resources.base_url}}voila/static/theme-dark.css" />
 {% else %}
-    <link rel="stylesheet" type="text/css" href="{{resources.base_url}}voila/static/theme-light.css"></link>
+    <link rel="stylesheet" type="text/css" href="{{resources.base_url}}voila/static/theme-light.css" />
 {% endif %}
 
 {% for css in resources.inlining.css %}
@@ -46,7 +46,7 @@
     </style>
 {% endfor %}
 
-<link href="http://gridstackjs.com/dist/gridstack.css" rel="stylesheet">
+<link href="http://gridstackjs.com/dist/gridstack.css" rel="stylesheet" />
 
 {{ super() }}
 
@@ -107,7 +107,6 @@ body {
                 <div class="grid-stack-item-content">
                 </div> -->
         </div>
-        </div>
     </div>
 </section>
 </body>
@@ -136,4 +135,3 @@ body {
     </div>
 </div>
 {% endblock codecell %}
-
