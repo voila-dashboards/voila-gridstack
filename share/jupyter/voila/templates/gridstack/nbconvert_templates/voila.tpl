@@ -117,7 +117,11 @@ body {
 {% block markdowncell scoped %}
     {% set view_data = cell.metadata.extensions.jupyter_dashboards.views[active_view] %}
     {%- if not view_data.hidden %} 
-    <div class="grid-stack-item" data-gs-width="12" data-gs-height="2" data-gs-auto-position='true'>
+    <div class="grid-stack-item"
+         data-gs-width="{{ view_data.width }}" 
+         data-gs-height="{{ view_data.height }}"
+         data-gs-y="{{ view_data.row }}"
+         data-gs-x="{{ view_data.col }}">
         <div class="grid-stack-item-content">
             {{ super() }}
         </div>
@@ -129,7 +133,11 @@ body {
 {% set view_data = cell.metadata.extensions.jupyter_dashboards.views[active_view] %}
 {% if not view_data.hidden %} 
 {% if cell.metadata.extensions.jupyter_dashboards %}
-<div class="grid-stack-item" data-gs-width="{{ view_data.width }}" data-gs-height="{{ view_data.height }}" data-gs-auto-position='true'>
+<div class="grid-stack-item"
+     data-gs-width="{{ view_data.width }}" 
+     data-gs-height="{{ view_data.height }}"
+     data-gs-y="{{ view_data.row }}"
+     data-gs-x="{{ view_data.col }}">
     <!-- custom width/height -->
 {% else %}
 <div class="grid-stack-item" data-gs-width="4" data-gs-height="4" data-gs-auto-position='true'>
