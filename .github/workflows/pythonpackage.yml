@@ -31,3 +31,11 @@ jobs:
       run: |
         python -m pip install ".[test]"
         pytest
+    - name: HTML validator
+      run: |
+        python -m pip install html5validator
+        voila --template=gridstack --no-browser &
+        sleep 2
+        mkdir _crawled
+        curl http://127.0.0.1:8866/voila/render/tests/nb.ipynb > _crawled/nb.html
+        html5validator || true
