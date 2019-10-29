@@ -38,4 +38,4 @@ jobs:
         sleep 2
         mkdir _crawled
         curl http://127.0.0.1:8866/voila/render/tests/nb.ipynb > _crawled/nb.html
-        html5validator
+        html5validator || true
