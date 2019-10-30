@@ -31,7 +31,6 @@ def test_template_test(http_client, base_url):
     assert elem.attrib['data-gs-x'] == '0'
     assert elem.attrib['data-gs-y'] == '5'
 
-
     # test hidden cell
     elem = tree.xpath("//*[text()='This is a hidden cell.']")
     assert not elem
@@ -39,3 +38,7 @@ def test_template_test(http_client, base_url):
     # test absence of handles
     elem = tree.xpath("//div[contains(@class, 'gridhandle')]")
     assert not elem
+
+    assert "cellHeight: 40" in html_body
+    assert "width: 12" in html_body
+    assert "verticalMargin: 10" in html_body

@@ -23,4 +23,4 @@ def test_resources_gridstack_show_handles(http_client, base_url):
     tree = etree.fromstring(html_body, parser=parser)
 
     elem = tree.xpath("//div[@class='gridhandle']")
-    assert  elem
+    assert elem

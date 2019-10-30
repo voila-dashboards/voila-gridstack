@@ -1,7 +1,10 @@
 {%- extends 'base.tpl' -%}
 {% from 'mathjax.tpl' import mathjax %}
 
-{% block html_head_js %}
+{% set active_view = nb.metadata.extensions.jupyter_dashboards.activeView %}
+{% set gridstack_conf = nb.metadata.extensions.jupyter_dashboards.views[active_view] %}
+
+{% block html_head_js scoped %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
@@ -17,9 +20,18 @@
         $('.grid-stack').gridstack({
             width: 12,
             alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+            {% if resources.gridstack.show_handles %}
             resizable: {
                 handles: 'e, se, s, sw, w'
             },
+            {% else %}
+            resizable: {
+                handles: 'none'
+            },
+            {% endif %} 
+            cellHeight: {{gridstack_conf.defaultCellHeight}}, 
+            width: {{gridstack_conf.maxColumns}}, 
+            verticalMargin: {{gridstack_conf.cellMargin}},
             draggable: {
                 handle: '.gridhandle',
             }
@@ -74,7 +86,13 @@
 }
 
 .voila-gridstack {
+{% if resources.gridstack.show_handles  %}
     background: var(--jp-layout-color3);
+{% else %}
+    background: var(--jp-layout-color0);
+{% endif %}
+    
+
     color: var(--jp-ui-font-color0);
 }
 
@@ -94,12 +112,6 @@ body {
 {% endif %}
 <section id="demo" class="voila-gridstack">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h2>Voila + Gridstack.js demo</h2>
-                <hr class="star-light">
-            </div>
-        </div>
 
         <div class="grid-stack" data-gs-width="12" data-gs-animate="yes">
                 {{ super() }}
@@ -112,7 +124,6 @@ body {
 </body>
 {% endblock body %}
 
-{% set active_view = nb.metadata.extensions.jupyter_dashboards.activeView %}
 
 {% block markdowncell scoped %}
     {% set view_data = cell.metadata.extensions.jupyter_dashboards.views[active_view] %}
@@ -123,6 +134,11 @@ body {
          data-gs-y="{{ view_data.row }}"
          data-gs-x="{{ view_data.col }}">
         <div class="grid-stack-item-content">
+            {% if resources.gridstack.show_handles %}
+            <div class="gridhandle">
+                <i class=" fa fa-arrows"></i>
+            </div>
+            {% endif %}
             {{ super() }}
         </div>
     </div>
@@ -143,9 +159,11 @@ body {
 <div class="grid-stack-item" data-gs-width="4" data-gs-height="4" data-gs-auto-position='true'>
 {% endif %}
     <div class="grid-stack-item-content">
+        {% if resources.gridstack.show_handles %}
         <div class="gridhandle">
             <i class=" fa fa-arrows"></i>
         </div>
+        {% endif %}
     {{ super() }}
     </div>
 </div>
