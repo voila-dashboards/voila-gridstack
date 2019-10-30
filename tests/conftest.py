@@ -35,7 +35,6 @@ def app(voila_app):
 def voila_config():
     return lambda app: None
 
-
 @pytest.fixture
 def voila_args():
     nb_path = os.path.join(BASE_DIR, 'nb.ipynb')

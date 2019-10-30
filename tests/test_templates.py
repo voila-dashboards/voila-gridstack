@@ -1,8 +1,27 @@
+import os
 import pytest
 from lxml import etree
 
+BASE_DIR = os.path.dirname(__file__)
+
+@pytest.fixture(params=['a', 'b'])
+def voila_resources(request):
+    return request.param
+
+@pytest.fixture
+def voila_args(voila_resources):
+    nb_path = os.path.join(BASE_DIR, 'nb.ipynb')
+    return [nb_path, '--VoilaTest.config_file_paths=[]', '--VoilaConfiguration.resources={"a" : "%s"}' % voila_resources]
+
 @pytest.mark.gen_test
-def test_template_test(http_client, base_url):
+def test_radom_test(http_client, base_url, voila_resources):
+    response = yield http_client.fetch(base_url)
+    assert response.code == 200
+    html_body = response.body.decode('utf-8')
+    assert "Resources: {}".format(voila_resources) in html_body
+
+@pytest.mark.gen_test
+def test_template_test(http_client, base_url, voila_resources):
     response = yield http_client.fetch(base_url)
     assert response.code == 200
     html_body = response.body.decode('utf-8')

@@ -112,6 +112,7 @@ body {
 {% endif %}
 <section id="demo" class="voila-gridstack">
     <div class="container">
+    <h1>Resources: {{resources.a}}</h1>
 
         <div class="grid-stack" data-gs-width="12" data-gs-animate="yes">
                 {{ super() }}
