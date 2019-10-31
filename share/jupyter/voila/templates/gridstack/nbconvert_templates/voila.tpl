@@ -130,12 +130,12 @@ body {
 {% endblock body %}
 
 
-{% block markdowncell scoped %}
+{% block any_cell scoped %}
     {% set cell_jupyter_dashboards = cell.metadata.get('extensions', {}).get('jupyter_dashboards', {}) %}
     {% set view_data = cell_jupyter_dashboards.get('views', {}).get(active_view, {}) %}
     {% set hidden = view_data.get('hidden') %}
     {% set auto_position = ('row' not in view_data or 'col' not in view_data) %}
-    {%- if not hidden %} 
+    {%- if not hidden and cell.cell_type in ['markdown', 'code'] %} 
     <div class="grid-stack-item"
          data-gs-width="{{ view_data.width | default(12) }}" 
          data-gs-height="{{ view_data.height | default(2) }}"
@@ -156,31 +156,4 @@ body {
         </div>
     </div>
     {% endif %}
-{% endblock markdowncell %}
-
-{% block codecell scoped %}
-{% set cell_jupyter_dashboards = cell.metadata.get('extensions', {}).get('jupyter_dashboards', {}) %}
-{% set view_data = cell_jupyter_dashboards.get('views', {}).get(active_view, {}) %}
-{% set hidden = view_data.get('hidden') %}
-{% if not hidden %}
-{% if view_data %}
-<div class="grid-stack-item"
-     data-gs-width="{{ view_data.width | default(12)}}" 
-     data-gs-height="{{ view_data.height | default(2)}}"
-     data-gs-y="{{ view_data.row }}"
-     data-gs-x="{{ view_data.col }}">
-    <!-- custom width/height -->
-{% else %}
-<div class="grid-stack-item" data-gs-width="12" data-gs-height="2" data-gs-auto-position='true'>
-{% endif %}
-    <div class="grid-stack-item-content">
-        {% if resources.gridstack.show_handles %}
-        <div class="gridhandle">
-            <i class=" fa fa-arrows"></i>
-        </div>
-        {% endif %}
-    {{ super() }}
-    </div>
-</div>
-{% endif %}
-{% endblock codecell %}
+{% endblock any_cell %}
