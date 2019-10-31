@@ -1,17 +1,9 @@
 {%- extends 'base.tpl' -%}
 {% from 'mathjax.tpl' import mathjax %}
 
-{% if nb.metadata.extensions.jupyter_dashboards.activeView is defined %}
-    {% set active_view = nb.metadata.extensions.jupyter_dashboards.activeView %}
-{% else %}
-    {% set active_view = "grid_default" %}
-{% endif %}
-{% if nb.metadata.extensions.jupyter_dashboards.views[active_view] is defined %}
-    {% set gridstack_conf = nb.metadata.extensions.jupyter_dashboards.views[active_view] %}
-{% else %}
-    {% set gridstack_conf = {} %}
-{% endif %}
-
+{% set jupyter_dashboards = nb.metadata.get('extensions', {}).get('jupyter_dashboards', {}) %}
+{% set active_view = jupyter_dashboards.get('activeView', 'grid_default') %}
+{% set gridstack_conf = jupyter_dashboards.get('views', {}).get(active_view, {}) %}
 
 {% block html_head_js scoped %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
@@ -126,9 +118,7 @@ body {
 {% endif %}
 <section id="demo" class="voila-gridstack">
     <div class="container">
-    <h1>Resources: {{resources.a}}</h1>
-
-        <div class="grid-stack" data-gs-width="12" data-gs-animate="yes">
+        <div class="grid-stack" data-gs-animate="yes">
                 {{ super() }}
                 <!-- <div class="grid-stack-item" data-gs-x="0" data-gs-y="0" data-gs-width="4" data-gs-height="2">
                 <div class="grid-stack-item-content">
@@ -141,8 +131,10 @@ body {
 
 
 {% block markdowncell scoped %}
-    {% set view_data = cell.metadata.extensions.jupyter_dashboards.views[active_view] %}
-    {%- if not view_data.hidden %} 
+    {% set cell_jupyter_dashboards = cell.metadata.get('extensions', {}).get('jupyter_dashboards', {}) %}
+    {% set view_data = cell_jupyter_dashboards.get('views', {}).get(active_view, {}) %}
+    {% set hidden = view_data.get('hidden') %}
+    {%- if not hidden %} 
     <div class="grid-stack-item"
          data-gs-width="{{ view_data.width }}" 
          data-gs-height="{{ view_data.height }}"
@@ -161,9 +153,11 @@ body {
 {% endblock markdowncell %}
 
 {% block codecell scoped %}
-{% set view_data = cell.metadata.extensions.jupyter_dashboards.views[active_view] %}
-{% if not view_data.hidden %} 
-{% if cell.metadata.extensions.jupyter_dashboards %}
+{% set cell_jupyter_dashboards = cell.metadata.get('extensions', {}).get('jupyter_dashboards', {}) %}
+{% set view_data = cell_jupyter_dashboards.get('views', {}).get(active_view, {}) %}
+{% set hidden = view_data.get('hidden') %}
+{% if not hidden %}
+{% if view_data %}
 <div class="grid-stack-item"
      data-gs-width="{{ view_data.width }}" 
      data-gs-height="{{ view_data.height }}"
