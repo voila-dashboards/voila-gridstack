@@ -18,24 +18,27 @@ def test_render_without_metadata(http_client, base_url):
     parser = etree.HTMLParser()
     tree = etree.fromstring(html_body, parser=parser)
 
-    elem = tree.xpath("//pre[text()='Hi !\n']")
-    assert elem
+    text_elem = tree.xpath("//pre[text()='Hi !\n']")
+    assert text_elem
 
-    elem = tree.xpath("//*[text()='This is a hidden cell.']")
-    assert elem
+    hidden_elem = tree.xpath("//*[text()='This is a hidden cell.']")
+    assert hidden_elem
 
-    elem = tree.xpath("//pre[text()='2']")
-    assert elem
+    expr_elem = tree.xpath("//pre[text()='2']")
+    assert expr_elem
 
     md_elem = tree.xpath("//h1[text()='This is markdown']")
     assert md_elem
 
-    md_attribs = md_elem[0].xpath("ancestor::div[@class='grid-stack-item']")[0].attrib
-    assert md_attribs['data-gs-auto-position']
-    assert 'data-gs-x' not in md_attribs
-    assert 'data-gs-y' not in md_attribs
-    assert md_attribs['data-gs-width'] == '12'
-    assert md_attribs['data-gs-height'] == '2'
+    all_elements = text_elem + hidden_elem + expr_elem + md_elem
+
+    for elem in all_elements:
+        attribs = elem.xpath("ancestor::div[@class='grid-stack-item']")[0].attrib
+        assert attribs['data-gs-auto-position'] == 'true'
+        assert 'data-gs-x' not in attribs
+        assert 'data-gs-y' not in attribs
+        assert attribs['data-gs-width'] == '12'
+        assert attribs['data-gs-height'] == '2'
 
     # check if the document is properly ended
     assert "</html>" in html_body

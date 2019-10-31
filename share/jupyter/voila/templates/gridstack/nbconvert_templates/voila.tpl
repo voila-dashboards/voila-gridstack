@@ -171,7 +171,7 @@ body {
      data-gs-x="{{ view_data.col }}">
     <!-- custom width/height -->
 {% else %}
-<div class="grid-stack-item" data-gs-width="4" data-gs-height="4" data-gs-auto-position='true'>
+<div class="grid-stack-item" data-gs-width="12" data-gs-height="2" data-gs-auto-position='true'>
 {% endif %}
     <div class="grid-stack-item-content">
         {% if resources.gridstack.show_handles %}
