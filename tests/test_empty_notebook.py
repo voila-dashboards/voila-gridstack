@@ -27,9 +27,15 @@ def test_render_without_metadata(http_client, base_url):
     elem = tree.xpath("//pre[text()='2']")
     assert elem
 
-    elem = tree.xpath("//h1[text()='This is markdown']")
-    assert elem
+    md_elem = tree.xpath("//h1[text()='This is markdown']")
+    assert md_elem
+
+    md_attribs = md_elem[0].xpath("ancestor::div[@class='grid-stack-item']")[0].attrib
+    assert md_attribs['data-gs-auto-position']
+    assert 'data-gs-x' not in md_attribs
+    assert 'data-gs-y' not in md_attribs
+    assert md_attribs['data-gs-width'] == '12'
+    assert md_attribs['data-gs-height'] == '2'
 
     # check if the document is properly ended
     assert "</html>" in html_body
-    assert False

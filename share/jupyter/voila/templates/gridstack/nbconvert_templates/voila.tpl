@@ -134,12 +134,18 @@ body {
     {% set cell_jupyter_dashboards = cell.metadata.get('extensions', {}).get('jupyter_dashboards', {}) %}
     {% set view_data = cell_jupyter_dashboards.get('views', {}).get(active_view, {}) %}
     {% set hidden = view_data.get('hidden') %}
+    {% set auto_position = ('row' not in view_data or 'col' not in view_data) %}
     {%- if not hidden %} 
     <div class="grid-stack-item"
-         data-gs-width="{{ view_data.width }}" 
-         data-gs-height="{{ view_data.height }}"
+         data-gs-width="{{ view_data.width | default(12) }}" 
+         data-gs-height="{{ view_data.height | default(2) }}"
+         {% if auto_position %}
+         data-gs-auto-position=true
+         {% else %}
          data-gs-y="{{ view_data.row }}"
-         data-gs-x="{{ view_data.col }}">
+         data-gs-x="{{ view_data.col }}",
+         {% endif %}
+     >
         <div class="grid-stack-item-content">
             {% if resources.gridstack.show_handles %}
             <div class="gridhandle">
@@ -159,8 +165,8 @@ body {
 {% if not hidden %}
 {% if view_data %}
 <div class="grid-stack-item"
-     data-gs-width="{{ view_data.width }}" 
-     data-gs-height="{{ view_data.height }}"
+     data-gs-width="{{ view_data.width | default(12)}}" 
+     data-gs-height="{{ view_data.height | default(2)}}"
      data-gs-y="{{ view_data.row }}"
      data-gs-x="{{ view_data.col }}">
     <!-- custom width/height -->
