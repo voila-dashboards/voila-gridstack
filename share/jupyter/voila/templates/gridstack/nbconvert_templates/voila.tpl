@@ -18,7 +18,6 @@
     }, 100)
     $(function () {
         $('.grid-stack').gridstack({
-            width: 12,
             alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
             {% if resources.gridstack.show_handles %}
             resizable: {
@@ -29,9 +28,15 @@
                 handles: 'none'
             },
             {% endif %} 
+            {% if gridstack_conf.defaultCellHeight %}
             cellHeight: {{gridstack_conf.defaultCellHeight}}, 
+            {% endif %}
+            {% if gridstack_conf.maxColumns %}
             width: {{gridstack_conf.maxColumns}}, 
+            {% endif %}
+            {% if gridstack_conf.cellMargin is defined %}
             verticalMargin: {{gridstack_conf.cellMargin}},
+            {% endif %}
             draggable: {
                 handle: '.gridhandle',
             }
