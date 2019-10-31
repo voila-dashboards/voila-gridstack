@@ -6,6 +6,11 @@ import tempfile
 
 BASE_DIR = os.path.dirname(__file__)
 
+@pytest.fixture(
+    params=[None, 'grid_default', 'report_default'],
+    ids="activeView={}".format)
+def activeView(request):
+    return request.param
 
 @pytest.fixture(params=[None, 20], ids="defaultCellHeight={}".format)
 def defaultCellHeight(request):
@@ -23,7 +28,7 @@ def maxColumns(request):
 
 
 @pytest.fixture
-def nb_metadata(defaultCellHeight, cellMargin, maxColumns):
+def nb_metadata(defaultCellHeight, cellMargin, maxColumns, activeView):
     grid_default = {"name": "grid", "type": "grid"}
     if defaultCellHeight is not None:
         grid_default['defaultCellHeight'] = defaultCellHeight
@@ -31,11 +36,13 @@ def nb_metadata(defaultCellHeight, cellMargin, maxColumns):
         grid_default['cellMargin'] = cellMargin
     if maxColumns is not None:
         grid_default['maxColumns'] = maxColumns
+    activeView_dict = {"activeView": activeView} if activeView else {}
     return {"extensions": {
                "jupyter_dashboards":  {
-                   "activeView": "grid_default",
                    "views": {
-                       "grid_default": grid_default}}}}
+                       "grid_default": grid_default},
+                   **activeView_dict
+                   }}}
 
 
 @pytest.fixture
@@ -63,6 +70,7 @@ def test_gridstack_general_conf(http_client, base_url, nb_metadata):
     gridstack_config = tree.xpath("//script[contains(text(), 'gridstack')]")[0].text
 
     grid_default = nb_metadata['extensions']['jupyter_dashboards']['views']['grid_default']
+    activeView = nb_metadata['extensions']['jupyter_dashboards'].get('activeView')
 
     def assert_config(metadata_name, gridstack_property):
         value = grid_default.get(metadata_name)
@@ -71,6 +79,12 @@ def test_gridstack_general_conf(http_client, base_url, nb_metadata):
         else:
             assert (f"{gridstack_property}: {value}" in gridstack_config)
 
-    assert_config('defaultCellHeight', 'cellHeight')
-    assert_config('cellMargin', 'verticalMargin')
-    assert_config('maxColumns', 'width')
+    if activeView is None or activeView == 'grid_default':
+
+        assert_config('defaultCellHeight', 'cellHeight')
+        assert_config('cellMargin', 'verticalMargin')
+        assert_config('maxColumns', 'width')
+    else:
+        assert 'cellHeight' not in gridstack_config
+        assert 'verticalMargin' not in gridstack_config
+        assert 'width' not in gridstack_config

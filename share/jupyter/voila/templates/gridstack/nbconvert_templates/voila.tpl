@@ -1,8 +1,17 @@
 {%- extends 'base.tpl' -%}
 {% from 'mathjax.tpl' import mathjax %}
 
-{% set active_view = nb.metadata.extensions.jupyter_dashboards.activeView %}
-{% set gridstack_conf = nb.metadata.extensions.jupyter_dashboards.views[active_view] %}
+{% if nb.metadata.extensions.jupyter_dashboards.activeView is defined %}
+    {% set active_view = nb.metadata.extensions.jupyter_dashboards.activeView %}
+{% else %}
+    {% set active_view = "grid_default" %}
+{% endif %}
+{% if nb.metadata.extensions.jupyter_dashboards.views[active_view] is defined %}
+    {% set gridstack_conf = nb.metadata.extensions.jupyter_dashboards.views[active_view] %}
+{% else %}
+    {% set gridstack_conf = {} %}
+{% endif %}
+
 
 {% block html_head_js scoped %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
