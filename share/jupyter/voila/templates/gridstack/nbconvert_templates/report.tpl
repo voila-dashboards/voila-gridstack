@@ -1,4 +1,4 @@
-{%- extends 'base.tpl' -%}
+{%- extends 'gridstack_base.tpl' -%}
 {% from 'mathjax.tpl' import mathjax %}
 
 {% block any_cell scoped %}
