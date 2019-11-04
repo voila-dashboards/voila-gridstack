@@ -32,7 +32,7 @@ the specs.  However, there are a few differences compared to the original implme
 * it can not persist the state of the cells (i.e. the re-configuration of the layout will
   be lost, when the user closes the voila page),
 * if the cell does not contain view configuration for the particular view type (`grid` or
-  `report`) or `hidden` attribute is not defined, voilà will treat it as visible.
+  `report`) or `hidden` attribute is not defined, voilà will treat it as **visible**.
 
 ## Usage
 
@@ -48,6 +48,12 @@ voila --template=gridstack examples/ --VoilaConfiguration.resources='{"gridstack
 ```
 
 Note, however, that the state of the dashboard can not be persisted in the notebook.
+
+You can change the color scheme using the `theme` resource:
+
+```
+voila --template=gridstack examples/ --VoilaConfiguration.resources='{"theme": "dark"}'
+```
 
 ## License
 
