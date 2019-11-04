@@ -44,17 +44,8 @@
     });
 </script>
 {{ super() }}
-{% endblock html_head_js%}
+{% endblock html_head_js %}
 
-{% block body_loop %}
-<section id="demo" class="voila-gridstack">
-    <div class="container">
-        <div class="grid-stack" data-gs-animate="yes">
-                {{ super() }}
-        </div>
-    </div>
-</section>
-{% endblock body_loop %}
 
 {% block any_cell scoped %}
     {% set cell_jupyter_dashboards = cell.metadata.get('extensions', {}).get('jupyter_dashboards', {}) %}
@@ -69,9 +60,9 @@
          data-gs-auto-position=true
          {% else %}
          data-gs-y="{{ view_data.row }}"
-         data-gs-x="{{ view_data.col }}",
+         data-gs-x="{{ view_data.col }}"
          {% endif %}
-     >
+         >
         <div class="grid-stack-item-content">
             {% if resources.gridstack.show_handles %}
             <div class="gridhandle">
@@ -83,3 +74,14 @@
     </div>
     {% endif %}
 {% endblock any_cell %}
+
+{% block body %}
+<section id="demo" class="voila-gridstack">
+    <div class="container">
+        <div class="grid-stack" data-gs-animate="yes">
+               <p> hello </p>
+                {{ super() }}
+        </div>
+    </div>
+</section>
+{% endblock body %}

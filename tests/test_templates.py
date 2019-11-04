@@ -14,6 +14,10 @@ def test_template_test(http_client, base_url):
     parser = etree.HTMLParser()
     tree = etree.fromstring(html_body, parser=parser)
 
+    # test top-level section
+    elem = tree.xpath("//section[@id='demo']")
+    assert elem
+
     # test width/height params
     elem = tree.xpath("//pre[text()='Hi !\n']/ancestor::div[@class='grid-stack-item']")[0]
     assert elem.attrib['data-gs-width'] == '6'
