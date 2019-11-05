@@ -79,7 +79,6 @@
 <section id="demo" class="voila-gridstack">
     <div class="container">
         <div class="grid-stack" data-gs-animate="yes">
-               <p> hello </p>
                 {{ super() }}
         </div>
     </div>
