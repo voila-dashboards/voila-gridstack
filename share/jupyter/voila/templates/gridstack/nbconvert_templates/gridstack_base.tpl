@@ -21,15 +21,6 @@
 {{ super() }}
 
 <style>
-.cell, .output_wrapper, .output, .output_area, .output_subarea, .widget-subarea {
-    display: flex;
-    flex: 1;
-
-}
-
-.p-Widget {
-    flex: 1;
-}
 
 .grid-stack-item-content {
     background: var(--jp-layout-color0);
@@ -54,9 +45,7 @@
     color: var(--jp-ui-font-color0);
 }
 
-body {
-    overflow: scroll;
-}
+
 </style>
 
 {{ mathjax() }}
