@@ -1,0 +1,1 @@
+pip install matplotlib pandas seaborn numpy ipywidgets ipympl
