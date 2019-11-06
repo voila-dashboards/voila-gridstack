@@ -1,0 +1,4 @@
+channels:
+  - conda-forge
+dependencies:
+  - voila>=0.1.17,<0.2 

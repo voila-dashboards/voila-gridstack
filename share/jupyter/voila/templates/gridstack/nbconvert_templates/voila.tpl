@@ -3,6 +3,15 @@
 {% set gridstack_conf = jupyter_dashboards.get('views', {}).get(active_view, {}) %}
 {% set dashboard_type = gridstack_conf.get("type", "grid") %}
 
+<style>
+a.anchor-link {
+  display: none;
+}
+.highlight  {
+  margin: 0.4em;
+}
+</style>
+
 {% if dashboard_type == 'grid' %}
     {% include 'grid.tpl' %}
 {% elif dashboard_type == 'report' %}
