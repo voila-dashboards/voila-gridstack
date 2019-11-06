@@ -21,7 +21,6 @@
 {{ super() }}
 
 <style>
-
 .grid-stack-item-content {
     background: var(--jp-layout-color0);
     color: var(--jp-ui-font-color1);
@@ -40,12 +39,17 @@
 {% else %}
     background: var(--jp-layout-color0);
 {% endif %}
-    
-
     color: var(--jp-ui-font-color0);
 }
+</style>
 
-
+<style>
+a.anchor-link {
+  display: none;
+}
+.highlight  {
+  margin: 0.4em;
+}
 </style>
 
 {{ mathjax() }}
