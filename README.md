@@ -1,6 +1,7 @@
 # voila-gridstack
 
 [![Join the Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/QuantStack/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/voila-dashboards/voila-gridstack/master)
 
 A gridstack-based template for [Voilà](https://github.com/voila-dashboards/voila).
 
