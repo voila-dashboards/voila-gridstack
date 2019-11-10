@@ -1,5 +1,4 @@
 {%- extends 'gridstack_base.tpl' -%}
-{% from 'mathjax.tpl' import mathjax %}
 
 {% block any_cell scoped %}
     {% set cell_jupyter_dashboards = cell.metadata.get('extensions', {}).get('jupyter_dashboards', {}) %}

@@ -1,5 +1,4 @@
 {%- extends 'base.tpl' -%}
-{% from 'mathjax.tpl' import mathjax %}
 
 {% block html_head_css %}
 <link rel="stylesheet" type="text/css" href="{{resources.base_url}}voila/static/index.css" />
@@ -52,7 +51,6 @@ a.anchor-link {
 }
 </style>
 
-{{ mathjax() }}
 {% endblock html_head_css %}
 
 {% block body_header %}

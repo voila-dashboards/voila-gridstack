@@ -1,5 +1,4 @@
 {%- extends 'gridstack_base.tpl' -%}
-{% from 'mathjax.tpl' import mathjax %}
 
 {% block html_head_js scoped %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>

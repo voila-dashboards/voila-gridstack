@@ -12,7 +12,7 @@ setup_args = {
     'packages': [],
     'data_files': data_files,
     'install_requires': [
-        'voila>=0.1.6,<0.2'
+        'voila>=0.1.18,<0.2'
     ],
     'extras_require': {
         'test': [
@@ -21,8 +21,8 @@ setup_args = {
             'lxml'
         ]
     },
-    'author': 'QuantStack',
-    'author_email': 'info@quantstack.net',
+    'author': 'Voila Development team',
+    'author_email': 'jupyter@googlegroups.com',
     'url': 'https://github.com/voila-dashboards/voila-gridstack/'
 }
 
