@@ -6,8 +6,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js"></script>
 
-<script src="https://gridstackjs.com/dist/gridstack.js"></script>
-<script src="https://gridstackjs.com/dist/gridstack.jQueryUI.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gridstack@0.5.2/dist/gridstack.all.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gridstack@0.5.2/dist/gridstack.jQueryUI.min.js"></script>
 <script type="text/javascript">
     // bqplot doesn't resize when resizing the tile, fix: fake a resize event
     var resize_workaround = _.debounce(() => {
