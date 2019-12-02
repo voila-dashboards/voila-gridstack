@@ -27,8 +27,8 @@ def test_report_view(http_client, base_url):
     header = tree.xpath("//*[contains(text(), 'Graphics')]")
     assert header
 
-    svg_tag = tree.xpath("//svg")
-    assert svg_tag
+    circle_tag = tree.xpath("//svg/circle")
+    assert circle_tag
 
     voila_caption_tag = tree.xpath("//p[contains(text(), 'Voilà logo')]")
     assert not voila_caption_tag
@@ -37,6 +37,6 @@ def test_report_view(http_client, base_url):
     assert not img_tag
 
     # test element order
-    ordered_tags = [header[0], svg_tag[0], caption_tag[0]]
+    ordered_tags = [header[0], circle_tag[0], caption_tag[0]]
     document_order = [e for e in tree.getiterator() if e in ordered_tags]
     assert ordered_tags == document_order
