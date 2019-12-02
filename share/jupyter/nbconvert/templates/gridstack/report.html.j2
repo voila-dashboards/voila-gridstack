@@ -1,4 +1,4 @@
-{%- extends 'gridstack_base.tpl' -%}
+{%- extends 'gridstack_base.html.j2' -%}
 
 {% block any_cell scoped %}
     {% set cell_jupyter_dashboards = cell.metadata.get('extensions', {}).get('jupyter_dashboards', {}) %}

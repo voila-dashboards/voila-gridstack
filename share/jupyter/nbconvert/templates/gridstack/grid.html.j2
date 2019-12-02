@@ -1,4 +1,4 @@
-{%- extends 'gridstack_base.tpl' -%}
+{%- extends 'gridstack_base.html.j2' -%}
 
 {% block html_head_js scoped %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
@@ -74,12 +74,15 @@
     {% endif %}
 {% endblock any_cell %}
 
-{% block body %}
+{% block body_header %}
+{{ super() }}
 <section id="demo" class="voila-gridstack">
     <div class="container">
         <div class="grid-stack" data-gs-animate="yes">
-                {{ super() }}
+{% endblock body_header %}
+{% block body_footer %}
         </div>
     </div>
 </section>
-{% endblock body %}
+{{ super() }}
+{% endblock body_footer %}
