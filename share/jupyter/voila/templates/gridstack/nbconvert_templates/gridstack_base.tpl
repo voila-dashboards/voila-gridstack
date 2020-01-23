@@ -49,6 +49,9 @@ a.anchor-link {
 .highlight  {
   margin: 0.4em;
 }
+body {
+  overflow: scroll;
+}
 </style>
 
 {% endblock html_head_css %}
