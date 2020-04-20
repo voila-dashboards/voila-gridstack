@@ -1,0 +1,66 @@
+
+.grid-stack-item-content {
+    background: var(--jp-layout-color0);
+    color: var(--jp-ui-font-color1);
+    display: flex;
+    flex-direction: column;
+}
+
+.grid-stack-item {
+    position: static;
+    border: solid 2px;
+}
+
+.grid-stack-item-hidden {
+    display: none;
+}
+
+.gridhandle {
+    position: absolute;
+    z-index: 1;
+    cursor: move;
+    margin-left: 10px;
+    display: none;
+}
+
+.grid-stack {
+    background-color: var(--jp-layout-color3);
+}
+
+#notebook-container {
+    background-color: var(--jp-layout-color3);
+}
+
+/* SPINNER */
+
+#loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 75vh;
+    color: var(--jp-content-font-color1);
+    font-family: sans-serif;
+}
+
+.spinner {
+    animation: rotation 2s infinite linear;
+    transform-origin: 50% 50%;
+}
+
+.spinner-container {
+    width: 10%;
+}
+
+@keyframes rotation {
+      from {transform: rotate(0deg);}
+      to   {transform: rotate(359deg);}
+}
+
+.voila-spinner-color1{
+    fill:#268380;
+}
+
+.voila-spinner-color2{
+    fill:#f8e14b;
+}

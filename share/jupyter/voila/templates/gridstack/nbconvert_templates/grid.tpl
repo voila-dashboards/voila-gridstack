@@ -26,10 +26,10 @@
             },
             {% endif %} 
             {% if gridstack_conf.defaultCellHeight %}
-            cellHeight: {{gridstack_conf.defaultCellHeight}}, 
+            cellHeight: {{gridstack_conf.cellHeight}},
             {% endif %}
             {% if gridstack_conf.maxColumns %}
-            width: {{gridstack_conf.maxColumns}}, 
+            column: {{gridstack_conf.maxColumns}},
             {% endif %}
             {% if gridstack_conf.cellMargin is defined %}
             verticalMargin: {{gridstack_conf.cellMargin}},
@@ -75,6 +75,7 @@
 {% endblock any_cell %}
 
 {% block body %}
+
 <section id="demo" class="voila-gridstack">
     <div class="container">
         <div class="grid-stack" data-gs-animate="yes">
@@ -82,4 +83,5 @@
         </div>
     </div>
 </section>
+
 {% endblock body %}
