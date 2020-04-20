@@ -40,6 +40,10 @@
 {% endif %}
     color: var(--jp-ui-font-color0);
 }
+
+body {
+    overflow: initial;
+}
 </style>
 
 <style>
