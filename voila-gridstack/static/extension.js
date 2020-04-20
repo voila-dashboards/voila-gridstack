@@ -154,12 +154,16 @@ define(['jquery',
                         resizable: {
                             handles: 'e, se, s, sw, w'
                         },
-                        cellHeight: active_view.cellHeight,
+                        cellHeight: active_view.defaultCellHeight,
                         verticalMargin: active_view.cellMargin,
-                        column: active_view.numColumns,
+                        width: active_view.maxColumns,
                         draggable: {
                             handle: '.gridhandle'
                         }
+                    });
+
+                    grid.on('resizestop', function(event, elem) {
+                        resize_workaround()
                     });
 
                     // hides code cells with empty output, and raw text cells

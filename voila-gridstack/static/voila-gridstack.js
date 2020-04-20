@@ -27,12 +27,12 @@ define(['jquery',
         if (!notebook_gridstack_metadata['version']) {
             notebook_gridstack_metadata.version = 1;
             notebook_gridstack_metadata.activeView = 'default_view';
-            notebook_gridstack_metadata.views = {'default_view': {   // tool-assigned, unique layout ID
-                                                                  'name': 'active_view',              // user-assigned, unique human readable name
-                                                                  'type': 'grid',               // layout algorithm to use (grid in this example view)
-                                                                  'cellMargin': 10,      // margin between cells in pixels
-                                                                  'cellHeight': 40,      // height in pixels of a logical row
-                                                                  'numColumns': 12       // total number of logical columns
+            notebook_gridstack_metadata.views = {'default_view': {
+                                                                  'name': 'active_view',    // user-assigned, unique human readable name
+                                                                  'type': 'grid',           // layout algorithm to use (grid in this example view)
+                                                                  'cellMargin': 10,         // margin between cells in pixels
+                                                                  'defaultCellHeight': 40,  // height in pixels of a logical row
+                                                                  'maxColumns': 12          // total number of logical columns
                                                                  }
 //                                                 'report': {   // tool-assigned, unique layout ID
 //                                                             'name': 'report',              // user-assigned, unique human readable name
