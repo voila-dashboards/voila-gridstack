@@ -95,7 +95,6 @@
         const items = document.querySelectorAll('.grid-stack-item');
 
         items.forEach(item => {
-            console.log(item.dataset, item.dataset.cellNr);
             cells.push({
                 width: parseInt(item.dataset.gsWidth),
                 height: parseInt(item.dataset.gsHeight),
