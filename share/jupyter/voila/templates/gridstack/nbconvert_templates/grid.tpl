@@ -87,7 +87,8 @@
         updateConfig();
         setCellNrs();
     });
-
+</script>
+<script type="text/javascript">
     function updateConfig() {
         const gsConfig = document.getElementById('gsConfig');
         const cells = []
