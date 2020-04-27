@@ -48,6 +48,9 @@ define(['jquery',
                 $('head').children("link[href='https://cdn.jsdelivr.net/npm/gridstack@1.0.0/dist/gridstack.min.css']").remove();
                 $("head").children("#voila-gridstack-styles").remove();
 
+                // fake window resize event to resize bqplot to notebook width
+                window.dispatchEvent(new Event('resize'));
+
                 // enables button for gristack view
                 $('#btn-voila-gridstack_gridstack').prop( "disabled", false );
             });
@@ -162,11 +165,19 @@ define(['jquery',
                         }
                     });
 
+                    //  bqplot doesn't resize when resizing the tile, fix: fake a resize event
+                    grid.on('resizestop', function(event, elem) {
+                        window.dispatchEvent(new Event('resize'));
+                    });
+
                     // hides code cells with empty output, and raw text cells
                     voila_gridstack.hide_elements(grid);
 
                     // adds 'on change' listener on grid to save position and size in metadata
                     voila_gridstack.init_on_change(grid);
+
+                    // fake window resize event at init to display bqplot without resizing tile
+                    window.dispatchEvent(new Event('resize'));
 
                     // saves initial positions and sizes in metadata
                     $('.grid-stack').trigger("change", grid.engine.nodes[0]);
