@@ -75,7 +75,6 @@
 {% endblock any_cell %}
 
 {% block body %}
-
 <section id="demo" class="voila-gridstack">
     <div class="container">
         <div class="grid-stack" data-gs-animate="yes">
@@ -83,5 +82,4 @@
         </div>
     </div>
 </section>
-
 {% endblock body %}

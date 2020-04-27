@@ -45,7 +45,7 @@ define(['jquery',
                 $('style[data-gs-style-id]').remove();
 
                 // Remove CSS files
-                $('head').children("link[href='https://cdn.jsdelivr.net/npm/gridstack@0.5.2/dist/gridstack.min.css']").remove();
+                $('head').children("link[href='https://cdn.jsdelivr.net/npm/gridstack@1.0.0/dist/gridstack.min.css']").remove();
                 $("head").children("#voila-gridstack-styles").remove();
 
                 // enables button for gristack view
@@ -91,12 +91,12 @@ define(['jquery',
                         var active_view_name = Jupyter.notebook.metadata.extensions.jupyter_dashboards.activeView;
                         var active_view = Jupyter.notebook.metadata.extensions.jupyter_dashboards.views[active_view_name];
                     }
-                    catch(TypeError) {
-                        console.error('Error during gridstack initialization');
+                    catch(err) {
+                        console.error('Error during gridstack initialization\n', err);
                     }
 
                     // import gridstack styles
-                    $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'https://cdn.jsdelivr.net/npm/gridstack@0.5.2/dist/gridstack.min.css') );
+                    $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'https://cdn.jsdelivr.net/npm/gridstack@1.0.0/dist/gridstack.min.css') );
 
                     // sets notebook full width, and hides inputs and prompts
                     $('#notebook-container').css('width', '100%');
@@ -119,8 +119,8 @@ define(['jquery',
                         try {
                             gridstack_meta = cell.metadata.extensions.jupyter_dashboards.views[active_view_name];
                         }
-                        catch(TypeError) {
-                            console.error('Error during gridstack initialization');
+                        catch(err) {
+                            console.error('Error during gridstack initialization\n', err);
                         }
 
                         position = (!gridstack_meta.hasOwnProperty('col')) ?
@@ -160,10 +160,6 @@ define(['jquery',
                         draggable: {
                             handle: '.gridhandle'
                         }
-                    });
-
-                    grid.on('resizestop', function(event, elem) {
-                        resize_workaround()
                     });
 
                     // hides code cells with empty output, and raw text cells

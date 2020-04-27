@@ -34,10 +34,6 @@ define(['jquery',
                                                                   'defaultCellHeight': 40,  // height in pixels of a logical row
                                                                   'maxColumns': 12          // total number of logical columns
                                                                  }
-//                                                 'report': {   // tool-assigned, unique layout ID
-//                                                             'name': 'report',              // user-assigned, unique human readable name
-//                                                             'type': 'report'              // layout algorithm to use (report in this example view)
-//                                                            }
                                                 };
         }
 

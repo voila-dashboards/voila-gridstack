@@ -54,9 +54,7 @@ body {
 }
 </style>
 
-
 {% endblock html_head_css %}
-
 
 {% block body_header %}
 {% if resources.theme == 'dark' %}
