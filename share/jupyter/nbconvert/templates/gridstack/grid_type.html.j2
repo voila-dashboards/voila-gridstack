@@ -52,9 +52,14 @@
 <script src="https://cdn.jsdelivr.net/npm/gridstack@0.5.2/dist/gridstack.all.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gridstack@0.5.2/dist/gridstack.jQueryUI.min.js"></script>
 <script type="text/javascript">
-    // bqplot doesn't resize when resizing the tile, fix: fake a resize event
-    var resize_workaround = _.debounce(() => {
-        window.dispatchEvent(new Event('resize'));
+
+    var resizedJupyterWidget;
+
+    var resizeListener = _.debounce(() => {
+        if (!resizedJupyterWidget) {
+            return;
+        }
+        resizedJupyterWidget.dispatchEvent(new Event('jupyterWidgetResize'));
     }, 100)
     $(function () {
         $('.grid-stack').gridstack({
@@ -80,9 +85,27 @@
             draggable: {
                 handle: '.gridhandle',
             }
+        }).on('resizestart', function(event, elem) {
+            resizedJupyterWidget = elem.element[0].querySelector('[data-voila-jupyter-widget]');
+            if (!resizedJupyterWidget) {
+                return;
+            }
+            document.addEventListener('mousemove', resizeListener);
         }).on('resizestop', function(event, elem) {
-            resize_workaround()
-        }).on('change', updateConfig);
+            if (!resizedJupyterWidget) {
+                return;
+            }
+            document.removeEventListener('mousemove', resizeListener);
+
+            const jupyterWidget = resizedJupyterWidget;
+            resizedJupyterWidget = undefined;
+
+            /* Wait for the next event loop so the gridstack item has it's final size */
+            setTimeout(function() {
+                jupyterWidget.dispatchEvent(new Event('jupyterWidgetResize'));
+            }, 0);
+        })
+        .on('change', updateConfig);
 
         updateConfig();
         setCellNrs();
