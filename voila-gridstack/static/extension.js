@@ -33,6 +33,7 @@ define(['jquery',
                 $('#notebook-container').css('width', '');
                 $('.code_cell > .input').show();
                 $('.prompt').show();
+                $('div.output_subarea').css('max-width', '');
 
                 // removes handles
                 $('.gridhandle').remove();
@@ -105,6 +106,9 @@ define(['jquery',
                     $('#notebook-container').css('width', '100%');
                     $('.code_cell > .input').hide();
                     $('.prompt').hide();
+
+                    // remove unused space on right-hand side of widgets
+                    $('div.output_subarea').css('max-width', '100%');
 
                     // wraps each notebook cell in a grid-stack-item-content div, and adds handles
                     $('.cell').wrap("<div class='grid-stack-item-content'></div>");
