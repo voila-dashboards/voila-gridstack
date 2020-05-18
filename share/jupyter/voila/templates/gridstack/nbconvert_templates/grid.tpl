@@ -69,10 +69,10 @@
             },
             {% endif %} 
             {% if gridstack_conf.defaultCellHeight %}
-            cellHeight: {{gridstack_conf.defaultCellHeight}}, 
+            cellHeight: {{gridstack_conf.defaultCellHeight}},
             {% endif %}
             {% if gridstack_conf.maxColumns %}
-            width: {{gridstack_conf.maxColumns}}, 
+            width: {{gridstack_conf.maxColumns}},
             {% endif %}
             {% if gridstack_conf.cellMargin is defined %}
             verticalMargin: {{gridstack_conf.cellMargin}},
