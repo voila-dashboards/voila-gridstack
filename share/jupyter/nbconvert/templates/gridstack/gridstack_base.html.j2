@@ -1,22 +1,7 @@
-{%- extends 'base.tpl' -%}
+{%- extends 'lab/index.html.j2' -%}
 
 {% block html_head_css %}
-<link rel="stylesheet" type="text/css" href="{{resources.base_url}}voila/static/index.css" />
-
-{% if resources.theme == 'dark' %}
-    <link rel="stylesheet" type="text/css" href="{{resources.base_url}}voila/static/theme-dark.css" />
-{% else %}
-    <link rel="stylesheet" type="text/css" href="{{resources.base_url}}voila/static/theme-light.css" />
-{% endif %}
-
-{% for css in resources.inlining.css %}
-    <style type="text/css">
-    {{ css }}
-    </style>
-{% endfor %}
-
 <link href="https://cdn.jsdelivr.net/npm/gridstack@0.5.2/dist/gridstack.min.css" rel="stylesheet" />
-
 {{ super() }}
 
 <style>
@@ -55,11 +40,3 @@ body {
 </style>
 
 {% endblock html_head_css %}
-
-{% block body_header %}
-{% if resources.theme == 'dark' %}
-<body class="theme-dark" data-base-url="{{resources.base_url}}voila/">
-{% else %}
-<body class="theme-light" data-base-url="{{resources.base_url}}voila/">
-{% endif %}
-{% endblock body_header %}
