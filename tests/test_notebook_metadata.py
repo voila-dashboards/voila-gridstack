@@ -59,9 +59,8 @@ def voila_args(nb_metadata):
     return [nb_temp.name, '--VoilaTest.config_file_paths=[]']
 
 
-@pytest.mark.gen_test
-def test_gridstack_general_conf(http_client, base_url, nb_metadata):
-    response = yield http_client.fetch(base_url)
+async def test_gridstack_general_conf(http_server_client, base_url, nb_metadata):
+    response = yield http_server_client.fetch(base_url)
     assert response.code == 200
     html_body = response.body.decode('utf-8')
 

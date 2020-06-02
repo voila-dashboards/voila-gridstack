@@ -8,10 +8,9 @@ def voila_args():
     nb_path = os.path.join(BASE_DIR, 'nb_without_metadata.ipynb')
     return [nb_path, '--VoilaTest.config_file_paths=[]']
 
-@pytest.mark.gen_test
-def test_render_without_metadata(http_client, base_url):
 
-    response = yield http_client.fetch(base_url)
+async def test_render_without_metadata(http_server_client, base_url):
+    response = await http_server_client.fetch(base_url)
     assert response.code == 200
     html_body = response.body.decode('utf-8')
 

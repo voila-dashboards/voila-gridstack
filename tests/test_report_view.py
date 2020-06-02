@@ -8,10 +8,9 @@ def voila_args():
     nb_path = os.path.join(BASE_DIR, 'nb_report.ipynb')
     return [nb_path, '--VoilaTest.config_file_paths=[]']
 
-@pytest.mark.gen_test
-def test_report_view(http_client, base_url):
 
-    response = yield http_client.fetch(base_url)
+async def test_report_view(http_server_client, base_url):
+    response = await http_server_client.fetch(base_url)
     assert response.code == 200
     html_body = response.body.decode('utf-8')
 
@@ -27,8 +26,8 @@ def test_report_view(http_client, base_url):
     header = tree.xpath("//*[contains(text(), 'Graphics')]")
     assert header
 
-    svg_tag = tree.xpath("//svg")
-    assert svg_tag
+    circle_tag = tree.xpath("//svg/circle")
+    assert circle_tag
 
     voila_caption_tag = tree.xpath("//p[contains(text(), 'Voilà logo')]")
     assert not voila_caption_tag
@@ -37,6 +36,6 @@ def test_report_view(http_client, base_url):
     assert not img_tag
 
     # test element order
-    ordered_tags = [header[0], svg_tag[0], caption_tag[0]]
+    ordered_tags = [header[0], circle_tag[0], caption_tag[0]]
     document_order = [e for e in tree.getiterator() if e in ordered_tags]
     assert ordered_tags == document_order

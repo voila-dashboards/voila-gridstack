@@ -20,10 +20,10 @@ def voila_args(voila_resources):
             '--VoilaTest.config_file_paths=[]',
             '--VoilaConfiguration.resources={}'.format(voila_resources)]
 
-@pytest.mark.gen_test
-def test_resources_gridstack_show_handles(http_client, base_url, show_handles):
+
+async def test_resources_gridstack_show_handles(http_server_client, base_url, show_handles):
     """Test with handlebars"""
-    response = yield http_client.fetch(base_url)
+    response = await http_server_client.fetch(base_url)
     assert response.code == 200
     html_body = response.body.decode('utf-8')
 

@@ -79,7 +79,7 @@ setup_args = {
     'extras_require': {
         'test': [
             'pytest',
-            'pytest-tornado',
+            'pytest-tornasync',
             'lxml'
         ]
     },
