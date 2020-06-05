@@ -53,7 +53,7 @@ Note, however, that the state of the dashboard can not be persisted in the noteb
 You can change the color scheme using the `theme` resource:
 
 ```
-voila --template=gridstack examples/ --VoilaConfiguration.resources='{"theme": "dark"}'
+voila examples/ --template=gridstack --theme=dark
 ```
 
 ## License
