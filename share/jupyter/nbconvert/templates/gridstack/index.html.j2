@@ -4,10 +4,10 @@
 {% set dashboard_type = gridstack_conf.get("type", "grid") %}
 
 {% if dashboard_type == 'grid' %}
-    {% include 'grid.tpl' %}
+    {% include 'grid_type.html.j2' %}
 {% elif dashboard_type == 'report' %}
-    {% include 'report.tpl' %}
+    {% include 'report_type.html.j2' %}
 {% else %}
-    {% include 'grid.tpl' %}
+    {% include 'grid_type.html.j2' %}
 {% endif %}
 

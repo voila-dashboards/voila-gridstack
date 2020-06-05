@@ -1,4 +1,4 @@
-{%- extends 'gridstack_base.tpl' -%}
+{%- extends 'gridstack_base.html.j2' -%}
 
 {% block html_head_css %}
 {{ super() }}
@@ -162,15 +162,18 @@
     {% endif %}
 {% endblock any_cell %}
 
-{% block body %}
+{% block body_header %}
+{{ super() }}
 <section id="demo" class="voila-gridstack">
     <div class="container">
         <div class="grid-stack" data-gs-animate="yes">
-                {{ super() }}
+{% endblock body_header %}
+
+{% block body_footer %}
         </div>
     </div>
 </section>
-
+{{ super() }}
 {% if resources.gridstack.show_handles %}
 <div class="config">
     <div class="openConfig">
@@ -180,4 +183,4 @@
     </div>
 </div>
 {% endif %}
-{% endblock body %}
+{% endblock body_footer %}

@@ -12,14 +12,8 @@ class VoilaTest(voila.app.Voila):
 @pytest.fixture
 def voila_app(voila_args, voila_config):
     voila_app = VoilaTest.instance()
-    voila_app.initialize(voila_args + ['--no-browser'])
+    voila_app.initialize(voila_args + ['--no-browser', '--template=gridstack'])
     voila_config(voila_app)
-    nbconvert_template_path = os.path.join(
-        BASE_DIR, '..', 'share/jupyter/voila/templates/gridstack/nbconvert_templates/')
-    template_path = os.path.join(
-        BASE_DIR, '..', 'share/jupyter/voila/templates/gridstack/templates')
-    voila_app.nbconvert_template_paths.insert(0, nbconvert_template_path)
-    voila_app.template_paths.insert(0, template_path)
     voila_app.start()
     yield voila_app
     voila_app.stop()
