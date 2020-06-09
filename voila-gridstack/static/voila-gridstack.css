@@ -15,10 +15,11 @@
 }
 
 .gridhandle {
-    position: absolute;
+    position: static;
     z-index: 1;
     cursor: move;
-    margin-left: 10px;
+    margin-left: 5px;
+    margin-top: 5px;
     display: none;
 }
 
