@@ -8,7 +8,6 @@
 
 .grid-stack-item {
     position: static;
-    border: solid 2px;
 }
 
 .grid-stack-item-hidden {
@@ -24,11 +23,11 @@
 }
 
 .grid-stack {
-    background-color: var(--jp-layout-color3);
+    background-color: var(--jp-layout-color2);
 }
 
 #notebook-container {
-    background-color: var(--jp-layout-color3);
+    background-color: var(--jp-layout-color2);
 }
 
 /* SPINNER */
