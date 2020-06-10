@@ -15,11 +15,14 @@
 }
 
 .gridhandle {
-    position: absolute;
+    position: relative;
+    background: var(--jp-layout-color2);
     z-index: 1;
+    height: 5px;
     cursor: move;
-    margin-left: 10px;
-    display: none;
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-right: 5px;
 }
 
 .grid-stack {

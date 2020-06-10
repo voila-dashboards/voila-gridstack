@@ -13,18 +13,34 @@
 }
 
 .gridhandle {
+    position: relative;
+    background: var(--jp-layout-color2);
+    z-index: 1;
+    height: 5px;
     cursor: move;
-    margin-left: 10px;
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-right: 5px;
 }
 
 .voila-gridstack {
 {% if resources.gridstack.show_handles  %}
-    background: var(--jp-layout-color3);
+    background: var(--jp-layout-color2);
 {% else %}
     background: var(--jp-layout-color0);
 {% endif %}
     color: var(--jp-ui-font-color0);
 }
+
+.jp-Notebook {
+{% if resources.gridstack.show_handles  %}
+    background: var(--jp-layout-color2);
+{% else %}
+    background: var(--jp-layout-color0);
+{% endif %}
+    color: var(--jp-ui-font-color0);
+}
+
 </style>
 
 <style>

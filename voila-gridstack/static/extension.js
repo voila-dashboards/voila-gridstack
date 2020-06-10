@@ -114,7 +114,7 @@ define(['jquery',
                     $('.cell').wrap("<div class='grid-stack-item-content'></div>");
                     $('.grid-stack-item-content').prepend(`
                         <div class="gridhandle">
-                            <i class=" fa fa-arrows"></i>
+                            <i class="fa"></i>
                         </div>
                     `);
 
@@ -142,14 +142,6 @@ define(['jquery',
                                  ${position}
                                  data-gs-width='${width}'
                                  data-gs-height='${height}'></div>`;
-                    });
-
-                    // adds listener to show handles on mouse over
-                    $('.grid-stack-item').hover( function () {
-                            $( this ).find('.gridhandle').show();
-                            $( this ).find('.gridhandle').css("z-index","9999");
-                        }, function(){
-                            $(this).find('.gridhandle').hide();
                     });
 
                     // wrap all grid-stack-item divs in a grid-stack div
