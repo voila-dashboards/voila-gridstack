@@ -15,12 +15,13 @@
 }
 
 .gridhandle {
-    position: static;
+    position: relative;
+    background: var(--jp-layout-color2);
     z-index: 1;
     cursor: move;
     margin-left: 5px;
     margin-top: 5px;
-    display: none;
+    margin-right: 5px;
 }
 
 .grid-stack {

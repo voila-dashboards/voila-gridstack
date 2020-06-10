@@ -144,14 +144,6 @@ define(['jquery',
                                  data-gs-height='${height}'></div>`;
                     });
 
-                    // adds listener to show handles on mouse over
-                    $('.grid-stack-item').hover( function () {
-                            $( this ).find('.gridhandle').show();
-                            $( this ).find('.gridhandle').css("z-index","9999");
-                        }, function(){
-                            $(this).find('.gridhandle').hide();
-                    });
-
                     // wrap all grid-stack-item divs in a grid-stack div
                     $('.grid-stack-item').wrapAll("<div class='grid-stack'></div>");
 
