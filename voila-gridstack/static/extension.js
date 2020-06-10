@@ -114,7 +114,7 @@ define(['jquery',
                     $('.cell').wrap("<div class='grid-stack-item-content'></div>");
                     $('.grid-stack-item-content').prepend(`
                         <div class="gridhandle">
-                            <i class=" fa fa-arrows"></i>
+                            <i class="fa"></i>
                         </div>
                     `);
 
