@@ -31,6 +31,16 @@
 {% endif %}
     color: var(--jp-ui-font-color0);
 }
+
+.jp-Notebook {
+{% if resources.gridstack.show_handles  %}
+    background: var(--jp-layout-color2);
+{% else %}
+    background: var(--jp-layout-color0);
+{% endif %}
+    color: var(--jp-ui-font-color0);
+}
+
 </style>
 
 <style>
