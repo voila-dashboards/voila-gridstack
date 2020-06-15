@@ -33,6 +33,28 @@
     background-color: var(--jp-layout-color2);
 }
 
+.ui-resizable-se {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAYAAACc7RhZAAACG0lEQVRYheXVO2gUURTG8ZsH8UEIBBKUcfZ83z33ZgIOiCCC5bZW2mijlVZapUyXLmW6dKm0SpVGG2200EKLFFooKAoKiqLYSchDG28Mugn7mJkj+IfTf7+dC+sieS4IvgXwx392X7WlZ51zzgWRMxH88g+MauQU+DxDnnZ7896fUuCT9bjaT/AxipSuU1HkZBB+MB9Z25fne+/9bEd8SnOdUeCd9dgavvzbQkQPxKdmAR+Eb8xHV3QefO29R1f43ZegKgq+sh4/+OFlkecnesLvvoRWKwuCF/aI/k7B5ySP94VPee+PBeCZNaZnvHC9yIqpgfCpIiumVLhujer+8FREJivBp0RkMpBP7HEHnxc+jjFOVIpPxRgnFHxkjdz/2cvDcrocrwWfKqfL8QA8sMZ2ePb3syw7Wis+lef5kUjes0f/OuFdkocbwadijIcC/B1rvIJrZVmONYpPlWU5puCa2Q9ArrZde9QEn2q79mggV5v/8rjtnBsxxe9pJAC3msP7FefcsDX6z4YVfqUB/LJzbsgau19DCr9cH55L1sCuUnCpcrxw0drVUypcrBC/YO3pKxUuDIwn560dA6Xk/AD4Oev9laTkXI/4HSVvWO+utAjcDOBOF/htBa5Z762lCFwP4PYB+C0FrljvrLUo/moAt/7+j8dmFH/Jel8jRfGXFdj8/TeHjUhesN7VaIG8qIKNIPwegPNWO34CxalQ+boTIlAAAAAASUVORK5CYII=') !important;
+    transform: rotate(90deg) !important;
+    -o-transform: rotate(90deg) !important;
+    -ms-transform: rotate(90deg) !important;
+    -moz-transform: rotate(90deg) !important;
+    -webkit-transform: rotate(90deg) !important;
+    background-position: unset !important;
+    background-size: 50px;
+}
+
+.ui-resizable-sw {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAYAAACc7RhZAAACG0lEQVRYheXVO2gUURTG8ZsH8UEIBBKUcfZ83z33ZgIOiCCC5bZW2mijlVZapUyXLmW6dKm0SpVGG2200EKLFFooKAoKiqLYSchDG28Mugn7mJkj+IfTf7+dC+sieS4IvgXwx392X7WlZ51zzgWRMxH88g+MauQU+DxDnnZ7896fUuCT9bjaT/AxipSuU1HkZBB+MB9Z25fne+/9bEd8SnOdUeCd9dgavvzbQkQPxKdmAR+Eb8xHV3QefO29R1f43ZegKgq+sh4/+OFlkecnesLvvoRWKwuCF/aI/k7B5ySP94VPee+PBeCZNaZnvHC9yIqpgfCpIiumVLhujer+8FREJivBp0RkMpBP7HEHnxc+jjFOVIpPxRgnFHxkjdz/2cvDcrocrwWfKqfL8QA8sMZ2ePb3syw7Wis+lef5kUjes0f/OuFdkocbwadijIcC/B1rvIJrZVmONYpPlWU5puCa2Q9ArrZde9QEn2q79mggV5v/8rjtnBsxxe9pJAC3msP7FefcsDX6z4YVfqUB/LJzbsgau19DCr9cH55L1sCuUnCpcrxw0drVUypcrBC/YO3pKxUuDIwn560dA6Xk/AD4Oev9laTkXI/4HSVvWO+utAjcDOBOF/htBa5Z762lCFwP4PYB+C0FrljvrLUo/moAt/7+j8dmFH/Jel8jRfGXFdj8/TeHjUhesN7VaIG8qIKNIPwegPNWO34CxalQ+boTIlAAAAAASUVORK5CYII=') !important;
+    transform: rotate(180deg) !important;
+    -o-transform: rotate(180deg) !important;
+    -ms-transform: rotate(180deg) !important;
+    -moz-transform: rotate(180deg) !important;
+    -webkit-transform: rotate(180deg) !important;
+    background-position: unset !important;
+    background-size: 50px;
+}
+
 /* SPINNER */
 
 #loading {
