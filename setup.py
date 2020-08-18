@@ -65,7 +65,7 @@ def get_data_files():
 
 setup_args = {
     'name': 'voila-gridstack',
-    'version': '0.0.9',
+    'version': '0.1.0a2',
     'packages': find_packages(),
     'data_files': get_data_files(),
     'package_data': {
