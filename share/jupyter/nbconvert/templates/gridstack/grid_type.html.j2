@@ -117,7 +117,7 @@
         open = !open
 
         const gsConfig = document.getElementById('gsConfig');
-        gsConfig.style.visibility = open ? 'visible' : 'hidden';
+        gsConfig.style.display = open ? '' : 'none';
     }
 
     function setCellNrs() {
@@ -178,7 +178,7 @@
     <div class="openConfig">
         <i class="fa fa-cog"  onclick="showConfig()"></i>
     </div>
-    <div id="gsConfig" style="visibility: hidden">
+    <div id="gsConfig" style="display: none">
     </div>
 </div>
 {% endif %}
