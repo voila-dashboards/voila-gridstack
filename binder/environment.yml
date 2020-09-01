@@ -1,0 +1,8 @@
+name: voila-editor
+channels:
+- conda-forge
+dependencies:
+- python
+- nodejs
+- mamba
+- jupyterlab

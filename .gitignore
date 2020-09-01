@@ -1,0 +1,21 @@
+*.bundle.*
+
+# Build
+build
+dist
+js/*.tsbuildinfo
+js/voila-editor-*.tgz
+voila_editor_server.egg-info
+
+# Dep
+package-lock.json
+js/node_modules
+
+# Cache
+examples/.ipynb_checkpoints
+voila_editor_server/**/__pycache__
+
+# Others
+.github/
+.vscode/
+.DS_Store

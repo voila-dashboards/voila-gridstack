@@ -1,0 +1,13 @@
+{
+  "title": "Voila Editor",
+  "description": "Settings for Voila Editor.",
+  "type": "object",
+  "properties": {
+    "env": {
+      "type": "string",
+      "title": "Example",
+      "description": "Exampe",
+      "default": ""
+    }
+  }
+}
