@@ -1,7 +1,7 @@
 import { JupyterFrontEnd, JupyterFrontEndPlugin, ILayoutRestorer } from '@jupyterlab/application';
 import { ABCWidgetFactory, DocumentRegistry } from "@jupyterlab/docregistry";
+import { WidgetTracker, sessionContextDialogs } from '@jupyterlab/apputils';
 import { INotebookModel } from '@jupyterlab/notebook';
-import { WidgetTracker } from '@jupyterlab/apputils';
 
 import VoilaEditor from './widget';
 
@@ -18,16 +18,18 @@ export const editor: JupyterFrontEndPlugin<void> = {
     if (restorer) {
       restorer.restore(tracker, {
         command: "docmanager:open",
-        args: panel => ({ path: panel.context.path, factory: factory.name }),
+        args: panel => ({ path: panel.context.path, factory: "Voila" }),
         name: panel => panel.context.path,
         when: app.serviceManager.ready
       });
     }
 
-    const factory = new VoilaEditorFactory({
+    const factory = new VoilaWidgetFactory({
       name: "Voila",
       fileTypes: ["notebook"],
-      modelName: "notebook"
+      modelName: "notebook",
+      defaultRendered: ["notebook"],
+      preferKernel: true
     });
 
     factory.widgetCreated.connect( (sender, widget) => {
@@ -41,12 +43,16 @@ export const editor: JupyterFrontEndPlugin<void> = {
   }
 };
 
-class VoilaEditorFactory extends ABCWidgetFactory<VoilaEditor, INotebookModel> {
+class VoilaWidgetFactory extends ABCWidgetFactory<VoilaEditor, INotebookModel> {
   constructor(options: DocumentRegistry.IWidgetFactoryOptions<VoilaEditor>) {
     super(options);
   }
 
   protected createNewWidget(context: DocumentRegistry.IContext<INotebookModel>): VoilaEditor {
+    context.sessionContext.initialize().then( value => {
+      if (value) sessionContextDialogs.selectKernel(context.sessionContext);
+    }).catch( e => console.error("Failed to initialize the kernel session.\n" + e) );
+
     return new VoilaEditor(context);
   }
 }

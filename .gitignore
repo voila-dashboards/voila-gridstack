@@ -9,7 +9,7 @@ voila_editor_server.egg-info
 
 # Dep
 package-lock.json
-js/node_modules
+node_modules
 
 # Cache
 examples/.ipynb_checkpoints
