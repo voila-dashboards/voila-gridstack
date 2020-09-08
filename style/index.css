@@ -2,12 +2,12 @@
   width: 100%;
   height: 100%;
   overflow: auto;
+  /*background-color: darkgrey;*/
 }
 
-.grid-stack {
-  min-height: 400px;
-}
-
-.grid-stack-item-content {
+.jp-InputArea-editor {
+  width: 100%;
+  height: 100%;
   border-style: solid;
+  overflow: auto;
 }
