@@ -1,0 +1,12 @@
+name: voila-gridstack
+channels:
+- conda-forge
+dependencies:
+- ipympl
+- ipywidgets
+- matplotlib
+- numpy
+- pandas
+- seaborn
+- voila
+- voila-gridstack
