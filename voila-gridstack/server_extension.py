@@ -9,7 +9,7 @@
 
 from jupyter_server.utils import url_path_join
 
-from voila.paths import STATIC_ROOT, collect_template_paths
+from voila.paths import collect_template_paths
 from voila.handler import VoilaHandler
 from voila.configuration import VoilaConfiguration
 
