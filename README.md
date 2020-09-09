@@ -21,9 +21,9 @@ pip install voila-gridstack
 
 ## Format
 
-The template uses metadata defined in the notebook file (`.ipynb`) to configure the layout. 
+The template uses metadata defined in the notebook file (`.ipynb`) to configure the layout.
 The specification of the metadata was defined by a now defunct project `jupyter-dashboards`.
-The specification is described in `jupyter-dashboards` 
+The specification is described in `jupyter-dashboards`
 [docs](https://jupyter-dashboards-layout.readthedocs.io/en/latest/metadata.html).
 
 The voila renderer behaves as a "display-only renderer without authoring capabilitiy" as defined in
@@ -41,7 +41,7 @@ To use the `gridstack` template, pass option `--template=gridstack` to the `voil
 
 ![voila-gridstack](voila-gridstack.gif)
 
-By default the position of cells in the dashboard will be fixed. If you want them to be draggable 
+By default the position of cells in the dashboard will be fixed. If you want them to be draggable
 and resizable, you can launch voila with the `show_handles` resource set to `True`:
 
 ```
@@ -55,6 +55,49 @@ You can change the color scheme using the `theme` resource:
 ```
 voila examples/ --template=gridstack --theme=dark
 ```
+
+## Development
+
+To install the template from source:
+
+```bash
+# create a new `conda` environment
+conda create -n voila-gridstack -c conda-forge notebook python
+
+# activate the environment
+conda activate voila-gridstack
+
+# install the package in development mode
+python -m pip install -e .
+
+# start voila with the gridstack template
+voila --template=gridstack
+```
+
+### Classic Notebook Extension
+
+`voila-gridstack` provides an extension for the classic notebook to edit the gridstack layout from the notebook interface.
+
+To install this extension in development mode:
+
+```bash
+# activate the environment
+conda activate voila-gridstack
+
+# link the local files
+jupyter nbextension install --sys-prefix --symlink --overwrite --py voila-gridstack
+
+# enable the extension
+jupyter nbextension enable --sys-prefix --py voila-gridstack
+
+# check the extension is installed and enabled
+jupyter nbextension list
+
+# start the notebook
+jupyter notebook
+```
+
+Then edit the files in `voila-gridstack/static` and reload the page to see the changes.
 
 ## License
 
