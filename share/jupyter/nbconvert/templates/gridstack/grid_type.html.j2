@@ -67,7 +67,7 @@
             resizable: {
                 handles: 'none'
             },
-            {% endif %} 
+            {% endif %}
             {% if gridstack_conf.defaultCellHeight %}
             cellHeight: {{gridstack_conf.defaultCellHeight}},
             {% endif %}
@@ -82,9 +82,12 @@
             }
         }).on('resizestop', function(event, elem) {
             resize_workaround()
-        }).on('change', updateConfig);
-
+        })
+        {% if resources.gridstack.show_handles %}
+        .on('change', updateConfig);
         updateConfig();
+        {% endif %}
+
         setCellNrs();
     });
 </script>
