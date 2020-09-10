@@ -81,9 +81,9 @@ async def test_gridstack_general_conf(http_server_client, base_url, nb_metadata)
     if activeView is None or activeView == 'grid_default':
 
         assert_config('defaultCellHeight', 'cellHeight')
-        assert_config('cellMargin', 'verticalMargin')
-        assert_config('maxColumns', 'width')
+        assert_config('cellMargin', 'margin')
+        assert_config('maxColumns', 'column')
     else:
         assert 'cellHeight' not in gridstack_config
-        assert 'verticalMargin' not in gridstack_config
-        assert 'width' not in gridstack_config
+        assert 'margin' not in gridstack_config
+        assert 'column' not in gridstack_config

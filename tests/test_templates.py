@@ -47,5 +47,5 @@ async def test_template_test(http_server_client, base_url):
     assert not elem
 
     assert "cellHeight: 40" in html_body
-    assert "width: 12" in html_body
-    assert "verticalMargin: 10" in html_body
+    assert "column: 12" in html_body
+    assert "margin: 10" in html_body
