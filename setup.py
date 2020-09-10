@@ -52,7 +52,6 @@ def get_data_files():
                                                         'voila-gridstack/static/voila-gridstack.js',
                                                         'voila-gridstack/static/voila-gridstack.css',
                                                         'voila-gridstack/static/gridstack.js',
-                                                        'voila-gridstack/static/gridstack.jqueryUI_require.js'
                                                         ])
     ]
     # Add all the templates
