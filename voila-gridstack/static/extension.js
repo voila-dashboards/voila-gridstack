@@ -11,10 +11,11 @@
 define(['jquery',
         'base/js/namespace',
         'nbextensions/voila-gridstack/gridstack',
-        'nbextensions/voila-gridstack/gridstack.jqueryUI_require',
         'nbextensions/voila-gridstack/voila-gridstack'
        ],
-       function($, Jupyter, gridstack, _, voila_gridstack) {
+       function($, Jupyter, gridstack, voila_gridstack) {
+
+    var grid;
 
     function load_ipython_extension() {
 
@@ -148,14 +149,14 @@ define(['jquery',
                     $('.grid-stack-item').wrapAll("<div class='grid-stack'></div>");
 
                     // init GridStack
-                    var grid = GridStack.init({
+                    grid = gridstack.init({
                         alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
                         resizable: {
                             handles: 'e, se, s, sw, w'
                         },
                         cellHeight: active_view.defaultCellHeight,
-                        verticalMargin: active_view.cellMargin,
-                        width: active_view.maxColumns,
+                        margin: active_view.cellMargin,
+                        column: active_view.maxColumns,
                         draggable: {
                             handle: '.gridhandle'
                         }
