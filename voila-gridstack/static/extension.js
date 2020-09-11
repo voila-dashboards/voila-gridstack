@@ -15,6 +15,7 @@ define(['jquery',
        ],
        function($, Jupyter, gridstack, voila_gridstack) {
 
+    var GRIDSTACK_STYLES = 'https://cdn.jsdelivr.net/npm/gridstack@2.0.0/dist/gridstack.min.css';
     var grid;
 
     function load_ipython_extension() {
@@ -47,7 +48,7 @@ define(['jquery',
                 $('style[data-gs-style-id]').remove();
 
                 // Remove CSS files
-                $('head').children("link[href='https://cdn.jsdelivr.net/npm/gridstack@1.0.0/dist/gridstack.min.css']").remove();
+                $('head').children("link[href='" + GRIDSTACK_STYLES + "']").remove();
                 $("head").children("#voila-gridstack-styles").remove();
 
                 // fake window resize event to resize bqplot to notebook width
@@ -101,10 +102,9 @@ define(['jquery',
                     }
 
                     // import gridstack styles
-                    $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'https://cdn.jsdelivr.net/npm/gridstack@1.0.0/dist/gridstack.min.css') );
+                    $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', GRIDSTACK_STYLES) );
 
-                    // sets notebook full width, and hides inputs and prompts
-                    $('#notebook-container').css('width', '100%');
+                    // hide inputs and prompts
                     $('.code_cell > .input').hide();
                     $('.prompt').hide();
 
