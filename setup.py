@@ -74,7 +74,7 @@ setup_args = {
         ]
     },
     'install_requires': [
-        'voila==0.2.0b1'
+        'voila>=0.2.0,<0.3.0',
     ],
     'extras_require': {
         'test': [
