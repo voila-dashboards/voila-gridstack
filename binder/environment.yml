@@ -2,11 +2,9 @@ name: voila-gridstack
 channels:
 - conda-forge
 dependencies:
-- ipympl
+- bqplot
 - ipywidgets
-- matplotlib
 - numpy
 - pandas
-- seaborn
 - voila
 - voila-gridstack
