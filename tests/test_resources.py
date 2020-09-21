@@ -33,7 +33,7 @@ async def test_resources_gridstack_show_handles(http_server_client, base_url, sh
     elem = tree.xpath("//div[@class='gridhandle']")
     assert (show_handles and elem) or (not show_handles and not elem)
 
-    gridstack_config = tree.xpath("//script[contains(text(), 'gridstack')]")[0].text
+    gridstack_config = tree.xpath("//script[contains(text(), 'GridStack')]")[0].text
 
     if show_handles:
         assert "handles: 'e, se, s, sw, w'" in gridstack_config

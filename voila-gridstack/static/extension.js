@@ -11,12 +11,17 @@
 define(['jquery',
         'base/js/namespace',
         'nbextensions/voila-gridstack/gridstack',
-        'nbextensions/voila-gridstack/gridstack.jqueryUI_require',
         'nbextensions/voila-gridstack/voila-gridstack'
        ],
-       function($, Jupyter, gridstack, _, voila_gridstack) {
+       function($, Jupyter, gridstack, voila_gridstack) {
+
+    var GRIDSTACK_STYLES = 'https://cdn.jsdelivr.net/npm/gridstack@2.0.0/dist/gridstack.min.css';
+    var grid;
 
     function load_ipython_extension() {
+
+        // import gridstack styles
+        $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', GRIDSTACK_STYLES) );
 
         /*
          * Cancel gridstack view and go back to usual notebook view
@@ -46,7 +51,6 @@ define(['jquery',
                 $('style[data-gs-style-id]').remove();
 
                 // Remove CSS files
-                $('head').children("link[href='https://cdn.jsdelivr.net/npm/gridstack@1.0.0/dist/gridstack.min.css']").remove();
                 $("head").children("#voila-gridstack-styles").remove();
 
                 // fake window resize event to resize bqplot to notebook width
@@ -99,11 +103,7 @@ define(['jquery',
                         console.error('Error during gridstack initialization\n', err);
                     }
 
-                    // import gridstack styles
-                    $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', 'https://cdn.jsdelivr.net/npm/gridstack@1.0.0/dist/gridstack.min.css') );
-
-                    // sets notebook full width, and hides inputs and prompts
-                    $('#notebook-container').css('width', '100%');
+                    // hide inputs and prompts
                     $('.code_cell > .input').hide();
                     $('.prompt').hide();
 
@@ -148,14 +148,14 @@ define(['jquery',
                     $('.grid-stack-item').wrapAll("<div class='grid-stack'></div>");
 
                     // init GridStack
-                    var grid = GridStack.init({
+                    grid = gridstack.init({
                         alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
                         resizable: {
                             handles: 'e, se, s, sw, w'
                         },
                         cellHeight: active_view.defaultCellHeight,
-                        verticalMargin: active_view.cellMargin,
-                        width: active_view.maxColumns,
+                        margin: active_view.cellMargin,
+                        column: active_view.maxColumns,
                         draggable: {
                             handle: '.gridhandle'
                         }

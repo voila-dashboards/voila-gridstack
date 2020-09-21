@@ -49,15 +49,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/gridstack@0.5.2/dist/gridstack.all.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gridstack@0.5.2/dist/gridstack.jQueryUI.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gridstack@2.0.0/dist/gridstack.all.js"></script>
 <script type="text/javascript">
     // bqplot doesn't resize when resizing the tile, fix: fake a resize event
     var resize_workaround = _.debounce(() => {
         window.dispatchEvent(new Event('resize'));
     }, 100)
     $(function () {
-        $('.grid-stack').gridstack({
+        GridStack.init({
             alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
             {% if resources.gridstack.show_handles %}
             resizable: {
@@ -72,10 +71,10 @@
             cellHeight: {{gridstack_conf.defaultCellHeight}},
             {% endif %}
             {% if gridstack_conf.maxColumns %}
-            width: {{gridstack_conf.maxColumns}},
+            column: {{gridstack_conf.maxColumns}},
             {% endif %}
             {% if gridstack_conf.cellMargin is defined %}
-            verticalMargin: {{gridstack_conf.cellMargin}},
+            margin: {{gridstack_conf.cellMargin}},
             {% endif %}
             draggable: {
                 handle: '.gridhandle',

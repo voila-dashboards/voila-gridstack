@@ -82,6 +82,9 @@ define(['jquery',
             items.forEach( function (item) {
                 // get notebook cell
                 cell = $(item.el).find(".cell").first().data('cell');
+                if (!cell) {
+                    return;
+                }
 
                 active_view_name = Jupyter.notebook.metadata.extensions.jupyter_dashboards.activeView;
                 gridstack_meta = cell.metadata.extensions.jupyter_dashboards.views[active_view_name];
