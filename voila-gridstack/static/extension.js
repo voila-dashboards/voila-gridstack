@@ -20,6 +20,9 @@ define(['jquery',
 
     function load_ipython_extension() {
 
+        // import gridstack styles
+        $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', GRIDSTACK_STYLES) );
+
         /*
          * Cancel gridstack view and go back to usual notebook view
          */
@@ -48,7 +51,6 @@ define(['jquery',
                 $('style[data-gs-style-id]').remove();
 
                 // Remove CSS files
-                $('head').children("link[href='" + GRIDSTACK_STYLES + "']").remove();
                 $("head").children("#voila-gridstack-styles").remove();
 
                 // fake window resize event to resize bqplot to notebook width
@@ -100,9 +102,6 @@ define(['jquery',
                     catch(err) {
                         console.error('Error during gridstack initialization\n', err);
                     }
-
-                    // import gridstack styles
-                    $('head').append( $('<link rel="stylesheet" type="text/css" />').attr('href', GRIDSTACK_STYLES) );
 
                     // hide inputs and prompts
                     $('.code_cell > .input').hide();
