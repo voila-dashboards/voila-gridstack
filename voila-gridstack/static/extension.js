@@ -104,6 +104,7 @@ define(['jquery',
                     }
 
                     // hide inputs and prompts
+                    $('#notebook-container').css('width', '100%');
                     $('.code_cell > .input').hide();
                     $('.prompt').hide();
 
@@ -151,7 +152,8 @@ define(['jquery',
                     grid = gridstack.init({
                         alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
                         resizable: {
-                            handles: 'e, se, s, sw, w'
+                            handles: 'e, se, s, sw, w',
+                            autoHide: true
                         },
                         cellHeight: active_view.defaultCellHeight,
                         margin: active_view.cellMargin,
