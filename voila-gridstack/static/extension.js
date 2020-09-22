@@ -168,9 +168,6 @@ define(['jquery',
                         window.dispatchEvent(new Event('resize'));
                     });
 
-                    // hides code cells with empty output, and raw text cells
-                    voila_gridstack.hide_elements(grid);
-
                     // adds 'on change' listener on grid to save position and size in metadata
                     voila_gridstack.init_on_change(grid);
 

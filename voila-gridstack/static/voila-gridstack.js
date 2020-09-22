@@ -63,6 +63,9 @@ define(['jquery',
     function hide_elements(grid) {
         grid.engine.nodes.forEach( function (item) {
             cell = $(item.el).find(".cell").first().data('cell');
+            if (!cell) {
+                return;
+            }
             if ((cell.cell_type == "code" && !cell.output_area.outputs.length) || cell.cell_type == "raw") {
                 $(item.el).addClass('grid-stack-item-hidden');
                 grid.removeWidget(item.el, false);
@@ -97,6 +100,7 @@ define(['jquery',
                 gridstack_meta.height = item.height;
             });
 
+            hide_elements(grid);
             Jupyter.notebook.save_notebook();
         });
 
