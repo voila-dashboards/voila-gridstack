@@ -63,7 +63,7 @@ export default class EditorPanel extends Widget {
     this.grid = null;
   }
 
-  onUpdateRequest = () => {
+  onUpdateRequest = (): void => {
     //console.debug("onUpdateRequest:", this.grid, this.cells);
 
     this.grid?.destroy();
@@ -125,7 +125,7 @@ export default class EditorPanel extends Widget {
       any
     >;
 
-    if (data && data.hasOwnProperty('jupyter_dashboards')) {
+    if (data && data.jupyter_dashboards) {
       this.dasboard = data['jupyter_dashboards'] as DasboardInfo;
     } else {
       this.dasboard = {
@@ -160,7 +160,7 @@ export default class EditorPanel extends Widget {
         }
       };
 
-      if (data && data.hasOwnProperty('jupyter_dashboards')) {
+      if (data && data.jupyter_dashboards) {
         info = data['jupyter_dashboards'] as DasboardCellInfo;
       }
 
@@ -170,7 +170,7 @@ export default class EditorPanel extends Widget {
     this.update();
   };
 
-  onChange = (event: Event, items: GridHTMLElement | GridStackNode[]) => {
+  onChange = (event: Event, items: GridHTMLElement | GridStackNode[]): void => {
     // TODO: fix casts
     (items as GridStackNode[]).forEach(el => {
       const cell = this.cells.get(el.id as string);
@@ -184,7 +184,7 @@ export default class EditorPanel extends Widget {
     });
   };
 
-  onRemove = (event: Event, items: GridHTMLElement | GridStackNode[]) => {
+  onRemove = (event: Event, items: GridHTMLElement | GridStackNode[]): void => {
     // TODO: fix casts
     (items as GridStackNode[]).forEach(el => {
       console.log('Removed:', el);
@@ -199,7 +199,10 @@ export default class EditorPanel extends Widget {
     });
   };
 
-  onDropped = (event: Event, items: GridHTMLElement | GridStackNode[]): void => {
+  onDropped = (
+    event: Event,
+    items: GridHTMLElement | GridStackNode[]
+  ): void => {
     // TODO: fix casts
     const widgets = items as GridStackNode[];
     const [previousWidget, newWidget] = widgets;

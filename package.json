@@ -18,12 +18,12 @@
     "jupyterlab-extension"
   ],
   "files": [
-    "build/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
+    "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
     "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
     "schema/**/*.json"
   ],
-  "main": "build/index.js",
-  "types": "build/src/index.d.ts",
+  "main": "lib/index.js",
+  "types": "lib/src/index.d.ts",
   "style": "style/index.css",
   "scripts": {
     "build": "jlpm run build:lib && jlpm run build:labextension",
@@ -38,6 +38,8 @@
     "eslint:check": "eslint . --ext .ts,.tsx",
     "install:extension": "jupyter labextension develop --overwrite .",
     "prepare": "jlpm run clean && jlpm run build",
+    "prettier": "prettier --write '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}'",
+    "prettier:check": "prettier --list-different '**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}'",
     "watch": "run-p watch:src watch:labextension",
     "watch:labextension": "jupyter labextension watch .",
     "watch:src": "tsc -w"

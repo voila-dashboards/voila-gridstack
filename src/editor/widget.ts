@@ -36,7 +36,7 @@ export default class VoilaEditor extends DocumentWidget<
     console.debug('Widget dispose');
   }
 
-  runAll = () => {
+  runAll = (): void => {
     const nb = new Notebook({
       mimeTypeService: new CodeMirrorMimeTypeService(),
       rendermime: new RenderMimeRegistry()
@@ -49,7 +49,7 @@ export default class VoilaEditor extends DocumentWidget<
       .catch(e => console.error(e));
   };
 
-  runCells = () => {
+  runCells = (): void => {
     console.info('runCells');
 
     for (let i = 0; i < this.context.model.cells?.length; i++) {

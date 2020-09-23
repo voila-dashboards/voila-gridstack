@@ -4,18 +4,15 @@
 
 A JupyterLab extension to create voila dashboards.
 
-
-
 ## Requirements
 
-* JupyterLab >= 3.0
+- JupyterLab >= 3.0
 
 ## Install
 
 ```bash
 pip install voila-editor
 ```
-
 
 ## Contributing
 
