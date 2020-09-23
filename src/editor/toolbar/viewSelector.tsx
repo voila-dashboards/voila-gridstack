@@ -7,11 +7,9 @@ export default class ViewSelector extends ReactWidget {
     super();
   }
 
-  onClick = () => {}
+  onClick = () => {};
 
   render(): JSX.Element {
-    return (
-      <div onClick={this.onClick}>preview</div>
-    );
+    return <div onClick={this.onClick}>preview</div>;
   }
 }

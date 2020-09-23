@@ -10,14 +10,23 @@ export default class Save extends ReactWidget {
 
   constructor(panel: EditorPanel) {
     super();
-    this.addClass("jp-ToolbarButton");
+    this.addClass('jp-ToolbarButton');
     this.panel = panel;
   }
-  
+
   render() {
-    return ( 
-      <button onClick={this.panel.save} className="bp3-button bp3-minimal jp-ToolbarButtonComponent minimal jp-Button">
-        <saveIcon.react tag="span" right="7px" top="5px" width="16px" height="16px" />
+    return (
+      <button
+        onClick={this.panel.save}
+        className="bp3-button bp3-minimal jp-ToolbarButtonComponent minimal jp-Button"
+      >
+        <saveIcon.react
+          tag="span"
+          right="7px"
+          top="5px"
+          width="16px"
+          height="16px"
+        />
       </button>
     );
   }
