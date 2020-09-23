@@ -32,7 +32,7 @@ export default class CellView extends Panel {
     this.addWidget(this.editor);
   }
 
-  onUpdateRequest = () => {
+  onUpdateRequest = (): void => {
     //console.debug("onUpdateRequest cell:", this.editor);
     this.editor.editor.refresh();
   };

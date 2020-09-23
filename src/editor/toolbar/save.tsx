@@ -1,5 +1,6 @@
-import { saveIcon } from '@jupyterlab/ui-components';
 import { ReactWidget } from '@jupyterlab/apputils';
+
+import { saveIcon } from '@jupyterlab/ui-components';
 
 import * as React from 'react';
 
@@ -14,7 +15,7 @@ export default class Save extends ReactWidget {
     this.panel = panel;
   }
 
-  render() {
+  render(): JSX.Element {
     return (
       <button
         onClick={this.panel.save}

@@ -6,7 +6,7 @@ import { Widget } from '@lumino/widgets';
 import * as nbformat from '@jupyterlab/nbformat';
 
 import 'gridstack/dist/gridstack.css';
-import { GridStack } from 'gridstack';
+import { GridStack, GridStackNode, GridHTMLElement } from 'gridstack';
 
 import Cell from './components/cell';
 
@@ -100,7 +100,8 @@ export default class EditorPanel extends Widget {
             x: view.col,
             y: view.row,
             width: view.width,
-            height: view.height
+            height: view.height,
+            autoPosition: false
           };
 
           if (!view.row || !view.col) {
@@ -169,9 +170,10 @@ export default class EditorPanel extends Widget {
     this.update();
   };
 
-  onChange = (event: any, items: any[]) => {
-    items.forEach(el => {
-      const cell = this.cells.get(el.id);
+  onChange = (event: Event, items: GridHTMLElement | GridStackNode[]) => {
+    // TODO: fix casts
+    (items as GridStackNode[]).forEach(el => {
+      const cell = this.cells.get(el.id as string);
       cell.info.views[this.dasboard.activeView] = {
         hidden: false,
         col: el.x,
@@ -182,10 +184,11 @@ export default class EditorPanel extends Widget {
     });
   };
 
-  onRemove = (event: Event, items: any[]) => {
-    items.forEach(el => {
+  onRemove = (event: Event, items: GridHTMLElement | GridStackNode[]) => {
+    // TODO: fix casts
+    (items as GridStackNode[]).forEach(el => {
       console.log('Removed:', el);
-      const cell = this.cells.get(el.id);
+      const cell = this.cells.get(el.id as string);
       cell.info.views[this.dasboard.activeView] = {
         hidden: true,
         col: el.x,
@@ -196,7 +199,10 @@ export default class EditorPanel extends Widget {
     });
   };
 
-  onDropped = (event: Event, previousWidget: any, newWidget: any) => {
+  onDropped = (event: Event, items: GridHTMLElement | GridStackNode[]): void => {
+    // TODO: fix casts
+    const widgets = items as GridStackNode[];
+    const [previousWidget, newWidget] = widgets;
     console.log('Removed widget that was dragged out of grid:', previousWidget);
     console.log('Added widget in dropped grid:', newWidget);
   };

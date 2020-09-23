@@ -1,4 +1,4 @@
-import { GridStack } from 'gridstack';
+import { GridStack, GridStackNode, GridHTMLElement } from 'gridstack';
 
 import { Widget } from '@lumino/widgets';
 
@@ -17,16 +17,14 @@ export default class GridStackPanel extends Widget {
     this.cells = {};
   }
 
-  dispose = () => {
+  dispose = (): void => {
     super.dispose();
     this.cells = null;
     this.grid = null;
     console.debug('Grid disposed:', this.grid);
   };
 
-  onUpdateRequest = () => {
-    //console.debug("onUpdateRequest:", this.grid, this.node.children);
-
+  onUpdateRequest = (): void => {
     this.grid?.destroy();
 
     const grid = document.createElement('div');
@@ -38,12 +36,16 @@ export default class GridStackPanel extends Widget {
       styleInHead: true
     });
 
-    this.grid.on('change', (event: any, elements: any[]) => {
-      elements.forEach(e => {
-        console.debug(e.id);
-        this.cells[e.id];
-      });
-    });
+    this.grid.on(
+      'change',
+      (event: Event, elements: GridHTMLElement | GridStackNode[]) => {
+        // TODO: fix cast
+        (elements as GridStackNode[]).forEach(e => {
+          console.debug(e.id);
+          this.cells[e.id];
+        });
+      }
+    );
 
     for (const k in Object.keys(this.cells)) {
       const widget = document.createElement('div');
@@ -54,7 +56,7 @@ export default class GridStackPanel extends Widget {
     }
   };
 
-  addCell = (cell: Cell) => {
+  addCell = (cell: Cell): void => {
     console.debug('Id:', cell.id);
     this.cells[cell.id] = cell;
     this.update();
