@@ -37,7 +37,7 @@ data_files_spec = [
     ("share/jupyter/labextensions/%s" % labext_name, lab_path, "*.*"),
 ]
 
-cmdclass = create_cmdclass("jsdeps", 
+cmdclass = create_cmdclass("jsdeps",
     package_data_spec=package_data_spec,
     data_files_spec=data_files_spec
 )
@@ -53,7 +53,7 @@ with open("README.md", "r") as fh:
 setup_args = dict(
     name=name,
     version=version,
-    url="https://github.com/...",
+    url="https://github.com/hbcarlos/voila-editor",
     author="QuantStack",
     description="A JupyterLab extension to create voila dashboards.",
     long_description= long_description,

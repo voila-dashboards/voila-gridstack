@@ -1,6 +1,6 @@
 # voila-editor
 
-![Github Actions Status](https://github.com/.../workflows/Build/badge.svg)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/.../master?urlpath=lab)
+![Github Actions Status](https://github.com/hbcarlos/voila-editor/workflows/Build/badge.svg)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hbcarlos/voila-editor/master?urlpath=lab)
 
 A JupyterLab extension to create voila dashboards.
 

@@ -2,13 +2,13 @@
   "name": "voila-editor",
   "version": "0.0.1",
   "description": "A JupyterLab extension to create voila dashboards.",
-  "homepage": "https://github.com/...",
+  "homepage": "https://github.com/hbcarlos/voila-editor",
   "repository": {
     "type": "git",
-    "url": "https://github.com/..."
+    "url": "https://github.com/hbcarlos/voila-editor"
   },
   "bugs": {
-    "url": "https://github.com/.../issues"
+    "url": "https://github.com/hbcarlos/voila-editor/issues"
   },
   "license": "BSD-3-Clause",
   "author": "QuantStack",
