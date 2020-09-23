@@ -1,3 +1,1 @@
 pip install .
-
-jupyter-lab build --dev-build=False
