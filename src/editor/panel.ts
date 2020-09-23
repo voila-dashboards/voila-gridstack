@@ -1,6 +1,5 @@
 import { ReadonlyPartialJSONValue } from '@lumino/coreutils';
 import { INotebookModel } from '@jupyterlab/notebook';
-import { CodeCell, MarkdownCell } from '@jupyterlab/cells';
 import { Context } from "@jupyterlab/docregistry";
 import { Widget } from '@lumino/widgets';
 

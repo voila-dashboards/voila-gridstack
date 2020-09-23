@@ -2027,7 +2027,7 @@
         "affectsGlobalScope": false
       },
       "./src/editor/panel.ts": {
-        "version": "055574b24f3252471ef36562bdc4496e99e195a8c28aa607a1ac5d3b0a9fe1e6",
+        "version": "ac302f72c9914e1d6e82ce86f0507d1328c399b925620f28e190ce5d503ab0fa",
         "signature": "1d183ff3c6c50ebd2d1c88e8f97f58f8e98c436e2ab1358512111fd1bf6c46b9",
         "affectsGlobalScope": false
       },
@@ -2037,12 +2037,12 @@
         "affectsGlobalScope": false
       },
       "./src/editor/widget.ts": {
-        "version": "2d866d3b9f9e87db6137546b20b5a7ead2168ef8d896905d8b2cfa36cc1f23ae",
-        "signature": "109a702754c1c3231ecfce299560b68cdfd0aabf35690d25b59e34eb2c6f75af",
+        "version": "9d264099403e8f5bd8b74582bfc38527183a64f4e3820d864abc6f349d8e9dfa",
+        "signature": "5df214533df1528e5107ad61680db0da3d5785a6f8b1afae9a1b3f64bf6381ab",
         "affectsGlobalScope": false
       },
       "./src/editor/factory.ts": {
-        "version": "b30b6c81238c301cb01e0c0fb5bc0bc96b02bdb2c6be569246d75b00ed96375f",
+        "version": "9fc0361ac973f04c8d95e014f494e992f81ec922e4c0db54103ce8387d9f60ee",
         "signature": "a33d60dfc475519834fce314fc8a9f4b01bcc9eccaea845818675085fb024c46",
         "affectsGlobalScope": false
       },
@@ -4050,7 +4050,6 @@
         "./src/editor/widget.ts"
       ],
       "./src/editor/panel.ts": [
-        "./node_modules/@jupyterlab/cells/lib/index.d.ts",
         "./node_modules/@jupyterlab/docregistry/lib/index.d.ts",
         "./node_modules/@jupyterlab/nbformat/lib/index.d.ts",
         "./node_modules/@jupyterlab/notebook/lib/index.d.ts",
@@ -4081,8 +4080,11 @@
         "./node_modules/@types/react/index.d.ts"
       ],
       "./src/editor/widget.ts": [
+        "./node_modules/@jupyterlab/cells/lib/index.d.ts",
+        "./node_modules/@jupyterlab/codemirror/lib/index.d.ts",
         "./node_modules/@jupyterlab/docregistry/lib/index.d.ts",
         "./node_modules/@jupyterlab/notebook/lib/index.d.ts",
+        "./node_modules/@jupyterlab/rendermime/lib/index.d.ts",
         "./node_modules/@jupyterlab/ui-components/lib/index.d.ts",
         "./src/editor/panel.ts",
         "./src/editor/toolbar/save.tsx"

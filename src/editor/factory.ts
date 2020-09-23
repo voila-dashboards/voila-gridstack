@@ -7,7 +7,6 @@ import EditorPanel from './panel';
 export default class VoilaWidgetFactory extends ABCWidgetFactory<VoilaEditor, INotebookModel> {
 
   protected createNewWidget(context: DocumentRegistry.IContext<INotebookModel>, source?: VoilaEditor): VoilaEditor {
-    console.debug("New widget: ", source);
     const contextNotebook = context as Context<INotebookModel>;
     return new VoilaEditor(contextNotebook, new EditorPanel(contextNotebook));
   }
