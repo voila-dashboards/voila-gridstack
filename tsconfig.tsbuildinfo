@@ -2037,7 +2037,7 @@
         "affectsGlobalScope": false
       },
       "./src/editor/widget.ts": {
-        "version": "9d264099403e8f5bd8b74582bfc38527183a64f4e3820d864abc6f349d8e9dfa",
+        "version": "02f2811e429fefbf7d3bf851279949cbca34e9007238dff13563949ad6754006",
         "signature": "5df214533df1528e5107ad61680db0da3d5785a6f8b1afae9a1b3f64bf6381ab",
         "affectsGlobalScope": false
       },
@@ -2098,6 +2098,7 @@
       "strictNullChecks": false,
       "target": 4,
       "types": [],
+      "watch": true,
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {

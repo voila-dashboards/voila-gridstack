@@ -59,7 +59,7 @@ export default class VoilaEditor extends DocumentWidget<EditorPanel, INotebookMo
 
         console.info("Cell:", cell);
         console.info("codeCell:", codeCell);
-        
+
         CodeCell.execute(codeCell, this.context.sessionContext)
         .then( reply => {
           console.info("reply:", reply);
