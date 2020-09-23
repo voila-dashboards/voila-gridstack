@@ -2278,10 +2278,10 @@ graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.4:
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.4.tgz#2256bde14d3632958c465ebc96dc467ca07a29fb"
   integrity sha512-WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==
 
-gridstack@^2.0.0-rc2:
-  version "2.0.0-rc2"
-  resolved "https://registry.yarnpkg.com/gridstack/-/gridstack-2.0.0-rc2.tgz#71f6f619cde5f67e105563cff444fbdfa280bafe"
-  integrity sha512-jvg7a4mw0UxuQ9rHZyXCril+BMapoHzNmqIfFnKa205UY6uN/Htzt+55vsbZTnHpC5qAZQduBquNHJBlgfAVEw==
+gridstack@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/gridstack/-/gridstack-2.0.0.tgz#315aa139611695f71a3b5fe51b295b0e56ef3308"
+  integrity sha512-QdWlck9GGIHf1hBT3pwpZtXjHhkretsMeJO5Ltsv9UbmbWpdzIIxf/ZTv23JOFg9DfLBhsI0H1Od1xtTsh8UIw==
 
 gud@^1.0.0:
   version "1.0.0"
