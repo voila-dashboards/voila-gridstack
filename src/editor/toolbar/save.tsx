@@ -1,5 +1,6 @@
-import { saveIcon } from '@jupyterlab/ui-components';
 import { ReactWidget } from '@jupyterlab/apputils';
+
+import { saveIcon } from '@jupyterlab/ui-components';
 
 import * as React from 'react';
 
@@ -10,14 +11,23 @@ export default class Save extends ReactWidget {
 
   constructor(panel: EditorPanel) {
     super();
-    this.addClass("jp-ToolbarButton");
+    this.addClass('jp-ToolbarButton');
     this.panel = panel;
   }
-  
-  render() {
-    return ( 
-      <button onClick={this.panel.save} className="bp3-button bp3-minimal jp-ToolbarButtonComponent minimal jp-Button">
-        <saveIcon.react tag="span" right="7px" top="5px" width="16px" height="16px" />
+
+  render(): JSX.Element {
+    return (
+      <button
+        onClick={this.panel.save}
+        className="bp3-button bp3-minimal jp-ToolbarButtonComponent minimal jp-Button"
+      >
+        <saveIcon.react
+          tag="span"
+          right="7px"
+          top="5px"
+          width="16px"
+          height="16px"
+        />
       </button>
     );
   }
