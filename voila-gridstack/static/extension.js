@@ -104,6 +104,7 @@ define(['jquery',
                     }
 
                     // hide inputs and prompts
+                    $('#notebook-container').css('width', '100%');
                     $('.code_cell > .input').hide();
                     $('.prompt').hide();
 
@@ -151,7 +152,8 @@ define(['jquery',
                     grid = gridstack.init({
                         alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
                         resizable: {
-                            handles: 'e, se, s, sw, w'
+                            handles: 'e, se, s, sw, w',
+                            autoHide: true
                         },
                         cellHeight: active_view.defaultCellHeight,
                         margin: active_view.cellMargin,
@@ -165,9 +167,6 @@ define(['jquery',
                     grid.on('resizestop', function(event, elem) {
                         window.dispatchEvent(new Event('resize'));
                     });
-
-                    // hides code cells with empty output, and raw text cells
-                    voila_gridstack.hide_elements(grid);
 
                     // adds 'on change' listener on grid to save position and size in metadata
                     voila_gridstack.init_on_change(grid);
