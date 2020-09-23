@@ -207,8 +207,7 @@ define(['jquery',
             handler : close_voila_gridstack
         };
         var prefix = 'notebook';
-        var action_name = 'close-voila-gridstack';
-        var full_action_notebook = Jupyter.actions.register(action_notebook, action_notebook, prefix);
+        var full_action_notebook = Jupyter.actions.register(action_notebook, 'close-voila-gridstack', prefix);
 
         // Registers icon which show grid-stack with handles in Jupyter environment
         var action_gridstack = {
@@ -217,8 +216,7 @@ define(['jquery',
             handler : open_voila_gridstack
         };
         var prefix = 'voila-gridstack';
-        var action_name = 'open-voila-gridstack';
-        var full_action_gridstack = Jupyter.actions.register(action_gridstack, action_gridstack, prefix);
+        var full_action_gridstack = Jupyter.actions.register(action_gridstack, 'open-voila-gridstack', prefix);
 
         // Registers icon which open voila-gridstack
         var action_dashboard = {
@@ -227,8 +225,7 @@ define(['jquery',
             handler : open_voila_dashboard
         };
         var prefix = 'voila-dashboard';
-        var action_name = 'open-voila-dashboard';
-        var full_action_dashboard = Jupyter.actions.register(action_dashboard, action_dashboard, prefix);
+        var full_action_dashboard = Jupyter.actions.register(action_dashboard, 'open-voila-dashboard', prefix);
 
         // adds buttons in Jupyter header
         Jupyter.toolbar.add_buttons_group([{action: full_action_notebook, id: 'btn-voila-gridstack_notebook'},
