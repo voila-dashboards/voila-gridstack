@@ -62,6 +62,7 @@ setup_args = dict(
     packages=setuptools.find_packages(),
     install_requires=[
         "jupyterlab>=3.0.0b6,==3.*",
+        "jupyterlab_server==2.0.0rc0",  # TODO: unpin for jupyterlab>=3.0.0b9
     ],
     zip_safe=False,
     include_package_data=True,
