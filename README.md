@@ -1,26 +1,27 @@
-# Voila Editor
+# voila-editor
+
+![Github Actions Status](https://github.com/.../workflows/Build/badge.svg)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/.../master?urlpath=lab)
 
 A JupyterLab extension to create voila dashboards.
 
-[![Binder](https://mybinder.org/badge_logo.svg)]()
+
 
 ## Requirements
 
-* python >= 3.7
 * JupyterLab >= 3.0
-* npm >= 6.13.4
 
 ## Install
 
 ```bash
-# Create a new environment with the dependencies
-mamba create -n test -c conda-forge python nodejs jupyterlab=3.0.0b0
-conda activate test
+pip install voila-editor
 ```
+
 
 ## Contributing
 
-### Install
+### Development install
+
+Note: You will need NodeJS to build the extension package.
 
 The `jlpm` command is JupyterLab's pinned version of
 [yarn](https://yarnpkg.com/) that is installed with JupyterLab. You may use
@@ -28,42 +29,29 @@ The `jlpm` command is JupyterLab's pinned version of
 
 ```bash
 # Clone the repo to your local environment
-git clone https://github.com/...
-# Move to jupyterlab-ros directory
-cd jupyterlab-ros
-
-# Install server extension in editable mode
+# Change directory to the voila-editor directory
+# Install package in development mode
 pip install -e .
-# Register server extension
-jupyter-serverextension enable --py --sys-prefix voila_editor_server
-
-# Move to js folder
-cd js/
 # Link your development version of the extension with JupyterLab
-jupyter-labextension link .
+jupyter labextension develop . --overwrite
+# Rebuild extension Typescript source after making changes
+jlpm run build
 ```
 
-You can watch the source directory and run JupyterLab in watch mode to watch for changes in the extension's source and automatically rebuild the extension and application.
+You can watch the source directory and run JupyterLab at the same time in different terminals to watch for changes in the extension's source and automatically rebuild the extension.
 
 ```bash
-# Watch the source directory in another terminal tab
-jlpm watch
-# Run jupyterlab in watch mode in one terminal tab
-jupyter-lab --no-browser --ip=192.168.64.6 --watch
+# Watch the source directory in one terminal, automatically rebuilding when needed
+jlpm run watch
+# Run JupyterLab in another terminal
+jupyter lab
 ```
+
+With the watch command running, every saved change will immediately be built locally and available in your running JupyterLab. Refresh JupyterLab to load the change in your browser (you may need to wait several seconds for the extension to be rebuilt).
 
 ### Uninstall
 
 ```bash
-# Uninstalling the frontend extension
-jupyter-labextension unlink voila-editor
-jupyter-labextension uninstall voila-editor
-
-# Uninstalling the server extension
-jupyter-serverextension disable voila_editor_server
-pip uninstall voila_editor_server
-
-# Cleaning jupyterlab
-jupyter lab clean
-jupyter lab build
+pip uninstall voila-editor
+jupyter labextension uninstall voila-editor
 ```
