@@ -1,27 +1,39 @@
-import { Widget } from '@lumino/widgets';
-import { CodeMirrorMimeTypeService, CodeMirrorEditorFactory } from '@jupyterlab/codemirror';
+import {
+  CodeMirrorMimeTypeService,
+  CodeMirrorEditorFactory
+} from '@jupyterlab/codemirror';
+import { CodeEditor, CodeEditorWrapper } from '@jupyterlab/codeeditor';
+import { ICellModel } from '@jupyterlab/cells';
+import { Panel } from '@lumino/widgets';
+
 import * as nbformat from '@jupyterlab/nbformat';
 
-import {
-  CodeEditor,
-  CodeEditorWrapper,
-  IEditorServices,
-} from '@jupyterlab/codeeditor';
+export default class CellView extends Panel {
+  private cell: ICellModel;
+  private editor: CodeEditorWrapper;
 
-export default class CellView extends Widget {
-
-  constructor(info: nbformat.ILanguageInfoMetadata, code: string) {
+  constructor(cell: ICellModel, info: nbformat.ILanguageInfoMetadata) {
     super();
-    //this.addClass("jp-CodeMirrorEditor jp-Editor jp-InputArea-editor");
+    this.addClass('grid-stack-item-content');
 
-    const editor = new CodeEditorWrapper({
+    this.cell = cell;
+
+    this.editor = new CodeEditorWrapper({
       model: new CodeEditor.Model({
-        value: code,
-        mimeType: new CodeMirrorMimeTypeService().getMimeTypeByLanguage(info),
+        value: this.cell.value.text,
+        mimeType: new CodeMirrorMimeTypeService().getMimeTypeByLanguage(info)
       }),
       factory: new CodeMirrorEditorFactory().newInlineEditor,
-      config: { readOnly: true }
+      config: { readOnly: true, codeFolding: false },
+      updateOnShow: true
     });
-    
+
+    this.editor.addClass('jp-InputArea-editor');
+    this.addWidget(this.editor);
   }
+
+  onUpdateRequest = (): void => {
+    //console.debug("onUpdateRequest cell:", this.editor);
+    this.editor.editor.refresh();
+  };
 }
