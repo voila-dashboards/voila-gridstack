@@ -3,8 +3,8 @@
 # Build
 build
 dist
-js/*.tsbuildinfo
-js/voila-editor-*.tgz
+*.tsbuildinfo
+voila-editor-*.tgz
 voila_editor_server.egg-info
 
 # Dep
