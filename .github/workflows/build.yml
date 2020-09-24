@@ -25,7 +25,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install jupyter_packaging
-        python -m pip install --pre jupyterlab jupyterlab_server==2.0.0rc0
+        python -m pip install --pre jupyterlab
     - name: Install the extension
       run: |
         python -m pip install .

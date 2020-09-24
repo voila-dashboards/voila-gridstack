@@ -33,7 +33,7 @@ conda create -n voila-editor -c conda-forge python nodejs -y
 conda activate voila-editor
 
 # install the JupyterLab pre-release
-python -m pip install --pre jupyterlab jupyterlab_server==2.0.0rc0
+python -m pip install --pre jupyterlab
 
 # Install package in development mode
 pip install -e .
