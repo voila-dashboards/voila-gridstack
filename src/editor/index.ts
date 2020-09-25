@@ -11,9 +11,8 @@ import VoilaWidgetFactory from './factory';
 export const editor: JupyterFrontEndPlugin<void> = {
   id: 'voila-editor/editor',
   autoStart: true,
-  requires: [ILayoutRestorer],
-  optional: [],
-  activate: (app: JupyterFrontEnd, restorer: ILayoutRestorer) => {
+  optional: [ILayoutRestorer],
+  activate: (app: JupyterFrontEnd, restorer: ILayoutRestorer | null) => {
     const tracker = new WidgetTracker<VoilaEditor>({
       namespace: 'voila-editor'
     });
