@@ -4,5 +4,5 @@ channels:
 dependencies:
 - python
 - nodejs
-- mamba
-- jupyterlab
+- voila
+- voila-gridstack
