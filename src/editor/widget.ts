@@ -1,11 +1,18 @@
-import { DocumentWidget, Context } from '@jupyterlab/docregistry';
-import { INotebookModel } from '@jupyterlab/notebook';
-import { listIcon } from '@jupyterlab/ui-components';
-
-import { NotebookActions, Notebook } from '@jupyterlab/notebook';
-import { RenderMimeRegistry } from '@jupyterlab/rendermime';
 import { CodeCell, ICodeCellModel } from '@jupyterlab/cells';
+
 import { CodeMirrorMimeTypeService } from '@jupyterlab/codemirror';
+
+import { DocumentWidget, Context } from '@jupyterlab/docregistry';
+
+import {
+  INotebookModel,
+  NotebookActions,
+  Notebook
+} from '@jupyterlab/notebook';
+
+import { RenderMimeRegistry } from '@jupyterlab/rendermime';
+
+import { listIcon } from '@jupyterlab/ui-components';
 
 import EditorPanel from './panel';
 
@@ -15,8 +22,6 @@ export default class VoilaEditor extends DocumentWidget<
   EditorPanel,
   INotebookModel
 > {
-  private save: Save;
-
   constructor(context: Context<INotebookModel>, content: EditorPanel) {
     super({ context, content });
     this.id = 'voila-editor/editor:widget';
@@ -24,11 +29,11 @@ export default class VoilaEditor extends DocumentWidget<
     this.title.closable = true;
     this.title.icon = listIcon;
 
-    // Adding the buttons in widget toolbar
-    this.save = new Save(this.content);
-    this.toolbar.addItem('save', this.save);
+    // Adding the buttons to the widget toolbar
+    this._save = new Save(this.content);
+    this.toolbar.addItem('save', this._save);
 
-    this.context.ready.then(() => this.runCells());
+    this.context.ready.then(() => this._runCells());
   }
 
   dispose(): void {
@@ -36,7 +41,7 @@ export default class VoilaEditor extends DocumentWidget<
     console.debug('Widget dispose');
   }
 
-  runAll = (): void => {
+  runAll(): void {
     const nb = new Notebook({
       mimeTypeService: new CodeMirrorMimeTypeService(),
       rendermime: new RenderMimeRegistry()
@@ -47,11 +52,9 @@ export default class VoilaEditor extends DocumentWidget<
         console.log(nb);
       })
       .catch(e => console.error(e));
-  };
+  }
 
-  runCells = (): void => {
-    console.info('runCells');
-
+  private _runCells(): void {
     for (let i = 0; i < this.context.model.cells?.length; i++) {
       const cell = this.context.model.cells.get(i);
 
@@ -81,5 +84,7 @@ export default class VoilaEditor extends DocumentWidget<
           .catch(reason => console.error(reason.message));
       }
     }
-  };
+  }
+
+  private _save: Save;
 }

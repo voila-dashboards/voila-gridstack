@@ -7,18 +7,16 @@ import * as React from 'react';
 import EditorPanel from '../panel';
 
 export default class Save extends ReactWidget {
-  private panel: EditorPanel;
-
   constructor(panel: EditorPanel) {
     super();
     this.addClass('jp-ToolbarButton');
-    this.panel = panel;
+    this._panel = panel;
   }
 
   render(): JSX.Element {
     return (
       <button
-        onClick={this.panel.save}
+        onClick={this._panel.save}
         className="bp3-button bp3-minimal jp-ToolbarButtonComponent minimal jp-Button"
       >
         <saveIcon.react
@@ -31,4 +29,6 @@ export default class Save extends ReactWidget {
       </button>
     );
   }
+
+  private _panel: EditorPanel;
 }

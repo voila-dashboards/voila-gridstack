@@ -8,8 +8,8 @@ export default class NotebookPanel extends Panel {
     this.addClass('jp-Notebook');
   }
 
-  addCell = (cell: Cell) => {
+  addCell(cell: Cell): void {
     this.addWidget(cell);
     this.update();
-  };
+  }
 }
