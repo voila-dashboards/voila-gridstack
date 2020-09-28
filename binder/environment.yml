@@ -2,7 +2,11 @@ name: voila-editor
 channels:
 - conda-forge
 dependencies:
+- bqplot
+- ipympl
+- ipywidgets
 - python
 - nodejs
-- mamba
-- jupyterlab
+- scipy
+- voila
+- voila-gridstack
