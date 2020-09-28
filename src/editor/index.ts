@@ -3,10 +3,12 @@ import {
   JupyterFrontEndPlugin,
   ILayoutRestorer
 } from '@jupyterlab/application';
+
 import { WidgetTracker } from '@jupyterlab/apputils';
 
-import VoilaEditor from './widget';
 import VoilaWidgetFactory from './factory';
+
+import VoilaEditor from './widget';
 
 export const editor: JupyterFrontEndPlugin<void> = {
   id: 'voila-editor/editor',
@@ -20,14 +22,14 @@ export const editor: JupyterFrontEndPlugin<void> = {
     if (restorer) {
       restorer.restore(tracker, {
         command: 'docmanager:open',
-        args: panel => ({ path: panel.context.path, factory: 'Voila' }),
+        args: panel => ({ path: panel.context.path, factory: 'Voila Editor' }),
         name: panel => panel.context.path,
         when: app.serviceManager.ready
       });
     }
 
     const factory = new VoilaWidgetFactory({
-      name: 'Voila',
+      name: 'Voila Editor',
       fileTypes: ['notebook'],
       modelName: 'notebook',
       defaultFor: ['notebook'],

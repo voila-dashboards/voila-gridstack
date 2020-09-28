@@ -3,9 +3,11 @@ import {
   ABCWidgetFactory,
   Context
 } from '@jupyterlab/docregistry';
+
 import { INotebookModel } from '@jupyterlab/notebook';
 
 import VoilaEditor from './widget';
+
 import EditorPanel from './panel';
 
 export default class VoilaWidgetFactory extends ABCWidgetFactory<
