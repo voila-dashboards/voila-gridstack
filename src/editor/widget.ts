@@ -29,7 +29,6 @@ export default class VoilaEditor extends DocumentWidget<
 
   dispose(): void {
     super.dispose();
-    console.debug('Widget dispose');
   }
 
   private _save: Save;
