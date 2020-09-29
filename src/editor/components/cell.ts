@@ -1,40 +1,31 @@
-import {
-  CodeMirrorMimeTypeService,
-  CodeMirrorEditorFactory
-} from '@jupyterlab/codemirror';
-
-import { CodeEditor, CodeEditorWrapper } from '@jupyterlab/codeeditor';
-
-import { ICellModel } from '@jupyterlab/cells';
+import { CodeCell, MarkdownCell } from '@jupyterlab/cells';
 
 import { Panel } from '@lumino/widgets';
 
-import * as nbformat from '@jupyterlab/nbformat';
-
 export default class CellView extends Panel {
-  constructor(cell: ICellModel, info: nbformat.ILanguageInfoMetadata) {
+  constructor(cell: CodeCell | MarkdownCell) {
     super();
+    this.addClass('grid-stack-item-content');
 
     this._cell = cell;
-    this._editor = new CodeEditorWrapper({
-      model: new CodeEditor.Model({
-        value: this._cell.value.text,
-        mimeType: new CodeMirrorMimeTypeService().getMimeTypeByLanguage(info)
-      }),
-      factory: new CodeMirrorEditorFactory().newInlineEditor,
-      config: { readOnly: true, codeFolding: false },
-      updateOnShow: true
-    });
 
-    this._editor.addClass('jp-InputArea-editor');
-    this.addWidget(this._editor);
-    this.addClass('grid-stack-item-content');
+    if (this._cell.model.type === 'code') {
+      const out = (this._cell as CodeCell).outputArea;
+      out.addClass('cell');
+      this.addWidget(out);
+    } else if (this._cell.model.type === 'markdown') {
+      (this._cell as MarkdownCell).rendered = true;
+      (this._cell as MarkdownCell).inputHidden = false;
+      this._cell.addClass('cell');
+      this.addWidget(this._cell);
+    }
+
+    this._cell.update();
   }
 
   onUpdateRequest(): void {
-    this._editor.editor.refresh();
+    this._cell.update();
   }
 
-  private _cell: ICellModel;
-  private _editor: CodeEditorWrapper;
+  private _cell: CodeCell | MarkdownCell;
 }

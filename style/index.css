@@ -5,7 +5,8 @@
   /*background-color: darkgrey;*/
 }
 
-.jp-InputArea-editor {
+.cell {
+  margin: 2px;
   width: 100%;
   height: 100%;
   border-style: solid;

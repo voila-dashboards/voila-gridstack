@@ -13,10 +13,14 @@ export default class Save extends ReactWidget {
     this._panel = panel;
   }
 
+  private save(): void {
+    this._panel.save();
+  }
+
   render(): JSX.Element {
     return (
-      <button
-        onClick={this._panel.save}
+      <div
+        onClick={() => this.save()}
         className="bp3-button bp3-minimal jp-ToolbarButtonComponent minimal jp-Button"
       >
         <saveIcon.react
@@ -26,7 +30,7 @@ export default class Save extends ReactWidget {
           width="16px"
           height="16px"
         />
-      </button>
+      </div>
     );
   }
 
