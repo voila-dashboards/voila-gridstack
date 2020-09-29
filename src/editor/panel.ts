@@ -25,7 +25,7 @@ import { GridStack, GridStackNode, GridHTMLElement } from 'gridstack';
 
 import 'gridstack/dist/gridstack.css';
 
-import Cell from './components/Cell';
+import Cell from './components/cell';
 
 type DasboardInfo = {
   version: number;
