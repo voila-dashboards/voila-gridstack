@@ -47,6 +47,17 @@ cmdclass["jsdeps"] = combine_commands(
     ensure_targets(jstargets),
 )
 
+class BdistEggDisabled(setuptools.command.bdist_egg):
+    """
+    Disabled version of bdist_egg
+    Prevents setup.py install performing setuptools' default easy_install,
+    which it should never ever do.
+    """
+    def run(self):
+        sys.exit("Aborting implicit building of eggs. Use `pip install .` to install from source.")
+
+cmdclass['bdist_egg'] = setuptools.command.bdist_egg if 'bdist_egg' in sys.argv else BdistEggDisabled
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
