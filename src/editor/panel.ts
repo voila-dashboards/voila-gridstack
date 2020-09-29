@@ -1,8 +1,21 @@
-import { INotebookModel } from '@jupyterlab/notebook';
+import {
+  INotebookModel,
+  NotebookPanel,
+  StaticNotebook
+} from '@jupyterlab/notebook';
 
-import { Context } from '@jupyterlab/docregistry';
+import {
+  CodeCell,
+  CodeCellModel,
+  MarkdownCell,
+  MarkdownCellModel
+} from '@jupyterlab/cells';
 
-import * as nbformat from '@jupyterlab/nbformat';
+import { IEditorMimeTypeService } from '@jupyterlab/codeeditor';
+
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
+
+import { DocumentRegistry } from '@jupyterlab/docregistry';
 
 import { ReadonlyPartialJSONValue } from '@lumino/coreutils';
 
@@ -10,9 +23,9 @@ import { Widget } from '@lumino/widgets';
 
 import { GridStack, GridStackNode, GridHTMLElement } from 'gridstack';
 
-import Cell from './components/cell';
-
 import 'gridstack/dist/gridstack.css';
+
+import Cell from './components/Cell';
 
 type DasboardInfo = {
   version: number;
@@ -42,9 +55,15 @@ type DasboardCellView = {
 };
 
 export default class EditorPanel extends Widget {
-  constructor(context: Context<INotebookModel>) {
+  constructor(options: EditorPanel.IOptions) {
     super();
-    this._context = context;
+    this._context = options.context;
+    this.rendermime = options.rendermime;
+    this.contentFactory = options.contentFactory;
+    this.mimeTypeService = options.mimeTypeService;
+    this._editorConfig = options.editorConfig;
+    this._notebookConfig = options.notebookConfig;
+
     this._context.model.stateChanged.connect(() => {
       this._stateChanged();
     });
@@ -60,12 +79,28 @@ export default class EditorPanel extends Widget {
     this._grid = null;
   }
 
+  readonly rendermime: IRenderMimeRegistry;
+  readonly contentFactory: NotebookPanel.IContentFactory;
+  readonly mimeTypeService: IEditorMimeTypeService;
+  get editorConfig(): StaticNotebook.IEditorConfig {
+    return this._editorConfig;
+  }
+  set editorConfig(value: StaticNotebook.IEditorConfig) {
+    this._editorConfig = value;
+  }
+  get notebookConfig(): StaticNotebook.INotebookConfig {
+    return this._notebookConfig;
+  }
+  set notebookConfig(value: StaticNotebook.INotebookConfig) {
+    this._notebookConfig = value;
+  }
+
   onUpdateRequest(): void {
     this._grid?.destroy();
 
     const grid = document.createElement('div');
     grid.className = 'grid-stack';
-    this.node.append(grid);
+    this.node.appendChild(grid);
 
     this._grid = GridStack.init({
       animate: true,
@@ -82,7 +117,7 @@ export default class EditorPanel extends Widget {
     this._grid.on('dropped', this._onDropped.bind(this));
 
     this._cells.forEach(
-      (value: { info: DasboardCellInfo; cell: Cell }, key: string) => {
+      (value: { info: DasboardCellInfo; cell: any }, key: string) => {
         if (!value.info.views[this._dashboard.activeView].hidden) {
           const widget = document.createElement('div');
           widget.className = 'grid-stack-item';
@@ -104,7 +139,6 @@ export default class EditorPanel extends Widget {
           }
 
           this._grid.addWidget(widget, options);
-          value.cell.update();
         }
       }
     );
@@ -112,9 +146,6 @@ export default class EditorPanel extends Widget {
 
   private _stateChanged(): void {
     console.log('stateChanged');
-    const language_info = this._context.model.metadata.get(
-      'language_info'
-    ) as nbformat.ILanguageInfoMetadata;
     const data = this._context.model.metadata.get('extensions') as Record<
       string,
       any
@@ -146,7 +177,7 @@ export default class EditorPanel extends Widget {
         version: 1,
         views: {
           grid_default: {
-            hidden: true,
+            hidden: false,
             row: null,
             col: null,
             width: 1,
@@ -159,7 +190,30 @@ export default class EditorPanel extends Widget {
         info = data['jupyter_dashboards'] as DasboardCellInfo;
       }
 
-      this._cells.set(cell.id, { info, cell: new Cell(cell, language_info) });
+      if (cell.type === 'code') {
+        const codeCell = new CodeCell({
+          model: cell as CodeCellModel,
+          rendermime: this.rendermime,
+          contentFactory: this.contentFactory,
+          editorConfig: this._editorConfig.code,
+          updateEditorOnShow: true
+        });
+
+        this._cells.set(cell.id, { info, cell: new Cell(codeCell) });
+      } else if (cell.type === 'markdown') {
+        const markdownCell = new MarkdownCell({
+          model: cell as MarkdownCellModel,
+          rendermime: this.rendermime,
+          contentFactory: this.contentFactory,
+          editorConfig: this._editorConfig.markdown,
+          updateEditorOnShow: true
+        });
+
+        markdownCell.rendered = true;
+        markdownCell.inputHidden = false;
+
+        this._cells.set(cell.id, { info, cell: new Cell(markdownCell) });
+      }
     }
 
     this.update();
@@ -251,6 +305,32 @@ export default class EditorPanel extends Widget {
 
   private _grid: GridStack;
   private _dashboard: DasboardInfo;
-  private _context: Context<INotebookModel>;
+  private _context: DocumentRegistry.IContext<INotebookModel>;
   private _cells: Map<string, { info: DasboardCellInfo; cell: Cell }>;
+
+  private _editorConfig: StaticNotebook.IEditorConfig;
+  private _notebookConfig: StaticNotebook.INotebookConfig;
+}
+
+export namespace EditorPanel {
+  /**
+   * Notebook config interface for NotebookPanel
+   */
+  export interface IOptions {
+    context: DocumentRegistry.IContext<INotebookModel>;
+
+    rendermime: IRenderMimeRegistry;
+
+    contentFactory: NotebookPanel.IContentFactory;
+
+    mimeTypeService: IEditorMimeTypeService;
+    /**
+     * A config object for cell editors
+     */
+    editorConfig: StaticNotebook.IEditorConfig;
+    /**
+     * A config object for notebook widget
+     */
+    notebookConfig: StaticNotebook.INotebookConfig;
+  }
 }

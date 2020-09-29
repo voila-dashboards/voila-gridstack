@@ -4,6 +4,12 @@ import {
   ILayoutRestorer
 } from '@jupyterlab/application';
 
+import { NotebookPanel, StaticNotebook } from '@jupyterlab/notebook';
+
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
+
+import { IEditorServices } from '@jupyterlab/codeeditor';
+
 import { WidgetTracker } from '@jupyterlab/apputils';
 
 import VoilaWidgetFactory from './factory';
@@ -13,8 +19,20 @@ import VoilaEditor from './widget';
 export const editor: JupyterFrontEndPlugin<void> = {
   id: 'voila-editor/editor',
   autoStart: true,
-  optional: [ILayoutRestorer],
-  activate: (app: JupyterFrontEnd, restorer: ILayoutRestorer | null) => {
+  optional: [],
+  requires: [
+    ILayoutRestorer,
+    NotebookPanel.IContentFactory,
+    IEditorServices,
+    IRenderMimeRegistry
+  ],
+  activate: (
+    app: JupyterFrontEnd,
+    restorer: ILayoutRestorer | null,
+    contentFactory: NotebookPanel.IContentFactory,
+    editorServices: IEditorServices,
+    rendermime: IRenderMimeRegistry
+  ) => {
     const tracker = new WidgetTracker<VoilaEditor>({
       namespace: 'voila-editor'
     });
@@ -32,9 +50,13 @@ export const editor: JupyterFrontEndPlugin<void> = {
       name: 'Voila Editor',
       fileTypes: ['notebook'],
       modelName: 'notebook',
-      defaultFor: ['notebook'],
       preferKernel: true,
-      canStartKernel: true
+      canStartKernel: true,
+      rendermime: rendermime,
+      contentFactory,
+      editorConfig: StaticNotebook.defaultEditorConfig,
+      notebookConfig: StaticNotebook.defaultNotebookConfig,
+      mimeTypeService: editorServices.mimeTypeService
     });
 
     factory.widgetCreated.connect((sender, widget) => {
