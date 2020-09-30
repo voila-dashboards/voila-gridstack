@@ -4,7 +4,7 @@ import { GridStack, GridStackNode, GridHTMLElement } from 'gridstack';
 
 import 'gridstack/dist/gridstack.css';
 
-import { GridItem, DasboardCellView } from './../components/cell';
+import { GridItem } from './../components/cell';
 
 export type DasboardInfo = {
   version: number;
@@ -92,7 +92,7 @@ export class GridStackPanel extends Widget {
         widget.className = 'grid-stack-item';
         widget.append(value.node);
 
-        const view: DasboardCellView = value.info.views[this._info.activeView];
+        const view = value.info.views[this._info.activeView];
 
         const options = {
           id: key,
@@ -103,10 +103,11 @@ export class GridStackPanel extends Widget {
           autoPosition: false
         };
 
-        /* if (!view.row || !view.col) {
-            console.debug("autoposition");
-            options['autoPosition'] = true;
-          } */
+        console.debug('new: ', view.row, view.col);
+        if (view.row === null || view.col === null) {
+          console.debug('autoposition');
+          options['autoPosition'] = true;
+        }
 
         this._grid.addWidget(widget, options);
       }
