@@ -19,42 +19,15 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 
 import { ReadonlyPartialJSONValue } from '@lumino/coreutils';
 
-import { Widget } from '@lumino/widgets';
+import { Panel } from '@lumino/widgets';
 
-import { GridStack, GridStackNode, GridHTMLElement } from 'gridstack';
+import { Signal } from '@lumino/signaling';
 
-import 'gridstack/dist/gridstack.css';
+import { GridStackPanel, DasboardInfo } from './views/gridstackPanel';
 
-import Cell from './components/cell';
+import { GridItem, DasboardCellInfo } from './components/cell';
 
-type DasboardInfo = {
-  version: number;
-  activeView: string;
-  views: { [id: string]: DasboardView };
-};
-
-type DasboardView = {
-  name: string;
-  type: string;
-  cellMargin: number;
-  cellHeight: number;
-  numColumns: number;
-};
-
-type DasboardCellInfo = {
-  version: number;
-  views: { [id: string]: DasboardCellView };
-};
-
-type DasboardCellView = {
-  hidden: boolean;
-  row: number;
-  col: number;
-  width: number;
-  height: number;
-};
-
-export default class EditorPanel extends Widget {
+export default class EditorPanel extends Panel {
   constructor(options: EditorPanel.IOptions) {
     super();
     this._context = options.context;
@@ -65,29 +38,37 @@ export default class EditorPanel extends Widget {
     this._notebookConfig = options.notebookConfig;
 
     this._context.model.stateChanged.connect(() => {
-      this._stateChanged();
+      this._checkMetadata();
     });
 
-    this.addClass('grid-panel');
+    this._context.model.contentChanged.connect(() => {
+      this._contentChanged();
+    });
 
-    this._cells = new Map<string, { info: DasboardCellInfo; cell: Cell }>();
+    this._gridStackPanel = new GridStackPanel();
+    this.addWidget(this._gridStackPanel);
   }
 
   dispose(): void {
+    console.debug('Dispose');
     super.dispose();
-    this._cells = null;
-    this._grid = null;
+    this._gridStackPanel = null;
+    Signal.clearData(this._context.model);
   }
 
   readonly rendermime: IRenderMimeRegistry;
+
   readonly contentFactory: NotebookPanel.IContentFactory;
+
   readonly mimeTypeService: IEditorMimeTypeService;
+
   get editorConfig(): StaticNotebook.IEditorConfig {
     return this._editorConfig;
   }
   set editorConfig(value: StaticNotebook.IEditorConfig) {
     this._editorConfig = value;
   }
+
   get notebookConfig(): StaticNotebook.INotebookConfig {
     return this._notebookConfig;
   }
@@ -96,65 +77,22 @@ export default class EditorPanel extends Widget {
   }
 
   onUpdateRequest(): void {
-    this._grid?.destroy();
-
-    const grid = document.createElement('div');
-    grid.className = 'grid-stack';
-    this.node.appendChild(grid);
-
-    this._grid = GridStack.init({
-      animate: true,
-      removable: true,
-      removeTimeout: 500,
-      styleInHead: true,
-      disableOneColumnMode: true,
-      resizable: { autoHide: true, handles: 'e, se, s, sw, w' }
-      //alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-    });
-
-    this._grid.on('change', this._onChange.bind(this));
-    this._grid.on('removed', this._onRemove.bind(this));
-    this._grid.on('dropped', this._onDropped.bind(this));
-
-    this._cells.forEach(
-      (value: { info: DasboardCellInfo; cell: any }, key: string) => {
-        if (!value.info.views[this._dashboard.activeView].hidden) {
-          const widget = document.createElement('div');
-          widget.className = 'grid-stack-item';
-          widget.append(value.cell.node);
-
-          const view: DasboardCellView =
-            value.info.views[this._dashboard.activeView];
-          const options = {
-            id: key,
-            x: view.col,
-            y: view.row,
-            width: view.width,
-            height: view.height,
-            autoPosition: false
-          };
-
-          if (!view.row || !view.col) {
-            options['autoPosition'] = true;
-          }
-
-          this._grid.addWidget(widget, options);
-        }
-      }
-    );
+    this._gridStackPanel.update();
   }
 
-  private _stateChanged(): void {
-    console.log('stateChanged');
+  private _checkMetadata(): void {
+    //console.debug("_checkMetadata");
+    //console.debug(this._context.model);
+
     const data = this._context.model.metadata.get('extensions') as Record<
       string,
       any
     >;
 
     if (data && data.jupyter_dashboards) {
-      this._dashboard = data['jupyter_dashboards'] as DasboardInfo;
+      this._gridStackPanel.info = data['jupyter_dashboards'] as DasboardInfo;
     } else {
-      this._dashboard = {
+      this._gridStackPanel.info = {
         version: 1,
         activeView: 'grid_default',
         views: {
@@ -167,7 +105,18 @@ export default class EditorPanel extends Widget {
           }
         }
       };
+
+      const data = { jupyter_dashboards: this._gridStackPanel.info };
+      this._context.model.metadata.set(
+        'extensions',
+        data as ReadonlyPartialJSONValue
+      );
     }
+  }
+
+  private _contentChanged(): void {
+    //console.debug('_contentChanged');
+    //console.debug(this._context.model);
 
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const cell = this._context.model.cells.get(i);
@@ -199,7 +148,7 @@ export default class EditorPanel extends Widget {
           updateEditorOnShow: true
         });
 
-        this._cells.set(cell.id, { info, cell: new Cell(codeCell) });
+        this._gridStackPanel.addItem(cell.id, new GridItem(codeCell, info));
       } else if (cell.type === 'markdown') {
         const markdownCell = new MarkdownCell({
           model: cell as MarkdownCellModel,
@@ -212,89 +161,28 @@ export default class EditorPanel extends Widget {
         markdownCell.rendered = true;
         markdownCell.inputHidden = false;
 
-        this._cells.set(cell.id, { info, cell: new Cell(markdownCell) });
+        this._gridStackPanel.addItem(cell.id, new GridItem(markdownCell, info));
       }
     }
 
     this.update();
   }
 
-  private _onChange(
-    event: Event,
-    items: GridHTMLElement | GridStackNode[]
-  ): void {
-    // TODO: fix casts
-    (items as GridStackNode[]).forEach(el => {
-      const cell = this._cells.get(el.id as string);
-      cell.info.views[this._dashboard.activeView] = {
-        hidden: false,
-        col: el.x,
-        row: el.y,
-        width: el.width,
-        height: el.height
-      };
-    });
-  }
-
-  private _onRemove(
-    event: Event,
-    items: GridHTMLElement | GridStackNode[]
-  ): void {
-    // TODO: fix casts
-    (items as GridStackNode[]).forEach(el => {
-      console.log('Removed:', el);
-      const cell = this._cells.get(el.id as string);
-      cell.info.views[this._dashboard.activeView] = {
-        hidden: true,
-        col: el.x,
-        row: el.y,
-        width: el.width,
-        height: el.height
-      };
-    });
-  }
-
-  private _onDropped(
-    event: Event,
-    items: GridHTMLElement | GridStackNode[]
-  ): void {
-    // TODO: fix casts
-    const widgets = items as GridStackNode[];
-    const [previousWidget, newWidget] = widgets;
-    console.log('Removed widget that was dragged out of grid:', previousWidget);
-    console.log('Added widget in dropped grid:', newWidget);
-  }
-
   save(): void {
-    const data = this._context.model.metadata.get('extensions') as Record<
-      string,
-      any
-    >;
-
-    if (data) {
-      data['jupyter_dashboards'] = this._dashboard;
-      this._context.model.metadata.set(
-        'extensions',
-        data as ReadonlyPartialJSONValue
-      );
-    } else {
-      const data = { jupyter_dashboards: this._dashboard };
-      this._context.model.metadata.set(
-        'extensions',
-        data as ReadonlyPartialJSONValue
-      );
-    }
+    console.debug('save');
 
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const cell = this._context.model.cells.get(i);
       const data = cell.metadata.get('extensions') as Record<string, any>;
 
       if (data) {
-        data['jupyter_dashboards'] = this._cells.get(cell.id).info;
+        data['jupyter_dashboards'] = this._gridStackPanel.getItem(cell.id).info;
         cell.metadata.set('extensions', data as ReadonlyPartialJSONValue);
         this._context.model.cells.set(i, cell);
       } else {
-        const data = { jupyter_dashboards: this._cells.get(cell.id).info };
+        const data = {
+          jupyter_dashboards: this._gridStackPanel.getItem(cell.id).info
+        };
         cell.metadata.set('extensions', data as ReadonlyPartialJSONValue);
         this._context.model.cells.set(i, cell);
       }
@@ -303,13 +191,10 @@ export default class EditorPanel extends Widget {
     this._context.save();
   }
 
-  private _grid: GridStack;
-  private _dashboard: DasboardInfo;
   private _context: DocumentRegistry.IContext<INotebookModel>;
-  private _cells: Map<string, { info: DasboardCellInfo; cell: Cell }>;
-
   private _editorConfig: StaticNotebook.IEditorConfig;
   private _notebookConfig: StaticNotebook.INotebookConfig;
+  private _gridStackPanel: GridStackPanel;
 }
 
 export namespace EditorPanel {

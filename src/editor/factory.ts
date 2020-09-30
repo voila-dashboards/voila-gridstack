@@ -82,8 +82,6 @@ export default class VoilaWidgetFactory extends ABCWidgetFactory<
         : this._notebookConfig
     };
 
-    console.log(context);
-
     return new VoilaEditor(context, new EditorPanel(options));
   }
 
