@@ -21,6 +21,8 @@ import { ReadonlyPartialJSONValue } from '@lumino/coreutils';
 
 import { Panel } from '@lumino/widgets';
 
+import { Signal } from '@lumino/signaling';
+
 import { GridStackPanel, DasboardInfo } from './views/gridstackPanel';
 
 import { GridItem, DasboardCellInfo } from './components/cell';
@@ -51,6 +53,7 @@ export default class EditorPanel extends Panel {
     console.debug('Dispose');
     super.dispose();
     this._gridStackPanel = null;
+    Signal.clearData(this._context.model);
   }
 
   readonly rendermime: IRenderMimeRegistry;

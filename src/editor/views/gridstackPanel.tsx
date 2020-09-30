@@ -1,6 +1,6 @@
 import { Widget } from '@lumino/widgets';
 
-import { GridStack, GridStackNode } from 'gridstack';
+import { GridStack, GridStackNode, GridHTMLElement } from 'gridstack';
 
 import 'gridstack/dist/gridstack.css';
 
@@ -59,22 +59,32 @@ export class GridStackPanel extends Widget {
       //alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
     });
 
-    this._grid.on('change', (event: Event, items: any) => {
-      this._onChange(event, items as GridStackNode[]);
-    });
+    this._grid.on(
+      'change',
+      (event: Event, items: GridHTMLElement | GridStackNode[]) => {
+        this._onChange(event, items as GridStackNode[]);
+      }
+    );
 
-    this._grid.on('removed', (event: Event, items: any) => {
-      this._onRemove(event, items as GridStackNode[]);
-    });
+    this._grid.on(
+      'removed',
+      (event: Event, items: GridHTMLElement | GridStackNode[]) => {
+        this._onRemove(event, items as GridStackNode[]);
+      }
+    );
 
-    this._grid.on('dropped', (event: Event, items: any) => {
-      const { previousWidget, newWidget } = items;
-      this._onDropped(
-        event,
-        previousWidget as GridStackNode,
-        newWidget as GridStackNode
-      );
-    });
+    this._grid.on(
+      'dropped',
+      (event: Event, items: GridHTMLElement | GridStackNode[]) => {
+        const previousWidget = items[0];
+        const newWidget = items[1];
+        this._onDropped(
+          event,
+          previousWidget as GridStackNode,
+          newWidget as GridStackNode
+        );
+      }
+    );
 
     this._cells.forEach((value: GridItem, key: string) => {
       if (!value.info.views[this._info.activeView].hidden) {
