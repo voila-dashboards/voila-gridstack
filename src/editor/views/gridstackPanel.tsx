@@ -4,7 +4,7 @@ import { GridStack, GridStackNode, GridHTMLElement } from 'gridstack';
 
 import 'gridstack/dist/gridstack.css';
 
-import { GridItem, DasboardCellView } from './../components/cell';
+import { GridItem } from './../components/cell';
 
 export type DasboardInfo = {
   version: number;
@@ -28,10 +28,18 @@ export class GridStackPanel extends Widget {
   }
 
   dispose(): void {
-    console.debug('Dispose grid');
+    // console.debug('Dispose grid');
     super.dispose();
     this._cells = null;
     this._grid = null;
+  }
+
+  get cells(): Map<string, GridItem> {
+    return this._cells;
+  }
+
+  set cells(cells: Map<string, GridItem>) {
+    this._cells = cells;
   }
 
   get info(): DasboardInfo {
@@ -49,15 +57,18 @@ export class GridStackPanel extends Widget {
     grid.className = 'grid-stack';
     this.node.appendChild(grid);
 
-    this._grid = GridStack.init({
-      animate: true,
-      removable: true,
-      removeTimeout: 500,
-      styleInHead: true,
-      disableOneColumnMode: true,
-      resizable: { autoHide: true, handles: 'e, se, s, sw, w' }
-      //alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-    });
+    this._grid = GridStack.init(
+      {
+        animate: true,
+        removable: true,
+        removeTimeout: 500,
+        styleInHead: true,
+        disableOneColumnMode: true,
+        resizable: { autoHide: true, handles: 'e, se, s, sw, w' }
+        //alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      },
+      grid
+    );
 
     this._grid.on(
       'change',
@@ -92,7 +103,7 @@ export class GridStackPanel extends Widget {
         widget.className = 'grid-stack-item';
         widget.append(value.node);
 
-        const view: DasboardCellView = value.info.views[this._info.activeView];
+        const view = value.info.views[this._info.activeView];
 
         const options = {
           id: key,
@@ -103,10 +114,9 @@ export class GridStackPanel extends Widget {
           autoPosition: false
         };
 
-        /* if (!view.row || !view.col) {
-            console.debug("autoposition");
-            options['autoPosition'] = true;
-          } */
+        if (view.row === null || view.col === null) {
+          options['autoPosition'] = true;
+        }
 
         this._grid.addWidget(widget, options);
       }
@@ -120,6 +130,10 @@ export class GridStackPanel extends Widget {
   addItem(id: string, cell: GridItem): void {
     this._cells.set(id, cell);
     this.update();
+  }
+
+  removeItem(id: string): boolean {
+    return this._cells.delete(id);
   }
 
   private _onChange(event: Event, items: GridStackNode[]): void {
