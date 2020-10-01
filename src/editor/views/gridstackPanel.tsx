@@ -28,10 +28,18 @@ export class GridStackPanel extends Widget {
   }
 
   dispose(): void {
-    console.debug('Dispose grid');
+    // console.debug('Dispose grid');
     super.dispose();
     this._cells = null;
     this._grid = null;
+  }
+
+  get cells(): Map<string, GridItem> {
+    return this._cells;
+  }
+
+  set cells(cells: Map<string, GridItem>) {
+    this._cells = cells;
   }
 
   get info(): DasboardInfo {
@@ -49,15 +57,18 @@ export class GridStackPanel extends Widget {
     grid.className = 'grid-stack';
     this.node.appendChild(grid);
 
-    this._grid = GridStack.init({
-      animate: true,
-      removable: true,
-      removeTimeout: 500,
-      styleInHead: true,
-      disableOneColumnMode: true,
-      resizable: { autoHide: true, handles: 'e, se, s, sw, w' }
-      //alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-    });
+    this._grid = GridStack.init(
+      {
+        animate: true,
+        removable: true,
+        removeTimeout: 500,
+        styleInHead: true,
+        disableOneColumnMode: true,
+        resizable: { autoHide: true, handles: 'e, se, s, sw, w' }
+        //alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      },
+      grid
+    );
 
     this._grid.on(
       'change',
@@ -103,9 +114,7 @@ export class GridStackPanel extends Widget {
           autoPosition: false
         };
 
-        console.debug('new: ', view.row, view.col);
         if (view.row === null || view.col === null) {
-          console.debug('autoposition');
           options['autoPosition'] = true;
         }
 
@@ -121,6 +130,10 @@ export class GridStackPanel extends Widget {
   addItem(id: string, cell: GridItem): void {
     this._cells.set(id, cell);
     this.update();
+  }
+
+  removeItem(id: string): boolean {
+    return this._cells.delete(id);
   }
 
   private _onChange(event: Event, items: GridStackNode[]): void {

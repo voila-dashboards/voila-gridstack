@@ -54,6 +54,22 @@ export class GridItem extends Panel {
     }
   }
 
+  get isCode(): boolean {
+    return this._isCode;
+  }
+
+  set isCode(isCode: boolean) {
+    this._isCode = isCode;
+  }
+
+  get codeCell(): CodeCell {
+    return this._cell as CodeCell;
+  }
+
+  set codeCell(cell: CodeCell) {
+    this._cell = cell;
+  }
+
   get info(): DasboardCellInfo {
     return this._info;
   }
