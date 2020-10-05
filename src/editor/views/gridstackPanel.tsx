@@ -4,7 +4,9 @@ import { GridStack, GridStackNode, GridHTMLElement } from 'gridstack';
 
 import 'gridstack/dist/gridstack.css';
 
-import { GridItem } from './../components/cell';
+import 'gridstack/dist/gridstack-extra.css';
+
+import { GridItem } from './../components/gridItem';
 
 export type DasboardInfo = {
   version: number;
@@ -60,9 +62,11 @@ export class GridStackPanel extends Widget {
     this._grid = GridStack.init(
       {
         animate: true,
+        float: true,
         removable: true,
         removeTimeout: 500,
         styleInHead: true,
+        acceptWidgets: true,
         disableOneColumnMode: true,
         resizable: { autoHide: true, handles: 'e, se, s, sw, w' }
         //alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)

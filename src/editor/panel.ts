@@ -9,10 +9,10 @@ import {
   CodeCell,
   CodeCellModel,
   MarkdownCell,
-  MarkdownCellModel
+  MarkdownCellModel,
+  RawCell,
+  RawCellModel
 } from '@jupyterlab/cells';
-
-import { SimplifiedOutputArea } from '@jupyterlab/outputarea';
 
 import { IEditorMimeTypeService } from '@jupyterlab/codeeditor';
 
@@ -20,15 +20,17 @@ import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 
-import { ReadonlyPartialJSONValue } from '@lumino/coreutils';
+//import { ReadonlyPartialJSONValue } from '@lumino/coreutils';
 
 import { Panel } from '@lumino/widgets';
 
 import { Signal } from '@lumino/signaling';
 
-import { GridStackPanel, DasboardInfo } from './views/gridstackPanel';
+//import { GridStackPanel, DasboardInfo } from './views/gridstackPanel';
 
-import { GridItem, DasboardCellInfo } from './components/cell';
+import { NotebookView } from './views/notebook';
+
+import { GridItem, DasboardCellInfo } from './components/gridItem';
 
 export default class EditorPanel extends Panel {
   constructor(options: EditorPanel.IOptions) {
@@ -40,17 +42,21 @@ export default class EditorPanel extends Panel {
     this._editorConfig = options.editorConfig;
     this._notebookConfig = options.notebookConfig;
 
-    this._gridStackPanel = new GridStackPanel();
-    this.addWidget(this._gridStackPanel);
+    this._notebookView = new NotebookView();
+    this.addWidget(this._notebookView);
+
+    //this._gridStackPanel = new GridStackPanel();
+    //this.addWidget(this._gridStackPanel);
 
     this._checkMetadata();
-    this._context.sessionContext.ready.then(() => this._initGridStack());
+    this._context.sessionContext.ready.then(() => this._initNotebook());
   }
 
   dispose(): void {
     // console.debug('Dispose');
     super.dispose();
-    this._gridStackPanel = null;
+    this._notebookView = null;
+    //this._gridStackPanel = null;
     Signal.clearData(this);
   }
 
@@ -75,13 +81,14 @@ export default class EditorPanel extends Panel {
   }
 
   onUpdateRequest(): void {
-    this._gridStackPanel.update();
+    this._notebookView.update();
+    //this._gridStackPanel.update();
   }
 
   private _checkMetadata(): void {
     console.debug('_checkMetadata');
 
-    const data = this._context.model.metadata.get('extensions') as Record<
+    /* const data = this._context.model.metadata.get('extensions') as Record<
       string,
       any
     >;
@@ -108,10 +115,61 @@ export default class EditorPanel extends Panel {
         'extensions',
         data as ReadonlyPartialJSONValue
       );
-    }
+    } */
   }
 
-  private _initGridStack(): void {
+  private _initNotebook(): void {
+    console.debug('_initNotebook');
+
+    const cells: Map<string, GridItem> = new Map<string, GridItem>();
+
+    for (let i = 0; i < this._context.model.cells?.length; i++) {
+      const model = this._context.model.cells.get(i);
+      const cell = this._notebookView.getItem(model.id);
+
+      if (model.value.text.length === 0) {
+        continue;
+      } else if (cell === undefined) {
+        const item = this._createCell(model, false);
+        item.execute(this._context.sessionContext);
+        cells.set(model.id, item);
+      } else {
+        cells.set(model.id, cell);
+      }
+    }
+
+    this._notebookView.cells = cells;
+    this.update();
+    this._context.model.stateChanged.connect(this._updateNotebook, this);
+  }
+
+  private _updateNotebook(): void {
+    console.debug('_updateNotebook');
+
+    while (this._context.model.deletedCells.length > 0) {
+      const id = this._context.model.deletedCells.shift();
+      console.debug('deleted', id);
+      this._notebookView.removeItem(id);
+    }
+
+    for (let i = 0; i < this._context.model.cells?.length; i++) {
+      const model = this._context.model.cells.get(i);
+      const cell = this._notebookView.getItem(model.id);
+      console.debug(model);
+      console.debug(cell);
+
+      if (cell === undefined && model.value.text.length !== 0) {
+        console.debug(cell);
+        const item = this._createCell(model, false);
+        item.execute(this._context.sessionContext);
+        this._notebookView.addItem(model.id, item);
+      }
+    }
+
+    this.update();
+  }
+
+  /* private _initGridStack(): void {
     console.debug('_initGridStack');
 
     const cells: Map<string, GridItem> = new Map<string, GridItem>();
@@ -122,12 +180,12 @@ export default class EditorPanel extends Panel {
 
       if (model.value.text.length === 0) {
         continue;
+
       } else if (cell === undefined) {
-        const item = this._createCell(model);
-        this._runCell(item);
-        if (item !== undefined) {
-          cells.set(model.id, item);
-        }
+        const item = this._createCell(model, true);
+        item.execute(this._context.sessionContext);
+        cells.set(model.id, item);
+
       } else {
         cells.set(model.id, cell);
       }
@@ -135,34 +193,32 @@ export default class EditorPanel extends Panel {
 
     this._gridStackPanel.cells = cells;
     this.update();
-    this._context.model.contentChanged.connect(this._updateCells, this);
-  }
+    this._context.model.stateChanged.connect(this._updateCells, this);
+  } */
 
-  private _updateCells(): void {
+  /* private _updateCells(): void {
     console.debug('_updateCells');
-    const cells: Map<string, GridItem> = new Map<string, GridItem>();
+
+    while (this._context.model.deletedCells.length > 0) {
+      const id = this._context.model.deletedCells.shift();
+      this._gridStackPanel.removeItem(id);
+    }
 
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const model = this._context.model.cells.get(i);
       const cell = this._gridStackPanel.getItem(model.id);
 
-      if (model.value.text.length === 0) {
-        continue;
-      } else if (cell === undefined) {
-        const item = this._createCell(model);
-        if (item !== undefined) {
-          cells.set(model.id, item);
-        }
-      } else {
-        cells.set(model.id, cell);
+      if (cell === undefined && model.value.text.length !== 0) {
+        const item = this._createCell(model, true);
+        item.execute(this._context.sessionContext);
+        this._gridStackPanel.addItem(model.id, item);
       }
     }
 
-    this._gridStackPanel.cells = cells;
     this.update();
-  }
+  } */
 
-  private _createCell(cell: ICellModel): GridItem {
+  private _createCell(cell: ICellModel, isOutput: boolean): GridItem {
     const data = cell.metadata.get('extensions') as Record<string, any>;
 
     let info: DasboardCellInfo = {
@@ -183,7 +239,7 @@ export default class EditorPanel extends Panel {
     }
 
     if (cell.type === 'code') {
-      const codeCell = new CodeCell({
+      const code = new CodeCell({
         model: cell as CodeCellModel,
         rendermime: this.rendermime,
         contentFactory: this.contentFactory,
@@ -191,9 +247,11 @@ export default class EditorPanel extends Panel {
         updateEditorOnShow: true
       });
 
-      return new GridItem(codeCell, info);
+      code.outputArea.model.clear();
+
+      return new GridItem(code, info, isOutput);
     } else if (cell.type === 'markdown') {
-      const markdownCell = new MarkdownCell({
+      const markdown = new MarkdownCell({
         model: cell as MarkdownCellModel,
         rendermime: this.rendermime,
         contentFactory: this.contentFactory,
@@ -201,34 +259,23 @@ export default class EditorPanel extends Panel {
         updateEditorOnShow: true
       });
 
-      markdownCell.rendered = true;
-      markdownCell.inputHidden = false;
-
-      return new GridItem(markdownCell, info);
+      return new GridItem(markdown, info, isOutput);
     } else {
-      // RAW cell
-      return undefined;
-    }
-  }
+      const raw = new RawCell({
+        model: cell as RawCellModel,
+        contentFactory: this.contentFactory,
+        editorConfig: this._editorConfig.raw,
+        updateEditorOnShow: true
+      });
 
-  private _runCell(cell: GridItem): void {
-    if (
-      this._context.sessionContext.isReady &&
-      cell.isCode &&
-      cell.codeCell.model.executionCount === null
-    ) {
-      SimplifiedOutputArea.execute(
-        cell.codeCell.model.value.text,
-        cell.codeCell.outputArea,
-        this._context.sessionContext
-      ).catch(reason => console.error(reason));
+      return new GridItem(raw, info, isOutput);
     }
   }
 
   save(): void {
     console.debug('save');
 
-    for (let i = 0; i < this._context.model.cells?.length; i++) {
+    /* for (let i = 0; i < this._context.model.cells?.length; i++) {
       const model = this._context.model.cells.get(i);
       const cell = this._gridStackPanel.getItem(model.id);
       const data = model.metadata.get('extensions') as Record<string, any>;
@@ -244,7 +291,7 @@ export default class EditorPanel extends Panel {
         model.metadata.set('extensions', data as ReadonlyPartialJSONValue);
         this._context.model.cells.set(i, model);
       }
-    }
+    } */
 
     this._context.save();
   }
@@ -252,7 +299,8 @@ export default class EditorPanel extends Panel {
   private _context: DocumentRegistry.IContext<INotebookModel>;
   private _editorConfig: StaticNotebook.IEditorConfig;
   private _notebookConfig: StaticNotebook.INotebookConfig;
-  private _gridStackPanel: GridStackPanel;
+  //private _gridStackPanel: GridStackPanel;
+  private _notebookView: NotebookView;
 }
 
 export namespace EditorPanel {
