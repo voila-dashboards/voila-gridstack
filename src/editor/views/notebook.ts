@@ -4,8 +4,6 @@ import { GridStack } from 'gridstack';
 
 import 'gridstack/dist/gridstack.css';
 
-import 'gridstack/dist/gridstack-extra.css';
-
 import { GridItem } from './../components/gridItem';
 
 export class NotebookView extends Widget {
@@ -51,12 +49,11 @@ export class NotebookView extends Widget {
     this._cells.forEach((value: GridItem, key: string) => {
       const widget = document.createElement('div');
       widget.className = 'grid-stack-item';
-      widget.className = 'grid-item';
       widget.append(value.node);
 
       const options = {
         id: key,
-        minHeight: 4,
+        height: 2,
         noResize: true,
         autoPosition: true
       };

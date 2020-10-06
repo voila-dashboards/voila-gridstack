@@ -148,18 +148,14 @@ export default class EditorPanel extends Panel {
 
     while (this._context.model.deletedCells.length > 0) {
       const id = this._context.model.deletedCells.shift();
-      console.debug('deleted', id);
       this._notebookView.removeItem(id);
     }
 
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const model = this._context.model.cells.get(i);
       const cell = this._notebookView.getItem(model.id);
-      console.debug(model);
-      console.debug(cell);
 
       if (cell === undefined && model.value.text.length !== 0) {
-        console.debug(cell);
         const item = this._createCell(model, false);
         item.execute(this._context.sessionContext);
         this._notebookView.addItem(model.id, item);

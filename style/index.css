@@ -5,11 +5,6 @@
   /*background-color: darkgrey;*/
 }
 
-.grid-item {
-  min-height: fit-content;
-}
-
 .grid-content {
-  min-height: fit-content;
   border-style: solid;
 }

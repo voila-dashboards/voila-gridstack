@@ -4,6 +4,8 @@ import { SimplifiedOutputArea } from '@jupyterlab/outputarea';
 
 import { ISessionContext } from '@jupyterlab/apputils';
 
+import { Signal } from '@lumino/signaling';
+
 import { Panel } from '@lumino/widgets';
 
 export type DasboardCellInfo = {
@@ -27,19 +29,20 @@ export class GridItem extends Panel {
     this.removeClass('lm-Panel');
     this.removeClass('p-Panel');
     this.addClass('grid-stack-item-content');
-    this.addClass('grid-content');
 
     this._cell = cell;
     this._info = info;
     this._isOutput = isOutput;
     this._type = this._cell.model.type;
 
+    this._cell.model.contentChanged.connect(this.updateCell, this);
+
     if (this._isOutput) {
       if (this._type === 'code') {
         this._cell.inputHidden = true;
       }
 
-      this._cell.addClass('cell');
+      this._cell.addClass('grid-content');
       this.addWidget(this._cell);
     } else {
       this.addWidget(this._cell);
@@ -51,11 +54,17 @@ export class GridItem extends Panel {
   dispose(): void {
     this._cell.dispose();
     this._cell = null;
+    Signal.clearData(this);
   }
 
   onUpdateRequest(): void {
-    this._cell.editor.resizeToFit();
     this._cell.update();
+  }
+
+  updateCell(): void {
+    this._cell.editor.refresh();
+    this._cell.update();
+    console.debug('updating cell');
   }
 
   execute(sessionContext: ISessionContext): void {

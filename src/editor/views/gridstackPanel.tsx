@@ -4,7 +4,7 @@ import { GridStack, GridStackNode, GridHTMLElement } from 'gridstack';
 
 import 'gridstack/dist/gridstack.css';
 
-import 'gridstack/dist/gridstack-extra.css';
+//import 'gridstack/dist/gridstack-extra.css';
 
 import { GridItem } from './../components/gridItem';
 
