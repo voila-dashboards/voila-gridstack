@@ -1,8 +1,17 @@
-.grid-panel {
+.grid-editor {
   width: 100%;
   height: 100%;
-  overflow: scroll;
   /*background-color: darkgrey;*/
+}
+
+.grid-notebook {
+  height: 100%;
+  overflow: scroll;
+}
+
+.grid-panel {
+  height: 100%;
+  overflow: scroll;
 }
 
 .grid-content {

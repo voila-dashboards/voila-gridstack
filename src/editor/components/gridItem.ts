@@ -1,6 +1,6 @@
-import { Cell, CodeCell, MarkdownCell } from '@jupyterlab/cells';
+import { Cell, CodeCell, MarkdownCell, InputArea } from '@jupyterlab/cells';
 
-import { SimplifiedOutputArea } from '@jupyterlab/outputarea';
+import { SimplifiedOutputArea, OutputArea } from '@jupyterlab/outputarea';
 
 import { ISessionContext } from '@jupyterlab/apputils';
 
@@ -22,7 +22,7 @@ export type DasboardCellView = {
 };
 
 export class GridItem extends Panel {
-  constructor(cell: Cell, info: DasboardCellInfo, isOutput: boolean) {
+  constructor(cell: Cell, info: DasboardCellInfo) {
     super();
     this.removeClass('lm-Widget');
     this.removeClass('p-Widget');
@@ -32,39 +32,27 @@ export class GridItem extends Panel {
 
     this._cell = cell;
     this._info = info;
-    this._isOutput = isOutput;
-    this._type = this._cell.model.type;
+    this._type = cell.model.type;
 
-    this._cell.model.contentChanged.connect(this.updateCell, this);
+    this._cell.model.contentChanged.connect(this.update, this);
 
-    if (this._isOutput) {
-      if (this._type === 'code') {
-        this._cell.inputHidden = true;
-      }
-
-      this._cell.addClass('grid-content');
-      this.addWidget(this._cell);
-    } else {
-      this.addWidget(this._cell);
+    if (this._type === 'code') {
+      this._cell.inputHidden = true;
     }
 
-    this._cell.update();
+    this.addWidget(this._cell);
   }
 
   dispose(): void {
+    console.debug('Cell disposed');
     this._cell.dispose();
     this._cell = null;
     Signal.clearData(this);
   }
 
   onUpdateRequest(): void {
-    this._cell.update();
-  }
-
-  updateCell(): void {
-    this._cell.editor.refresh();
-    this._cell.update();
     console.debug('updating cell');
+    this._cell.update();
   }
 
   execute(sessionContext: ISessionContext): void {
@@ -81,7 +69,23 @@ export class GridItem extends Panel {
       (this._cell as MarkdownCell).rendered = true;
     }
 
-    this._cell.update();
+    this.update();
+  }
+
+  cell(): Cell {
+    return this._cell;
+  }
+
+  output(): InputArea | OutputArea | Cell {
+    if (this._type === 'code') {
+      return (this._cell as CodeCell).outputArea;
+    } else if (this._type === 'markdown') {
+      (this._cell as MarkdownCell).inputHidden = false;
+      (this._cell as MarkdownCell).rendered = true;
+      return this._cell;
+    } else {
+      return this._cell.inputArea;
+    }
   }
 
   get info(): DasboardCellInfo {
@@ -94,6 +98,5 @@ export class GridItem extends Panel {
 
   private _cell: Cell;
   private _info: DasboardCellInfo;
-  private _isOutput: boolean;
   private _type: 'code' | 'markdown' | 'raw';
 }

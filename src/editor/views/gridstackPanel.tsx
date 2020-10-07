@@ -1,10 +1,8 @@
 import { Widget } from '@lumino/widgets';
 
-import { GridStack, GridStackNode, GridHTMLElement } from 'gridstack';
+import { GridStack, GridHTMLElement, GridStackNode } from 'gridstack';
 
 import 'gridstack/dist/gridstack.css';
-
-//import 'gridstack/dist/gridstack-extra.css';
 
 import { GridItem } from './../components/gridItem';
 
@@ -23,25 +21,21 @@ export type DasboardView = {
 };
 
 export class GridStackPanel extends Widget {
-  constructor() {
+  constructor(cells: Map<string, GridItem>) {
     super();
+    this.removeClass('lm-Widget');
+    this.removeClass('p-Widget');
+    this.addClass('grid-stack');
     this.addClass('grid-panel');
-    this._cells = new Map<string, GridItem>();
+
+    this._cells = cells;
+    console.debug('GridStackPanel init');
   }
 
   dispose(): void {
-    // console.debug('Dispose grid');
+    console.debug('Dispose GridStackPanel');
     super.dispose();
-    this._cells = null;
     this._grid = null;
-  }
-
-  get cells(): Map<string, GridItem> {
-    return this._cells;
-  }
-
-  set cells(cells: Map<string, GridItem>) {
-    this._cells = cells;
   }
 
   get info(): DasboardInfo {
@@ -53,25 +47,27 @@ export class GridStackPanel extends Widget {
   }
 
   onUpdateRequest(): void {
-    this._grid?.destroy();
-
-    const grid = document.createElement('div');
-    grid.className = 'grid-stack';
-    this.node.appendChild(grid);
+    this._grid?.removeAll();
 
     this._grid = GridStack.init(
       {
-        animate: true,
-        float: true,
-        removable: true,
-        removeTimeout: 500,
+        margin: 2,
+        dragIn: '.grid-stack-item',
+        dragInOptions: { helper: 'clone' },
+        acceptWidgets: '.grid-stack-item',
         styleInHead: true,
-        acceptWidgets: true,
         disableOneColumnMode: true,
         resizable: { autoHide: true, handles: 'e, se, s, sw, w' }
         //alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
       },
-      grid
+      '.grid-stack.grid-panel'
+    );
+
+    this._grid.on(
+      'added',
+      (event: Event, items: GridHTMLElement | GridStackNode[]) => {
+        this._onAdded(event, items as GridStackNode[]);
+      }
     );
 
     this._grid.on(
@@ -85,6 +81,20 @@ export class GridStackPanel extends Widget {
       'removed',
       (event: Event, items: GridHTMLElement | GridStackNode[]) => {
         this._onRemove(event, items as GridStackNode[]);
+      }
+    );
+
+    this._grid.on(
+      'dragstart',
+      (event: Event, items: GridHTMLElement | GridStackNode[]) => {
+        this._onDragStart(event, items as GridHTMLElement);
+      }
+    );
+
+    this._grid.on(
+      'dragstop',
+      (event: Event, items: GridHTMLElement | GridStackNode[]) => {
+        this._onDragStop(event, items as GridHTMLElement);
       }
     );
 
@@ -105,7 +115,8 @@ export class GridStackPanel extends Widget {
       if (!value.info.views[this._info.activeView].hidden) {
         const widget = document.createElement('div');
         widget.className = 'grid-stack-item';
-        widget.append(value.node);
+        widget.className = 'grid-content';
+        widget.appendChild(value.output().node);
 
         const view = value.info.views[this._info.activeView];
 
@@ -127,17 +138,19 @@ export class GridStackPanel extends Widget {
     });
   }
 
-  getItem(id: string): GridItem {
-    return this._cells.get(id);
-  }
-
-  addItem(id: string, cell: GridItem): void {
-    this._cells.set(id, cell);
-    this.update();
-  }
-
-  removeItem(id: string): boolean {
-    return this._cells.delete(id);
+  private _onAdded(event: Event, items: GridStackNode[]): void {
+    items.forEach(el => {
+      console.debug('_onAdded:', el);
+      const cell = this._cells.get(el.id as string);
+      cell.info.views[this._info.activeView] = {
+        hidden: false,
+        col: el.x,
+        row: el.y,
+        width: el.width,
+        height: el.height
+      };
+      this._cells.set(el.id as string, cell);
+    });
   }
 
   private _onChange(event: Event, items: GridStackNode[]): void {
@@ -170,6 +183,14 @@ export class GridStackPanel extends Widget {
       };
       this._cells.set(el.id as string, cell);
     });
+  }
+
+  private _onDragStart(event: Event, el: GridHTMLElement): void {
+    console.log('Start draging:', el);
+  }
+
+  private _onDragStop(event: Event, el: GridHTMLElement): void {
+    console.log('Stop draging:', el);
   }
 
   private _onDropped(
