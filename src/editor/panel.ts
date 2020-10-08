@@ -28,8 +28,6 @@ import { Signal } from '@lumino/signaling';
 
 import { GridStackPanel, DasboardInfo } from './views/gridstackPanel';
 
-import { NotebookView } from './views/notebook';
-
 import { GridItem, DasboardCellInfo } from './components/gridItem';
 
 export default class EditorPanel extends SplitPanel {
@@ -46,9 +44,6 @@ export default class EditorPanel extends SplitPanel {
 
     this._cells = new Map<string, GridItem>();
 
-    this._notebookView = new NotebookView(this._cells);
-    this.addWidget(this._notebookView);
-
     this._gridStackPanel = new GridStackPanel(this._cells);
     this.addWidget(this._gridStackPanel);
 
@@ -62,7 +57,6 @@ export default class EditorPanel extends SplitPanel {
   dispose(): void {
     // console.debug('Dispose');
     super.dispose();
-    this._notebookView = null;
     this._gridStackPanel = null;
     Signal.clearData(this);
   }
@@ -88,7 +82,6 @@ export default class EditorPanel extends SplitPanel {
   }
 
   onUpdateRequest(): void {
-    this._notebookView.update();
     this._gridStackPanel.update();
   }
 
@@ -255,7 +248,6 @@ export default class EditorPanel extends SplitPanel {
   private _editorConfig: StaticNotebook.IEditorConfig;
   private _notebookConfig: StaticNotebook.INotebookConfig;
   private _gridStackPanel: GridStackPanel;
-  private _notebookView: NotebookView;
   private _cells: Map<string, GridItem>;
 }
 

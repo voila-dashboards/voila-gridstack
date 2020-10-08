@@ -1,4 +1,12 @@
+import { NotebookPanel } from '@jupyterlab/notebook';
+
+import { Cell } from '@jupyterlab/cells';
+
+import { IDragEvent } from '@lumino/dragdrop';
+
 import { Widget } from '@lumino/widgets';
+
+import { Message } from '@lumino/messaging';
 
 import { GridStack, GridHTMLElement, GridStackNode } from 'gridstack';
 
@@ -37,12 +45,51 @@ export class GridStackPanel extends Widget {
     this._grid = null;
   }
 
-  onAfterShow(): void {
-    // console.debug("onAfterShow:", this._grid);
+  onAfterAttach(msg: Message): void {
+    super.onAfterAttach(msg);
+    this.node.addEventListener('lm-dragenter', this, true);
+    this.node.addEventListener('lm-dragleave', this, true);
+    this.node.addEventListener('lm-dragover', this, true);
+    this.node.addEventListener('lm-drop', this, true);
+    this.node.addEventListener('lm-dragend', this, true);
+    this.node.addEventListener('scroll', this);
   }
 
-  onBeforeHide(): void {
-    // console.debug("onBeforeHide:", this._grid);
+  /**
+   * Remove click listeners on detach
+   */
+  onBeforeDetach(msg: Message): void {
+    super.onBeforeDetach(msg);
+    this.node.removeEventListener('lm-dragenter', this, true);
+    this.node.removeEventListener('lm-dragleave', this, true);
+    this.node.removeEventListener('lm-dragover', this, true);
+    this.node.removeEventListener('lm-drop', this, true);
+    this.node.removeEventListener('scroll', this);
+  }
+
+  handleEvent(event: Event): void {
+    switch (event.type) {
+      case 'scroll':
+        console.info('scroll');
+        // this._evtScroll(event);
+        break;
+      case 'lm-dragenter':
+        console.info('dragenter');
+        this._evtDragEnter(event as IDragEvent);
+        break;
+      case 'lm-dragleave':
+        console.info('dragleave');
+        this._evtDragLeave(event as IDragEvent);
+        break;
+      case 'lm-dragover':
+        console.info('dragover');
+        this._evtDragOver(event as IDragEvent);
+        break;
+      case 'lm-drop':
+        console.info('drop');
+        this._evtDrop(event as IDragEvent);
+        break;
+    }
   }
 
   onUpdateRequest(): void {
@@ -166,8 +213,56 @@ export class GridStackPanel extends Widget {
         height: 2
       };
       this._cells.set(item.id as string, cell);
-      this.parent.update();
+      this.update();
     }
+  }
+
+  /**
+   * Handle the `'lm-dragenter'` event for the widget.
+   */
+  private _evtDragEnter(event: IDragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  /**
+   * Handle the `'lm-dragleave'` event for the widget.
+   */
+  private _evtDragLeave(event: IDragEvent): void {
+    this.removeClass('pr-DropTarget');
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  /**
+   * Handle the `'lm-dragover'` event for the widget.
+   */
+  private _evtDragOver(event: IDragEvent): void {
+    this.addClass('pr-DropTarget');
+    event.dropAction = 'copy';
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  private _evtDrop(event: IDragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (event.proposedAction === 'copy') {
+      if (event.source.activeCell instanceof Cell) {
+        const widget = (event.source.parent as NotebookPanel).content
+          .activeCell;
+        const cell = this._cells.get(widget.model.id);
+        cell.info.views[this._info.activeView].hidden = false;
+        this._cells.set(widget.model.id, cell);
+        this.update();
+      }
+    } else {
+      return;
+    }
+
+    this.removeClass('pr-DropTarget');
+    this.update();
   }
 
   private _grid: GridStack;
