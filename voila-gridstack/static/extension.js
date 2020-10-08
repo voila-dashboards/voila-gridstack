@@ -131,7 +131,7 @@ define(['jquery',
                             console.error('Error during gridstack initialization\n', err);
                         }
 
-                        position = (!gridstack_meta.hasOwnProperty('col')) ?
+                        position = (!gridstack_meta.hasOwnProperty('col')) ? 
                                         "data-gs-auto-position='true'" :
                                         "data-gs-x='" + gridstack_meta.col + "' data-gs-y='" + gridstack_meta.row + "'";
 
@@ -150,6 +150,7 @@ define(['jquery',
 
                     // init GridStack
                     grid = gridstack.init({
+                        float: true,
                         alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
                         resizable: {
                             handles: 'e, se, s, sw, w',
@@ -175,7 +176,7 @@ define(['jquery',
                     window.dispatchEvent(new Event('resize'));
 
                     // saves initial positions and sizes in metadata
-                    $('.grid-stack').trigger("change", grid.engine.nodes[0]);
+                    $('.grid-stack').trigger("change", grid.engine.nodes);
                 });
 
                 // removes spinner and show notebook as gridstack

@@ -63,16 +63,26 @@ define(['jquery',
     function hide_elements(grid) {
         grid.engine.nodes.forEach( function (item) {
             cell = $(item.el).find(".cell").first().data('cell');
+            active_view_name = Jupyter.notebook.metadata.extensions.jupyter_dashboards.activeView;
+
             if (!cell) {
+                console.info("None: ", cell);
                 return;
-            }
-            if ((cell.cell_type == "code" && !cell.output_area.outputs.length) || cell.cell_type == "raw") {
+            } else if (cell.metadata.extensions.jupyter_dashboards.views[active_view_name].hidden) {
+                console.info("Hidden: ");
                 $(item.el).addClass('grid-stack-item-hidden');
                 grid.removeWidget(item.el, false);
-
-                active_view_name = Jupyter.notebook.metadata.extensions.jupyter_dashboards.activeView;
+            } else if ((cell.cell_type === "code" &&
+                cell.input_prompt_number !== undefined &&
+                cell.output_area.outputs.length === 0) || 
+                cell.cell_type === "raw" ) {
+                
+                console.info("Other: ");
                 cell.metadata.extensions.jupyter_dashboards.views[active_view_name].hidden = true;
+                $(item.el).addClass('grid-stack-item-hidden');
+                grid.removeWidget(item.el, false);
             }
+            console.info(cell);
         });
     }
 
@@ -93,7 +103,7 @@ define(['jquery',
                 gridstack_meta = cell.metadata.extensions.jupyter_dashboards.views[active_view_name];
 
                 // modify cell's gridstack metadata
-                gridstack_meta.hidden = false;
+                // gridstack_meta.hidden = false;
                 gridstack_meta.col = item.x;
                 gridstack_meta.row = item.y;
                 gridstack_meta.width = item.width;
