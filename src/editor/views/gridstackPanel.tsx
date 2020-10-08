@@ -1,10 +1,10 @@
 import { Widget } from '@lumino/widgets';
 
-import { GridStack, GridStackNode, GridHTMLElement } from 'gridstack';
+import { GridStack, GridHTMLElement, GridStackNode } from 'gridstack';
 
 import 'gridstack/dist/gridstack.css';
 
-import { GridItem } from './../components/cell';
+import { GridItem } from './../components/gridItem';
 
 export type DasboardInfo = {
   version: number;
@@ -21,90 +21,41 @@ export type DasboardView = {
 };
 
 export class GridStackPanel extends Widget {
-  constructor() {
+  constructor(cells: Map<string, GridItem>) {
     super();
-    this.addClass('grid-panel');
-    this._cells = new Map<string, GridItem>();
-  }
+    this.removeClass('lm-Widget');
+    this.removeClass('p-Widget');
+    this.addClass('grid-editor');
 
-  dispose(): void {
-    // console.debug('Dispose grid');
-    super.dispose();
-    this._cells = null;
-    this._grid = null;
-  }
-
-  get cells(): Map<string, GridItem> {
-    return this._cells;
-  }
-
-  set cells(cells: Map<string, GridItem>) {
     this._cells = cells;
   }
 
-  get info(): DasboardInfo {
-    return this._info;
+  dispose(): void {
+    //console.debug('Dispose GridStackPanel');
+    super.dispose();
+    this._grid?.destroy();
+    this._grid = null;
   }
 
-  set info(info: DasboardInfo) {
-    this._info = info;
+  onAfterShow(): void {
+    // console.debug("onAfterShow:", this._grid);
+  }
+
+  onBeforeHide(): void {
+    // console.debug("onBeforeHide:", this._grid);
   }
 
   onUpdateRequest(): void {
-    this._grid?.destroy();
-
-    const grid = document.createElement('div');
-    grid.className = 'grid-stack';
-    this.node.appendChild(grid);
-
-    this._grid = GridStack.init(
-      {
-        animate: true,
-        removable: true,
-        removeTimeout: 500,
-        styleInHead: true,
-        disableOneColumnMode: true,
-        resizable: { autoHide: true, handles: 'e, se, s, sw, w' }
-        //alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-      },
-      grid
-    );
-
-    this._grid.on(
-      'change',
-      (event: Event, items: GridHTMLElement | GridStackNode[]) => {
-        this._onChange(event, items as GridStackNode[]);
-      }
-    );
-
-    this._grid.on(
-      'removed',
-      (event: Event, items: GridHTMLElement | GridStackNode[]) => {
-        this._onRemove(event, items as GridStackNode[]);
-      }
-    );
-
-    this._grid.on(
-      'dropped',
-      (event: Event, items: GridHTMLElement | GridStackNode[]) => {
-        const previousWidget = items[0];
-        const newWidget = items[1];
-        this._onDropped(
-          event,
-          previousWidget as GridStackNode,
-          newWidget as GridStackNode
-        );
-      }
-    );
+    //console.debug("onUpdateRequest grid:", this._grid);
+    if (!this._grid) {
+      this._initGridStack();
+    }
+    this._grid?.removeAll();
 
     this._cells.forEach((value: GridItem, key: string) => {
+      //console.debug("ID grid panel: ", key);
       if (!value.info.views[this._info.activeView].hidden) {
-        const widget = document.createElement('div');
-        widget.className = 'grid-stack-item';
-        widget.append(value.node);
-
         const view = value.info.views[this._info.activeView];
-
         const options = {
           id: key,
           x: view.col,
@@ -118,63 +69,105 @@ export class GridStackPanel extends Widget {
           options['autoPosition'] = true;
         }
 
-        this._grid.addWidget(widget, options);
+        this._grid.addWidget(value.gridCell, options);
       }
     });
   }
 
-  getItem(id: string): GridItem {
-    return this._cells.get(id);
+  get info(): DasboardInfo {
+    return this._info;
   }
 
-  addItem(id: string, cell: GridItem): void {
-    this._cells.set(id, cell);
-    this.update();
+  set info(info: DasboardInfo) {
+    this._info = info;
   }
 
-  removeItem(id: string): boolean {
-    return this._cells.delete(id);
+  private _initGridStack(): void {
+    //console.debug("_initGridStack grid");
+    const grid = document.createElement('div');
+    grid.className = 'grid-stack';
+    this.node.appendChild(grid);
+
+    this._grid = GridStack.init(
+      {
+        float: true,
+        removable: true,
+        removeTimeout: 200,
+        acceptWidgets: true,
+        styleInHead: true,
+        disableOneColumnMode: true,
+        resizable: { autoHide: true, handles: 'e, se, s, sw, w' }
+        // alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      },
+      grid
+    );
+
+    this._grid.on(
+      'change',
+      (event: Event, items: GridHTMLElement | GridStackNode[]) => {
+        // console.debug("change grid: ", items);
+        this._onChange(event, items as GridStackNode[]);
+      }
+    );
+
+    this._grid.on(
+      'removed',
+      (event: Event, items: GridHTMLElement | GridStackNode[]) => {
+        // console.debug("removed grid: ", items);
+        if ((items as GridStackNode[]).length <= 1) {
+          this._onRemoved(event, items as GridStackNode[]);
+        }
+      }
+    );
+
+    this._grid.on(
+      'dropped',
+      (event: Event, items: GridHTMLElement | GridStackNode[]) => {
+        console.debug('dropped grid: ', items);
+        this._onDropped(event, items as GridStackNode);
+      }
+    );
   }
 
   private _onChange(event: Event, items: GridStackNode[]): void {
     items.forEach(el => {
-      console.debug('_onChange:', el);
-
       const cell = this._cells.get(el.id as string);
+      if (cell !== undefined) {
+        cell.info.views[this._info.activeView] = {
+          hidden: false,
+          col: el.x,
+          row: el.y,
+          width: el.width,
+          height: el.height
+        };
+        this._cells.set(el.id as string, cell);
+      }
+    });
+  }
+
+  private _onRemoved(event: Event, items: GridStackNode[]): void {
+    items.forEach(el => {
+      const cell = this._cells.get(el.id as string);
+      if (cell !== undefined) {
+        cell.info.views[this._info.activeView].hidden = true;
+        this._cells.set(el.id as string, cell);
+      }
+    });
+  }
+
+  private _onDropped(event: Event, item: GridStackNode): void {
+    const cell = this._cells.get(item.id as string);
+    if (cell !== undefined) {
       cell.info.views[this._info.activeView] = {
         hidden: false,
-        col: el.x,
-        row: el.y,
-        width: el.width,
-        height: el.height
+        col: null,
+        row: null,
+        width: 2,
+        height: 2
       };
-      this._cells.set(el.id as string, cell);
-    });
-  }
-
-  private _onRemove(event: Event, items: GridStackNode[]): void {
-    items.forEach(el => {
-      console.debug('_onRemove:', el);
-
-      const cell = this._cells.get(el.id as string);
-      cell.info.views[this._info.activeView] = {
-        hidden: true,
-        col: el.x,
-        row: el.y,
-        width: el.width,
-        height: el.height
-      };
-      this._cells.set(el.id as string, cell);
-    });
-  }
-
-  private _onDropped(
-    event: Event,
-    previousWidget: GridStackNode,
-    newWidget: GridStackNode
-  ): void {
-    console.log('Removed widget that was dragged out of grid:', previousWidget);
-    console.log('Added widget in dropped grid:', newWidget);
+      this._cells.set(item.id as string, cell);
+      this.parent.update();
+    }
   }
 
   private _grid: GridStack;
