@@ -55,7 +55,7 @@ export default class EditorPanel extends SplitPanel {
     this._checkMetadata();
     this._context.sessionContext.ready.then(() => {
       this._initCellsList();
-      this._context.model.stateChanged.connect(this._updateCellsList, this);
+      this._context.model.contentChanged.connect(this._updateCellsList, this);
     });
   }
 
