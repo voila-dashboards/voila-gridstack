@@ -35,6 +35,8 @@ import { GridItem, DasboardCellInfo } from './components/gridItem';
 export default class EditorPanel extends SplitPanel {
   constructor(options: EditorPanel.IOptions) {
     super();
+    this.addClass('grid-panel');
+
     this._context = options.context;
     this.rendermime = options.rendermime;
     this.contentFactory = options.contentFactory;
@@ -222,7 +224,7 @@ export default class EditorPanel extends SplitPanel {
         break;
     }
 
-    return new GridItem(item, info);
+    return new GridItem(item, info, this.rendermime);
   }
 
   save(): void {

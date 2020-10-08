@@ -1,19 +1,26 @@
-.grid-editor {
+.grid-panel {
   width: 100%;
   height: 100%;
-  /*background-color: darkgrey;*/
+  background-color: white;
 }
 
 .grid-notebook {
-  height: 100%;
   overflow: scroll;
+  background-color: white;
 }
 
-.grid-panel {
-  height: 100%;
+.grid-editor {
+  padding: 2px;
   overflow: scroll;
+  background-color: darkgrey;
+}
+
+.grid-item {
+  overflow: hidden;
+  background-color: white;
 }
 
 .grid-content {
-  border-style: solid;
+  width: 100%;
+  height: 100%;
 }
