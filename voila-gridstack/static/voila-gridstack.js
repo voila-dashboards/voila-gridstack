@@ -5,147 +5,195 @@
 *                                                                          *
 * The full license is in the file LICENSE, distributed with this software. *
 ****************************************************************************/
-define(['jquery',
-        'base/js/namespace'], function($, Jupyter) {
+define(
+  [
+    'jquery',
+    'base/js/namespace',
+    'nbextensions/voila-gridstack/gridstack'
+  ],
+  function($, Jupyter, gridstack) {
 
-    var gridstack_metadata_keys = ['extensions', 'jupyter_dashboards'];
+    const metadataKeys = ['extensions', 'jupyter_dashboards'];
+    let activeView = undefined;
+    let grid = undefined;
 
     /*
      * Init nested metadata for Notebook level and cells level
      */
-    function init_metadata() {
+    function initMetadata(cellWidgets) {
+      let metadata = Jupyter.notebook.metadata;
+      metadataKeys.forEach( key => {
+        if (!metadata[key]) metadata[key] = Object();
+        metadata = metadata[key];
+      });
 
-        var notebook_gridstack_metadata = Jupyter.notebook.metadata;
+      if (!metadata.version) {
+        metadata.version = 1;
+        metadata.activeView = 'default_view';
+        metadata.views = {
+          'default_view': {
+            'name': 'default_view',    // user-assigned, unique human readable name
+            'type': 'grid',           // layout algorithm to use (grid in this example view)
+            'cellMargin': 10,         // margin between cells in pixels
+            'defaultCellHeight': 40,  // height in pixels of a logical row
+            'maxColumns': 12          // total number of logical columns
+          }
+        };
+      }
 
-        gridstack_metadata_keys.forEach(function (key) {
-            if (!notebook_gridstack_metadata[key]){
-                notebook_gridstack_metadata[key] = Object();
-            }
-            notebook_gridstack_metadata = notebook_gridstack_metadata[key];
+      activeView = metadata.views[metadata.activeView];
+      activeView.name = "grid_default";
+      
+      Object.values(cellWidgets).forEach( cellWidget => {
+        let metadata = $(cellWidget).data("cell").metadata;
+        metadataKeys.forEach( key => {
+          if (!metadata[key]) metadata[key] = Object();
+          metadata = metadata[key];
         });
 
-        if (!notebook_gridstack_metadata['version']) {
-            notebook_gridstack_metadata.version = 1;
-            notebook_gridstack_metadata.activeView = 'default_view';
-            notebook_gridstack_metadata.views = {'default_view': {
-                                                                  'name': 'active_view',    // user-assigned, unique human readable name
-                                                                  'type': 'grid',           // layout algorithm to use (grid in this example view)
-                                                                  'cellMargin': 10,         // margin between cells in pixels
-                                                                  'defaultCellHeight': 40,  // height in pixels of a logical row
-                                                                  'maxColumns': 12          // total number of logical columns
-                                                                 }
-                                                };
+        if (!metadata.version) {
+          metadata.version = nbMetadata.version;
+          metadata.views = {};
+          metadata.views[activeView.name] = {
+            'hidden': false,      // if cell output+widget are visible in the layout
+            "row": 0,             // logical row position
+            "col": 0,             // logical column position
+            "width": 2,           // logical width
+            "height": 2           // logical height
+          };
         }
+      });
+    }
 
-        cells = $('.cell').toArray().map(function (e) {
-                    return $(e).data("cell");
-                });
-        cells.forEach(function (cell) {
-            cell_gridstack_metatada = cell.metadata;
-            gridstack_metadata_keys.forEach(function (key) {
-                if (!cell_gridstack_metatada[key]){
-                    cell_gridstack_metatada[key] = Object();
-                }
-                cell_gridstack_metatada = cell_gridstack_metatada[key];
-            });
-            if (!cell_gridstack_metatada['version']) {
-                cell_gridstack_metatada.version = notebook_gridstack_metadata['version'];
-                cell_gridstack_metatada.views = {};
-                cell_gridstack_metatada.views[notebook_gridstack_metadata.activeView] = {};
-            }
-        });
+    function initGridStack(gridElement, cellWidgets) {
+      // init GridStack
+      grid = gridstack.init({
+        //float: true,
+        alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+        resizable: {
+          handles: 'e, se, s, sw, w',
+          autoHide: true
+        },
+        disableOneColumnMode: true,
+        cellHeight: activeView.defaultCellHeight,
+        margin: activeView.cellMargin,
+        column: activeView.maxColumns,
+      },
+      gridElement
+      );
+
+      //  bqplot doesn't resize when resizing the tile, fix: fake a resize event
+      grid.on('resizestop', (event, elem) => {
+        window.dispatchEvent(new Event('resize'));
+      });
+
+      grid.on('change', (event, items) => {
+        on_change(event, items, cellWidgets);
+      });
+    }
+
+    function removeGridStack() {
+      grid.destroy();
+    }
+
+    function addCells(cellWidgets) {
+      Object.values(cellWidgets).forEach( cellWidget => {
+        const cell =  $(cellWidget).data("cell");
+        const metadata = cell.metadata.extensions.jupyter_dashboards.views[activeView.name];
+
+        if (!metadata.hidden) {
+          const item = document.createElement('div');
+          item.className = 'grid-stack-item';
+          const content = document.createElement('div');
+          content.className = 'grid-stack-item-content';
+
+          content.appendChild(cellWidget.cloneNode(true));
+          item.appendChild(content);
+
+          grid.addWidget(item, {
+            id: cell.cell_id,
+            x: metadata.col,
+            y: metadata.row,
+            width: metadata.width,
+            height: metadata.height
+          });
+        }
+      });
     }
 
     /*
      * Hides code cells with empty output and raw text cells
      * @param {gridstack object} grid: GridStack object returned by Gridstack.init()
      */
-    function hide_elements(grid) {
-        grid.engine.nodes.forEach( function (item) {
-            cell = $(item.el).find(".cell").first().data('cell');
-            active_view_name = Jupyter.notebook.metadata.extensions.jupyter_dashboards.activeView;
-
-            if (!cell) {
-                console.info("None: ", cell);
-                return;
-            } else if (cell.metadata.extensions.jupyter_dashboards.views[active_view_name].hidden) {
-                console.info("Hidden: ");
-                $(item.el).addClass('grid-stack-item-hidden');
-                grid.removeWidget(item.el, false);
-            } else if ((cell.cell_type === "code" &&
-                cell.input_prompt_number !== undefined &&
-                cell.output_area.outputs.length === 0) || 
-                cell.cell_type === "raw" ) {
-                
-                console.info("Other: ");
-                cell.metadata.extensions.jupyter_dashboards.views[active_view_name].hidden = true;
-                $(item.el).addClass('grid-stack-item-hidden');
-                grid.removeWidget(item.el, false);
-            }
-            console.info(cell);
-        });
+    function hideCells(cellWidgets) {
+      Object.values(cellWidgets).forEach( cellWidget => {
+        const cell = $(cellWidget).data("cell");
+        
+        if (
+          cell.cell_type === "raw" ||
+          (
+            cell.cell_type === "code" &&
+            cell.input_prompt_number !== undefined &&
+            cell.output_area.outputs.length === 0
+          )
+        ) {
+          cell.metadata.extensions.jupyter_dashboards.views[activeView.name].hidden = true;
+        }
+      });
     }
 
     /*
      * Adds listener on grid to save Notebook when a gridstack element change size or position
      * @param {gridstack object} grid: GridStack object returned by Gridstack.init()
      */
-    function on_change(grid) {
-        grid.on('change', function (event, items) {
-            items.forEach( function (item) {
-                // get notebook cell
-                cell = $(item.el).find(".cell").first().data('cell');
-                if (!cell) {
-                    return;
-                }
+    function on_change(event, items, cellWidgets) {
+      items.forEach( item => {
+        const cell = $(cellWidgets[item.id]).data("cell");
+        cell.metadata.extensions.jupyter_dashboards.views[activeView.name] = {
+          'hidden': false,        // if cell output+widget are visible in the layout
+          "row": item.y,          // logical row position
+          "col": item.x,          // logical column position
+          "width": item.width,    // logical width
+          "height": item.height   // logical height
+        };
+      });
 
-                active_view_name = Jupyter.notebook.metadata.extensions.jupyter_dashboards.activeView;
-                gridstack_meta = cell.metadata.extensions.jupyter_dashboards.views[active_view_name];
-
-                // modify cell's gridstack metadata
-                // gridstack_meta.hidden = false;
-                gridstack_meta.col = item.x;
-                gridstack_meta.row = item.y;
-                gridstack_meta.width = item.width;
-                gridstack_meta.height = item.height;
-            });
-
-            hide_elements(grid);
-            Jupyter.notebook.save_notebook();
-        });
-
-        // fill initial sizes and positions
-        grid._triggerEvent("change", grid.engine.nodes);
+      Jupyter.notebook.save_notebook();
     }
 
     /*
      * Waiting function used to wait for all cells executed
      */
     function wait(ms) {
-        return new Promise(r => setTimeout(r, ms));
+      return new Promise(r => setTimeout(r, ms));
     }
 
     /*
      * Wait for all cells executed using HTML class, and update loading text
      */
     async function wait_for_all_cells_executed() {
-        while ( ! all_cells_executed() ) {
-            code_cells_count = $(".code_cell").length;
-            remaining_code_cells = code_cells_count - $(".code_cell.running").length + 1;
-            $('#loading_text').text(`Running code cell ${remaining_code_cells} / ${code_cells_count}...`);
-            await wait(100);
-        }
-        return;
+      while ( ! all_cells_executed() ) {
+        code_cells_count = $(".code_cell").length;
+        remaining_code_cells = code_cells_count - $(".code_cell.running").length + 1;
+        $('#loading_text').text(`Running code cell ${remaining_code_cells} / ${code_cells_count}...`);
+        await wait(100);
+      }
+      return;
     }
 
     function all_cells_executed() {
-        return $(".cell.running").length == 0;
+      return $(".cell.running").length == 0;
     }
 
-    return {metadata_keys: gridstack_metadata_keys,
-            init_metadata: init_metadata,
-            init_on_change: on_change,
-            wait_for_all_cells_executed: wait_for_all_cells_executed,
-            hide_elements: hide_elements
-            };
-});
+    return {
+      metadata_keys: metadataKeys,
+      initMetadata: initMetadata,
+      initGridStack: initGridStack,
+      removeGridStack: removeGridStack,
+      hideCells: hideCells,
+      addCells: addCells,
+      init_on_change: on_change,
+      wait_for_all_cells_executed: wait_for_all_cells_executed
+    };
+  }
+);
