@@ -11,9 +11,10 @@ define(
     'base/js/namespace',
     'nbextensions/voila-gridstack/gridstack'
   ],
-  function($, Jupyter, gridstack) {
-
+  function($, Jupyter, gridstack, widgets) {
     const metadataKeys = ['extensions', 'jupyter_dashboards'];
+    let activeViewName = 'grid_default';
+    let version = 1;
     let activeView = undefined;
     let grid = undefined;
 
@@ -21,18 +22,18 @@ define(
      * Init nested metadata for Notebook level and cells level
      */
     function initMetadata(cellWidgets) {
-      let metadata = Jupyter.notebook.metadata;
+      let nbMetadata = Jupyter.notebook.metadata;
       metadataKeys.forEach( key => {
-        if (!metadata[key]) metadata[key] = Object();
-        metadata = metadata[key];
+        if (!nbMetadata[key]) nbMetadata[key] = Object();
+        nbMetadata = nbMetadata[key];
       });
 
-      if (!metadata.version) {
-        metadata.version = 1;
-        metadata.activeView = 'default_view';
-        metadata.views = {
-          'default_view': {
-            'name': 'default_view',    // user-assigned, unique human readable name
+      if (!nbMetadata.version) {
+        nbMetadata.version = 1;
+        nbMetadata.activeView = 'grid_default';
+        nbMetadata.views = {
+          'grid_default': {
+            'name': 'grid',           // user-assigned, unique human readable name
             'type': 'grid',           // layout algorithm to use (grid in this example view)
             'cellMargin': 10,         // margin between cells in pixels
             'defaultCellHeight': 40,  // height in pixels of a logical row
@@ -41,20 +42,22 @@ define(
         };
       }
 
-      activeView = metadata.views[metadata.activeView];
-      activeView.name = "grid_default";
+      nbMetadata.activeView = 'grid_default';
+      activeViewName = "grid_default";
+      version = nbMetadata.version;
+      activeView = nbMetadata.views[activeViewName];
       
       Object.values(cellWidgets).forEach( cellWidget => {
-        let metadata = $(cellWidget).data("cell").metadata;
+        let cellMetadata = $(cellWidget).data("cell").metadata;
         metadataKeys.forEach( key => {
-          if (!metadata[key]) metadata[key] = Object();
-          metadata = metadata[key];
+          if (!cellMetadata[key]) cellMetadata[key] = Object();
+          cellMetadata = cellMetadata[key];
         });
-
-        if (!metadata.version) {
-          metadata.version = nbMetadata.version;
-          metadata.views = {};
-          metadata.views[activeView.name] = {
+        
+        if (!cellMetadata.version) {
+          cellMetadata.version = version;
+          cellMetadata.views = {};
+          cellMetadata.views[activeViewName] = {
             'hidden': false,      // if cell output+widget are visible in the layout
             "row": 0,             // logical row position
             "col": 0,             // logical column position
@@ -83,9 +86,9 @@ define(
       );
 
       //  bqplot doesn't resize when resizing the tile, fix: fake a resize event
-      grid.on('resizestop', (event, elem) => {
+      /* grid.on('resizestop', (event, elem) => {
         window.dispatchEvent(new Event('resize'));
-      });
+      }); */
 
       grid.on('change', (event, items) => {
         on_change(event, items, cellWidgets);
@@ -99,13 +102,15 @@ define(
     function addCells(cellWidgets) {
       Object.values(cellWidgets).forEach( cellWidget => {
         const cell =  $(cellWidget).data("cell");
-        const metadata = cell.metadata.extensions.jupyter_dashboards.views[activeView.name];
+        const metadata = cell.metadata.extensions.jupyter_dashboards.views[activeViewName];
 
         if (!metadata.hidden) {
           const item = document.createElement('div');
           item.className = 'grid-stack-item';
           const content = document.createElement('div');
           content.className = 'grid-stack-item-content';
+
+          //widgets.Widget.attach(cellWidget.cloneNode(true), content);
 
           content.appendChild(cellWidget.cloneNode(true));
           item.appendChild(content);
@@ -117,6 +122,17 @@ define(
             width: metadata.width,
             height: metadata.height
           });
+
+          // Trying to trigger bqplot resize event or get bqplot.Figure
+          // and call figure.update_plotarea_dimensions();
+          const bqplot =  $(item).find(".bqplot");
+          //console.debug(bqplot);
+          if (bqplot.length > 0 ) {
+            bqplot[0].dispatchEvent(new Event('resize'));
+            //bqplot[0].update_plotarea_dimensions();
+            //const figure =  $(bqplot[0]).data("figure");
+            //console.debug(figure);
+          }
         }
       });
     }
@@ -137,7 +153,7 @@ define(
             cell.output_area.outputs.length === 0
           )
         ) {
-          cell.metadata.extensions.jupyter_dashboards.views[activeView.name].hidden = true;
+          cell.metadata.extensions.jupyter_dashboards.views[activeViewName].hidden = true;
         }
       });
     }
@@ -149,7 +165,7 @@ define(
     function on_change(event, items, cellWidgets) {
       items.forEach( item => {
         const cell = $(cellWidgets[item.id]).data("cell");
-        cell.metadata.extensions.jupyter_dashboards.views[activeView.name] = {
+        cell.metadata.extensions.jupyter_dashboards.views[activeViewName] = {
           'hidden': false,        // if cell output+widget are visible in the layout
           "row": item.y,          // logical row position
           "col": item.x,          // logical column position
