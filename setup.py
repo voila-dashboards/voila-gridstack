@@ -77,6 +77,7 @@ setup_args = {
     ],
     'extras_require': {
         'test': [
+            'ipykernel',
             'pytest',
             'pytest-tornasync',
             'lxml'
