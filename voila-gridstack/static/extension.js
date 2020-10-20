@@ -31,6 +31,12 @@ define(['jquery',
             // disables button
             $('#btn-voila-gridstack_notebook').prop( "disabled", true );
 
+            // unsubsribe from events
+            grid.off('added');
+            grid.off('change');
+            grid.off('removed');
+            grid.off('resizestop');
+
             // saves notebook then formats HTML
             Jupyter.notebook.save_notebook().then(function () {
 
@@ -131,7 +137,7 @@ define(['jquery',
                             console.error('Error during gridstack initialization\n', err);
                         }
 
-                        position = (!gridstack_meta.hasOwnProperty('col')) ? 
+                        position = (!gridstack_meta.hasOwnProperty('col')) ?
                                         "data-gs-auto-position='true'" :
                                         "data-gs-x='" + gridstack_meta.col + "' data-gs-y='" + gridstack_meta.row + "'";
 
@@ -174,6 +180,7 @@ define(['jquery',
 
                     // fake window resize event at init to display bqplot without resizing tile
                     window.dispatchEvent(new Event('resize'));
+
 
                     // saves initial positions and sizes in metadata
                     $('.grid-stack').trigger("change", grid.engine.nodes);

@@ -66,23 +66,23 @@ define(['jquery',
             active_view_name = Jupyter.notebook.metadata.extensions.jupyter_dashboards.activeView;
 
             if (!cell) {
-                console.info("None: ", cell);
                 return;
-            } else if (cell.metadata.extensions.jupyter_dashboards.views[active_view_name].hidden) {
-                console.info("Hidden: ");
+            }
+
+            if (cell.metadata.extensions.jupyter_dashboards.views[active_view_name].hidden) {
                 $(item.el).addClass('grid-stack-item-hidden');
                 grid.removeWidget(item.el, false);
-            } else if ((cell.cell_type === "code" &&
+                return;
+            }
+            if ((cell.cell_type === "code" &&
                 cell.input_prompt_number !== undefined &&
-                cell.output_area.outputs.length === 0) || 
+                cell.output_area.outputs.length === 0) ||
                 cell.cell_type === "raw" ) {
-                
-                console.info("Other: ");
+
                 cell.metadata.extensions.jupyter_dashboards.views[active_view_name].hidden = true;
                 $(item.el).addClass('grid-stack-item-hidden');
                 grid.removeWidget(item.el, false);
             }
-            console.info(cell);
         });
     }
 
@@ -91,7 +91,10 @@ define(['jquery',
      * @param {gridstack object} grid: GridStack object returned by Gridstack.init()
      */
     function on_change(grid) {
-        grid.on('change', function (event, items) {
+        const handleChange = (event, items) => {
+            if (!items) {
+              return;
+            }
             items.forEach( function (item) {
                 // get notebook cell
                 cell = $(item.el).find(".cell").first().data('cell');
@@ -103,7 +106,6 @@ define(['jquery',
                 gridstack_meta = cell.metadata.extensions.jupyter_dashboards.views[active_view_name];
 
                 // modify cell's gridstack metadata
-                // gridstack_meta.hidden = false;
                 gridstack_meta.col = item.x;
                 gridstack_meta.row = item.y;
                 gridstack_meta.width = item.width;
@@ -112,7 +114,11 @@ define(['jquery',
 
             hide_elements(grid);
             Jupyter.notebook.save_notebook();
-        });
+        };
+
+        grid.on('added', handleChange);
+        grid.on('change', handleChange);
+        grid.on('removed', handleChange);
 
         // fill initial sizes and positions
         grid._triggerEvent("change", grid.engine.nodes);
