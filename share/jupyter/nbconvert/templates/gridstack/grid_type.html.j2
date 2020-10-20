@@ -145,6 +145,7 @@
          data-gs-width="{{ view_data.width | default(12) }}"
          data-gs-height="{{ view_data.height | default(2) }}"
          {% if auto_position %}
+         data-gs-auto-position=true
          {% else %}
          data-gs-y="{{ view_data.row }}"
          data-gs-x="{{ view_data.col }}"
