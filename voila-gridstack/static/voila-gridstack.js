@@ -46,14 +46,14 @@ define(
       activeViewName = "grid_default";
       version = nbMetadata.version;
       activeView = nbMetadata.views[activeViewName];
-      
+
       Object.values(cellWidgets).forEach( cellWidget => {
         let cellMetadata = $(cellWidget).data("cell").metadata;
         metadataKeys.forEach( key => {
           if (!cellMetadata[key]) cellMetadata[key] = Object();
           cellMetadata = cellMetadata[key];
         });
-        
+
         if (!cellMetadata.version) {
           cellMetadata.version = version;
           cellMetadata.views = {};
@@ -81,6 +81,9 @@ define(
         cellHeight: activeView.defaultCellHeight,
         margin: activeView.cellMargin,
         column: activeView.maxColumns,
+        draggable: {
+          handle: '.gridhandle'
+        }
       },
       gridElement
       );
@@ -109,6 +112,7 @@ define(
           item.className = 'grid-stack-item';
           const content = document.createElement('div');
           content.className = 'grid-stack-item-content';
+          content.innerHTML = '<div class="gridhandle"><i class="fa"></i></div>';
 
           //widgets.Widget.attach(cellWidget.cloneNode(true), content);
 
@@ -144,7 +148,7 @@ define(
     function hideCells(cellWidgets) {
       Object.values(cellWidgets).forEach( cellWidget => {
         const cell = $(cellWidget).data("cell");
-        
+
         if (
           cell.cell_type === "raw" ||
           (
