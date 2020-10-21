@@ -159,7 +159,7 @@ export class GridItem extends Panel {
     }
   }
 
-  private _output() {
+  private _output(): void {
     this._gridCell = document.createElement('div');
     this._gridCell.className = 'grid-content';
 

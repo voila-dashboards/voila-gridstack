@@ -31,8 +31,6 @@ export type DasboardView = {
 export class GridStackPanel extends Widget {
   constructor(cells: Map<string, GridItem>) {
     super();
-    this.removeClass('lm-Widget');
-    this.removeClass('p-Widget');
     this.addClass('grid-editor');
 
     this._cells = cells;

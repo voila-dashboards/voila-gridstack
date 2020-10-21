@@ -1,23 +1,13 @@
-.grid-panel {
-  width: 100%;
-  height: 100%;
-  background-color: white;
-}
-
-.grid-notebook {
-  overflow: scroll;
-  background-color: white;
-}
-
 .grid-editor {
   padding: 2px;
   overflow: scroll;
-  background-color: darkgrey;
+  background-color: var(--jp-layout-color2);
 }
 
 .grid-item {
   overflow: hidden;
-  background-color: white;
+  color: var(--jp-content-font-color1);
+  background-color: var(--jp-layout-color1);
 }
 
 .grid-content {

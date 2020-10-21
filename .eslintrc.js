@@ -21,7 +21,7 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-namespace': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
-    '@typescript-eslint/camelcase': 'warn',
+    '@typescript-eslint/camelcase': ['error', { properties: 'never' }],
     '@typescript-eslint/quotes': [
       'error',
       'single',
