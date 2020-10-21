@@ -39,7 +39,6 @@ export class GridStackPanel extends Widget {
   }
 
   dispose(): void {
-    //console.debug('Dispose GridStackPanel');
     super.dispose();
     this._grid?.destroy();
     this._grid = null;
@@ -70,37 +69,30 @@ export class GridStackPanel extends Widget {
   handleEvent(event: Event): void {
     switch (event.type) {
       case 'scroll':
-        console.info('scroll');
         // this._evtScroll(event);
         break;
       case 'lm-dragenter':
-        console.info('dragenter');
         this._evtDragEnter(event as IDragEvent);
         break;
       case 'lm-dragleave':
-        console.info('dragleave');
         this._evtDragLeave(event as IDragEvent);
         break;
       case 'lm-dragover':
-        console.info('dragover');
         this._evtDragOver(event as IDragEvent);
         break;
       case 'lm-drop':
-        console.info('drop');
         this._evtDrop(event as IDragEvent);
         break;
     }
   }
 
   onUpdateRequest(): void {
-    //console.debug("onUpdateRequest grid:", this._grid);
     if (!this._grid) {
       this._initGridStack();
     }
     this._grid?.removeAll();
 
     this._cells.forEach((value: GridItem, key: string) => {
-      //console.debug("ID grid panel: ", key);
       if (!value.info.views[this._info.activeView].hidden) {
         const view = value.info.views[this._info.activeView];
         const options = {
@@ -130,7 +122,6 @@ export class GridStackPanel extends Widget {
   }
 
   private _initGridStack(): void {
-    //console.debug("_initGridStack grid");
     const grid = document.createElement('div');
     grid.className = 'grid-stack';
     this.node.appendChild(grid);
@@ -152,7 +143,6 @@ export class GridStackPanel extends Widget {
     this._grid.on(
       'change',
       (event: Event, items: GridHTMLElement | GridStackNode[]) => {
-        // console.debug("change grid: ", items);
         this._onChange(event, items as GridStackNode[]);
       }
     );
@@ -160,7 +150,6 @@ export class GridStackPanel extends Widget {
     this._grid.on(
       'removed',
       (event: Event, items: GridHTMLElement | GridStackNode[]) => {
-        // console.debug("removed grid: ", items);
         if ((items as GridStackNode[]).length <= 1) {
           this._onRemoved(event, items as GridStackNode[]);
         }
@@ -170,7 +159,6 @@ export class GridStackPanel extends Widget {
     this._grid.on(
       'dropped',
       (event: Event, items: GridHTMLElement | GridStackNode[]) => {
-        console.debug('dropped grid: ', items);
         this._onDropped(event, items as GridStackNode);
       }
     );
@@ -248,17 +236,16 @@ export class GridStackPanel extends Widget {
     event.preventDefault();
     event.stopPropagation();
 
-    if (event.proposedAction === 'copy') {
-      if (event.source.activeCell instanceof Cell) {
-        const widget = (event.source.parent as NotebookPanel).content
-          .activeCell;
-        const cell = this._cells.get(widget.model.id);
-        cell.info.views[this._info.activeView].hidden = false;
-        this._cells.set(widget.model.id, cell);
-        this.update();
-      }
-    } else {
+    if (event.proposedAction !== 'copy') {
       return;
+    }
+
+    if (event.source.activeCell instanceof Cell) {
+      const widget = (event.source.parent as NotebookPanel).content.activeCell;
+      const cell = this._cells.get(widget.model.id);
+      cell.info.views[this._info.activeView].hidden = false;
+      this._cells.set(widget.model.id, cell);
+      this.update();
     }
 
     this.removeClass('pr-DropTarget');

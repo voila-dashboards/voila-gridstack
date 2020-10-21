@@ -55,7 +55,6 @@ export default class EditorPanel extends SplitPanel {
   }
 
   dispose(): void {
-    // console.debug('Dispose');
     super.dispose();
     this._gridStackPanel = null;
     Signal.clearData(this);
@@ -86,8 +85,6 @@ export default class EditorPanel extends SplitPanel {
   }
 
   private _checkMetadata(): void {
-    console.debug('_checkMetadata');
-
     const data = this._context.model.metadata.get('extensions') as Record<
       string,
       any
@@ -119,8 +116,6 @@ export default class EditorPanel extends SplitPanel {
   }
 
   private _initCellsList(): void {
-    console.debug('_initCellsList');
-
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const model = this._context.model.cells.get(i);
       const cell = this._cells.get(model.id);
@@ -143,8 +138,6 @@ export default class EditorPanel extends SplitPanel {
   }
 
   private _updateCellsList(): void {
-    console.debug('_updateCellsList');
-
     while (this._context.model.deletedCells.length > 0) {
       const id = this._context.model.deletedCells.shift();
       this._cells.delete(id);
@@ -221,8 +214,6 @@ export default class EditorPanel extends SplitPanel {
   }
 
   save(): void {
-    console.debug('save');
-
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const model = this._context.model.cells.get(i);
       const cell = this._cells.get(model.id);
