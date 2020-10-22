@@ -28,8 +28,6 @@ import { Signal } from '@lumino/signaling';
 
 import { GridStackPanel, DasboardInfo } from './views/gridstackPanel';
 
-import { NotebookView } from './views/notebook';
-
 import { GridItem, DasboardCellInfo } from './components/gridItem';
 
 export default class EditorPanel extends SplitPanel {
@@ -46,23 +44,17 @@ export default class EditorPanel extends SplitPanel {
 
     this._cells = new Map<string, GridItem>();
 
-    this._notebookView = new NotebookView(this._cells);
-    this.addWidget(this._notebookView);
-
     this._gridStackPanel = new GridStackPanel(this._cells);
     this.addWidget(this._gridStackPanel);
 
     this._checkMetadata();
     this._context.sessionContext.ready.then(() => {
       this._initCellsList();
-      this._context.model.contentChanged.connect(this._updateCellsList, this);
     });
   }
 
   dispose(): void {
-    // console.debug('Dispose');
     super.dispose();
-    this._notebookView = null;
     this._gridStackPanel = null;
     Signal.clearData(this);
   }
@@ -88,13 +80,10 @@ export default class EditorPanel extends SplitPanel {
   }
 
   onUpdateRequest(): void {
-    this._notebookView.update();
     this._gridStackPanel.update();
   }
 
   private _checkMetadata(): void {
-    console.debug('_checkMetadata');
-
     const data = this._context.model.metadata.get('extensions') as Record<
       string,
       any
@@ -126,8 +115,6 @@ export default class EditorPanel extends SplitPanel {
   }
 
   private _initCellsList(): void {
-    console.debug('_initCellsList');
-
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const model = this._context.model.cells.get(i);
       const cell = this._cells.get(model.id);
@@ -143,28 +130,6 @@ export default class EditorPanel extends SplitPanel {
         this._cells.set(model.id, item);
       } else {
         this._cells.set(model.id, cell);
-      }
-    }
-
-    this.update();
-  }
-
-  private _updateCellsList(): void {
-    console.debug('_updateCellsList');
-
-    while (this._context.model.deletedCells.length > 0) {
-      const id = this._context.model.deletedCells.shift();
-      this._cells.delete(id);
-    }
-
-    for (let i = 0; i < this._context.model.cells?.length; i++) {
-      const model = this._context.model.cells.get(i);
-      const cell = this._cells.get(model.id);
-
-      if (cell === undefined && model.value.text.length !== 0) {
-        const item = this._createCell(model);
-        item.execute(this._context.sessionContext);
-        this._cells.set(model.id, item);
       }
     }
 
@@ -228,8 +193,6 @@ export default class EditorPanel extends SplitPanel {
   }
 
   save(): void {
-    console.debug('save');
-
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const model = this._context.model.cells.get(i);
       const cell = this._cells.get(model.id);
@@ -255,7 +218,6 @@ export default class EditorPanel extends SplitPanel {
   private _editorConfig: StaticNotebook.IEditorConfig;
   private _notebookConfig: StaticNotebook.INotebookConfig;
   private _gridStackPanel: GridStackPanel;
-  private _notebookView: NotebookView;
   private _cells: Map<string, GridItem>;
 }
 

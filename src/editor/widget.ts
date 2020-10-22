@@ -18,7 +18,7 @@ export default class VoilaEditor extends DocumentWidget<
   ) {
     super({ context, content });
     this.id = 'voila-editor/editor:widget';
-    this.title.label = 'Voila Editor';
+    this.title.label = 'Voila GridStack Editor';
     this.title.closable = true;
     this.title.icon = listIcon;
 

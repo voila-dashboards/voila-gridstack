@@ -52,14 +52,12 @@ export class GridItem extends Panel {
   }
 
   dispose(): void {
-    console.debug('Cell disposed');
     this._cell.dispose();
     this._cell = null;
     Signal.clearData(this);
   }
 
   onUpdateRequest(): void {
-    //console.debug('updating cell');
     this._cell.update();
   }
 
@@ -114,7 +112,7 @@ export class GridItem extends Panel {
     this.update();
   }
 
-  private _input() {
+  private _input(): void {
     this._notebookCell = document.createElement('div');
     this._notebookCell.className = 'grid-content';
 
@@ -161,7 +159,7 @@ export class GridItem extends Panel {
     }
   }
 
-  private _output() {
+  private _output(): void {
     this._gridCell = document.createElement('div');
     this._gridCell.className = 'grid-content';
 

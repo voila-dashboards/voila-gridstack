@@ -4,3 +4,4 @@ coverage
 **/*.d.ts
 tests
 lint-staged.config.js
+.eslintrc.js

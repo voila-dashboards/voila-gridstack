@@ -1,4 +1,12 @@
+import { NotebookPanel } from '@jupyterlab/notebook';
+
+import { Cell } from '@jupyterlab/cells';
+
+import { IDragEvent } from '@lumino/dragdrop';
+
 import { Widget } from '@lumino/widgets';
+
+import { Message } from '@lumino/messaging';
 
 import { GridStack, GridHTMLElement, GridStackNode } from 'gridstack';
 
@@ -23,37 +31,66 @@ export type DasboardView = {
 export class GridStackPanel extends Widget {
   constructor(cells: Map<string, GridItem>) {
     super();
-    this.removeClass('lm-Widget');
-    this.removeClass('p-Widget');
     this.addClass('grid-editor');
 
     this._cells = cells;
   }
 
   dispose(): void {
-    //console.debug('Dispose GridStackPanel');
     super.dispose();
     this._grid?.destroy();
     this._grid = null;
   }
 
-  onAfterShow(): void {
-    // console.debug("onAfterShow:", this._grid);
+  onAfterAttach(msg: Message): void {
+    super.onAfterAttach(msg);
+    this.node.addEventListener('lm-dragenter', this, true);
+    this.node.addEventListener('lm-dragleave', this, true);
+    this.node.addEventListener('lm-dragover', this, true);
+    this.node.addEventListener('lm-drop', this, true);
+    this.node.addEventListener('lm-dragend', this, true);
+    this.node.addEventListener('scroll', this);
   }
 
-  onBeforeHide(): void {
-    // console.debug("onBeforeHide:", this._grid);
+  /**
+   * Remove click listeners on detach
+   */
+  onBeforeDetach(msg: Message): void {
+    super.onBeforeDetach(msg);
+    this.node.removeEventListener('lm-dragenter', this, true);
+    this.node.removeEventListener('lm-dragleave', this, true);
+    this.node.removeEventListener('lm-dragover', this, true);
+    this.node.removeEventListener('lm-drop', this, true);
+    this.node.removeEventListener('scroll', this);
+  }
+
+  handleEvent(event: Event): void {
+    switch (event.type) {
+      case 'scroll':
+        // this._evtScroll(event);
+        break;
+      case 'lm-dragenter':
+        this._evtDragEnter(event as IDragEvent);
+        break;
+      case 'lm-dragleave':
+        this._evtDragLeave(event as IDragEvent);
+        break;
+      case 'lm-dragover':
+        this._evtDragOver(event as IDragEvent);
+        break;
+      case 'lm-drop':
+        this._evtDrop(event as IDragEvent);
+        break;
+    }
   }
 
   onUpdateRequest(): void {
-    //console.debug("onUpdateRequest grid:", this._grid);
     if (!this._grid) {
       this._initGridStack();
     }
     this._grid?.removeAll();
 
     this._cells.forEach((value: GridItem, key: string) => {
-      //console.debug("ID grid panel: ", key);
       if (!value.info.views[this._info.activeView].hidden) {
         const view = value.info.views[this._info.activeView];
         const options = {
@@ -83,7 +120,6 @@ export class GridStackPanel extends Widget {
   }
 
   private _initGridStack(): void {
-    //console.debug("_initGridStack grid");
     const grid = document.createElement('div');
     grid.className = 'grid-stack';
     this.node.appendChild(grid);
@@ -105,7 +141,6 @@ export class GridStackPanel extends Widget {
     this._grid.on(
       'change',
       (event: Event, items: GridHTMLElement | GridStackNode[]) => {
-        // console.debug("change grid: ", items);
         this._onChange(event, items as GridStackNode[]);
       }
     );
@@ -113,7 +148,6 @@ export class GridStackPanel extends Widget {
     this._grid.on(
       'removed',
       (event: Event, items: GridHTMLElement | GridStackNode[]) => {
-        // console.debug("removed grid: ", items);
         if ((items as GridStackNode[]).length <= 1) {
           this._onRemoved(event, items as GridStackNode[]);
         }
@@ -123,7 +157,6 @@ export class GridStackPanel extends Widget {
     this._grid.on(
       'dropped',
       (event: Event, items: GridHTMLElement | GridStackNode[]) => {
-        console.debug('dropped grid: ', items);
         this._onDropped(event, items as GridStackNode);
       }
     );
@@ -166,8 +199,55 @@ export class GridStackPanel extends Widget {
         height: 2
       };
       this._cells.set(item.id as string, cell);
-      this.parent.update();
+      this.update();
     }
+  }
+
+  /**
+   * Handle the `'lm-dragenter'` event for the widget.
+   */
+  private _evtDragEnter(event: IDragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  /**
+   * Handle the `'lm-dragleave'` event for the widget.
+   */
+  private _evtDragLeave(event: IDragEvent): void {
+    this.removeClass('pr-DropTarget');
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  /**
+   * Handle the `'lm-dragover'` event for the widget.
+   */
+  private _evtDragOver(event: IDragEvent): void {
+    this.addClass('pr-DropTarget');
+    event.dropAction = 'copy';
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  private _evtDrop(event: IDragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (event.proposedAction !== 'copy') {
+      return;
+    }
+
+    if (event.source.activeCell instanceof Cell) {
+      const widget = (event.source.parent as NotebookPanel).content.activeCell;
+      const cell = this._cells.get(widget.model.id);
+      cell.info.views[this._info.activeView].hidden = false;
+      this._cells.set(widget.model.id, cell);
+      this.update();
+    }
+
+    this.removeClass('pr-DropTarget');
+    this.update();
   }
 
   private _grid: GridStack;
