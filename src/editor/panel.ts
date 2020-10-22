@@ -50,7 +50,6 @@ export default class EditorPanel extends SplitPanel {
     this._checkMetadata();
     this._context.sessionContext.ready.then(() => {
       this._initCellsList();
-      this._context.model.contentChanged.connect(this._updateCellsList, this);
     });
   }
 
@@ -131,26 +130,6 @@ export default class EditorPanel extends SplitPanel {
         this._cells.set(model.id, item);
       } else {
         this._cells.set(model.id, cell);
-      }
-    }
-
-    this.update();
-  }
-
-  private _updateCellsList(): void {
-    while (this._context.model.deletedCells.length > 0) {
-      const id = this._context.model.deletedCells.shift();
-      this._cells.delete(id);
-    }
-
-    for (let i = 0; i < this._context.model.cells?.length; i++) {
-      const model = this._context.model.cells.get(i);
-      const cell = this._cells.get(model.id);
-
-      if (cell === undefined && model.value.text.length !== 0) {
-        const item = this._createCell(model);
-        item.execute(this._context.sessionContext);
-        this._cells.set(model.id, item);
       }
     }
 
