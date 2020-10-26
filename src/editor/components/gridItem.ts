@@ -2,10 +2,6 @@ import { Cell, CodeCell, MarkdownCell } from '@jupyterlab/cells';
 
 import { SimplifiedOutputArea } from '@jupyterlab/outputarea';
 
-import { CodeMirrorEditor } from '@jupyterlab/codemirror';
-
-// import {  } from '@jupyterlab/codeeditor';
-
 import {
   IRenderMimeRegistry,
   renderMarkdown,
@@ -61,36 +57,12 @@ export class GridItem extends Panel {
     this._cell.update();
   }
 
-  get notebookCell(): HTMLElement {
-    const item = document.createElement('div');
-    item.className = 'grid-stack-item';
-    item.className = 'grid-item';
+  gridCell(create: boolean): HTMLElement {
+    if (this._gridCell === undefined || create) {
+      this._output();
+    }
 
-    const content = document.createElement('div');
-    content.className = 'grid-stack-item-content';
-
-    this._input();
-    content.appendChild(this._notebookCell);
-    item.appendChild(content);
-    return item;
-  }
-
-  get gridCell(): HTMLElement {
-    const item = document.createElement('div');
-    item.className = 'grid-stack-item';
-    item.className = 'grid-item';
-
-    const content = document.createElement('div');
-    content.className = 'grid-stack-item-content';
-
-    this._output();
-    content.appendChild(this._gridCell);
-    item.appendChild(content);
-    return item;
-  }
-
-  get height(): number {
-    return this._notebookCell.scrollHeight + 20;
+    return this._gridCell;
   }
 
   execute(sessionContext: ISessionContext): void {
@@ -101,7 +73,7 @@ export class GridItem extends Panel {
         sessionContext
       )
         .then(value => {
-          /*console.info('executed:', value)*/
+          // console.info('executed:', value);
         })
         .catch(reason => console.error(reason));
     } else if (this._type === 'markdown') {
@@ -109,63 +81,17 @@ export class GridItem extends Panel {
       (this._cell as MarkdownCell).rendered = true;
     }
 
+    this._output();
     this.update();
   }
 
-  private _input(): void {
-    this._notebookCell = document.createElement('div');
-    this._notebookCell.className = 'grid-content';
-
-    if (this._type === 'markdown') {
-      renderMarkdown({
-        host: this._notebookCell,
-        source: this._cell.model.value.text,
-        sanitizer: this._rendermime.sanitizer,
-        latexTypesetter: this._rendermime.latexTypesetter,
-        linkHandler: this._rendermime.linkHandler,
-        resolver: this._rendermime.resolver,
-        shouldTypeset: false,
-        trusted: true
-      });
-    } else if (this._type === 'code') {
-      const input = (this._cell as CodeCell).editor;
-      const itemIn = document.createElement('div');
-      itemIn.className = 'jp-InputArea-editor';
-      new CodeMirrorEditor({
-        host: itemIn,
-        model: input.model,
-        config: {
-          mode: input.model.mimeType,
-          codeFolding: false,
-          readOnly: true
-        },
-        selectionStyle: input.selectionStyle
-      });
-      this._notebookCell.appendChild(itemIn);
-
-      const out = (this._cell as CodeCell).outputArea;
-      const itemOut = new SimplifiedOutputArea({
-        model: out.model,
-        rendermime: out.rendermime,
-        contentFactory: out.contentFactory
-      });
-      this._notebookCell.appendChild(itemOut.node);
-    } else {
-      renderText({
-        host: this._notebookCell,
-        source: this._cell.model.value.text,
-        sanitizer: this._rendermime.sanitizer
-      });
-    }
-  }
-
   private _output(): void {
-    this._gridCell = document.createElement('div');
-    this._gridCell.className = 'grid-content';
+    const cell = document.createElement('div');
+    cell.className = 'grid-content';
 
     if (this._type === 'markdown') {
       renderMarkdown({
-        host: this._gridCell,
+        host: cell,
         source: this._cell.model.value.text,
         sanitizer: this._rendermime.sanitizer,
         latexTypesetter: this._rendermime.latexTypesetter,
@@ -183,14 +109,25 @@ export class GridItem extends Panel {
         contentFactory: out.contentFactory
       });
 
-      this._gridCell.appendChild(item.node);
+      cell.appendChild(item.node);
     } else {
       renderText({
-        host: this._gridCell,
+        host: cell,
         source: this._cell.model.value.text,
         sanitizer: this._rendermime.sanitizer
       });
     }
+
+    const item = document.createElement('div');
+    item.className = 'grid-stack-item';
+    item.className = 'grid-item';
+
+    const content = document.createElement('div');
+    content.className = 'grid-stack-item-content';
+    content.appendChild(cell);
+    item.appendChild(content);
+
+    this._gridCell = item;
   }
 
   get info(): DasboardCellInfo {
@@ -205,6 +142,5 @@ export class GridItem extends Panel {
   private _info: DasboardCellInfo;
   private _type: 'code' | 'markdown' | 'raw';
   private _rendermime: IRenderMimeRegistry;
-  private _notebookCell: HTMLElement;
   private _gridCell: HTMLElement;
 }
