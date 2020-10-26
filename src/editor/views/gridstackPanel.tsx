@@ -91,17 +91,17 @@ export class GridStackPanel extends Widget {
 
     this._grid?.removeAll();
     this._cells.forEach((value: GridItem, key: string) => {
-      if (!value.info.views[this._info.activeView].hidden) {
+      if (!value.info.hidden) {
         this._addGridItem(value, key);
       }
     });
   }
 
-  get info(): DasboardInfo {
+  get info(): DasboardView {
     return this._info;
   }
 
-  set info(info: DasboardInfo) {
+  set info(info: DasboardView) {
     this._info = info;
   }
 
@@ -143,39 +143,46 @@ export class GridStackPanel extends Widget {
   }
 
   private _addGridItem(item: GridItem, key: string): void {
-    const view = item.info.views[this._info.activeView];
     const options = {
       id: key,
-      x: view.col,
-      y: view.row,
-      width: view.width,
-      height: view.height,
+      x: item.info.col,
+      y: item.info.row,
+      width: item.info.width,
+      height: item.info.height,
       autoPosition: false
     };
 
-    if (view.row === null || view.col === null) {
+    if (item.info.row === null || item.info.col === null) {
       options['autoPosition'] = true;
     }
 
+    item.closeSignal.connect(this._removeGridItem);
     this._grid.addWidget(item.gridCell(true), options);
   }
 
   private _updateGridItem(item: GridItem, key: string): void {
-    const view = item.info.views[this._info.activeView];
     this._grid.update(
       item.gridCell(false),
-      view.col,
-      view.row,
-      view.width,
-      view.height
+      item.info.col,
+      item.info.row,
+      item.info.width,
+      item.info.height
     );
   }
+
+  private _removeGridItem = (item: GridItem, id: string): void => {
+    if (item) {
+      item.info.hidden = true;
+      item.closeSignal.disconnect(this._removeGridItem);
+      this._grid.removeWidget(item.gridCell(false), true, false);
+    }
+  };
 
   private _onChange(event: Event, items: GridStackNode[]): void {
     items.forEach(el => {
       const cell = this._cells.get(el.id as string);
-      if (cell !== undefined) {
-        cell.info.views[this._info.activeView] = {
+      if (cell) {
+        cell.info = {
           hidden: false,
           col: el.x,
           row: el.y,
@@ -190,8 +197,9 @@ export class GridStackPanel extends Widget {
   private _onRemoved(event: Event, items: GridStackNode[]): void {
     items.forEach(el => {
       const cell = this._cells.get(el.id as string);
-      if (cell !== undefined) {
-        cell.info.views[this._info.activeView].hidden = true;
+      if (cell) {
+        cell.info.hidden = true;
+        cell.closeSignal.disconnect(this._removeGridItem);
         this._cells.set(el.id as string, cell);
       }
     });
@@ -241,15 +249,15 @@ export class GridStackPanel extends Widget {
       const widget = (event.source.parent as NotebookPanel).content.activeCell;
       const cell = this._cells.get(widget.model.id);
 
-      if (cell && cell.info.views[this._info.activeView].hidden) {
-        cell.info.views[this._info.activeView].hidden = false;
-        cell.info.views[this._info.activeView].col = col;
-        cell.info.views[this._info.activeView].row = row;
+      if (cell && cell.info.hidden) {
+        cell.info.hidden = false;
+        cell.info.col = col;
+        cell.info.row = row;
         this._cells.set(widget.model.id, cell);
         this._addGridItem(cell, widget.model.id);
       } else if (cell) {
-        cell.info.views[this._info.activeView].col = col;
-        cell.info.views[this._info.activeView].row = row;
+        cell.info.col = col;
+        cell.info.row = row;
         this._cells.set(widget.model.id, cell);
         this._updateGridItem(cell, widget.model.id);
       }
@@ -259,6 +267,6 @@ export class GridStackPanel extends Widget {
   }
 
   private _grid: GridStack;
-  private _info: DasboardInfo;
+  private _info: DasboardView;
   private _cells: Map<string, GridItem>;
 }

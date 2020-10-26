@@ -26,9 +26,9 @@ import { SplitPanel } from '@lumino/widgets';
 
 import { Signal } from '@lumino/signaling';
 
-import { GridStackPanel, DasboardInfo } from './views/gridstackPanel';
+import { GridStackPanel, DasboardView } from './views/gridstackPanel';
 
-import { GridItem, DasboardCellInfo } from './components/gridItem';
+import { GridItem, DasboardCellView } from './components/gridItem';
 
 export default class EditorPanel extends SplitPanel {
   constructor(options: EditorPanel.IOptions) {
@@ -44,6 +44,7 @@ export default class EditorPanel extends SplitPanel {
 
     this._cells = new Map<string, GridItem>();
 
+    this._activeView = 'grid_default';
     this._gridStackPanel = new GridStackPanel(this._cells);
     this.addWidget(this._gridStackPanel);
 
@@ -84,15 +85,29 @@ export default class EditorPanel extends SplitPanel {
   }
 
   private _checkMetadata(): void {
-    const data = this._context.model.metadata.get('extensions') as Record<
+    let data = this._context.model.metadata.get('extensions') as Record<
       string,
       any
     >;
 
-    if (data && data.jupyter_dashboards) {
-      this._gridStackPanel.info = data['jupyter_dashboards'] as DasboardInfo;
-    } else {
-      this._gridStackPanel.info = {
+    if (!data) {
+      data = {
+        jupyter_dashboards: {
+          version: 1,
+          activeView: 'grid_default',
+          views: {
+            grid_default: {
+              name: 'grid',
+              type: 'grid',
+              cellMargin: 1,
+              cellHeight: 1,
+              numColumns: 12
+            }
+          }
+        }
+      };
+    } else if (!data.jupyter_dashboards) {
+      data['jupyter_dashboards'] = {
         version: 1,
         activeView: 'grid_default',
         views: {
@@ -105,13 +120,24 @@ export default class EditorPanel extends SplitPanel {
           }
         }
       };
-
-      const data = { jupyter_dashboards: this._gridStackPanel.info };
-      this._context.model.metadata.set(
-        'extensions',
-        data as ReadonlyPartialJSONValue
-      );
+    } else if (!data.jupyter_dashboards.views[this._activeView]) {
+      data.jupyter_dashboards.views[this._activeView] = {
+        name: 'grid',
+        type: 'grid',
+        cellMargin: 1,
+        cellHeight: 1,
+        numColumns: 12
+      };
     }
+
+    this._gridStackPanel.info = data.jupyter_dashboards?.views[
+      this._activeView
+    ] as DasboardView;
+    this._context.model.metadata.set(
+      'extensions',
+      data as ReadonlyPartialJSONValue
+    );
+    this._context.save();
   }
 
   private _initCellsList(): void {
@@ -133,28 +159,12 @@ export default class EditorPanel extends SplitPanel {
       }
     }
 
+    this._context.save();
     this.update();
   }
 
   private _createCell(cell: ICellModel): GridItem {
-    const data = cell.metadata.get('extensions') as Record<string, any>;
-
-    let info: DasboardCellInfo = {
-      version: 1,
-      views: {
-        grid_default: {
-          hidden: true,
-          row: null,
-          col: null,
-          width: 1,
-          height: 1
-        }
-      }
-    };
-
-    if (data && data.jupyter_dashboards) {
-      info = data['jupyter_dashboards'] as DasboardCellInfo;
-    }
+    const info = this._checkCellMetadata(cell);
 
     let item = null;
     switch (cell.type) {
@@ -192,22 +202,73 @@ export default class EditorPanel extends SplitPanel {
     return new GridItem(item, info, this.rendermime);
   }
 
+  private _checkCellMetadata(cell: ICellModel): DasboardCellView {
+    let data = cell.metadata.get('extensions') as Record<string, any>;
+
+    if (!data) {
+      data = {
+        jupyter_dashboards: {
+          activeView: 'grid_default',
+          views: {
+            grid_default: {
+              hidden: true,
+              row: null,
+              col: null,
+              width: 1,
+              height: 1
+            }
+          }
+        }
+      };
+    } else if (!data.jupyter_dashboards) {
+      data['jupyter_dashboards'] = {
+        activeView: 'grid_default',
+        views: {
+          grid_default: {
+            hidden: true,
+            row: null,
+            col: null,
+            width: 1,
+            height: 1
+          }
+        }
+      };
+    } else if (!data.jupyter_dashboards.views[this._activeView]) {
+      data.jupyter_dashboards.views[this._activeView] = {
+        hidden: true,
+        row: null,
+        col: null,
+        width: 1,
+        height: 1
+      };
+    }
+
+    cell.metadata.set('extensions', data as ReadonlyPartialJSONValue);
+
+    return data.jupyter_dashboards.views[this._activeView];
+  }
+
   save(): void {
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const model = this._context.model.cells.get(i);
       const cell = this._cells.get(model.id);
       const data = model.metadata.get('extensions') as Record<string, any>;
 
-      if (cell === undefined) {
-        continue;
-      } else if (data) {
-        data['jupyter_dashboards'] = cell.info;
+      if (cell && data) {
+        data.jupyter_dashboards.views[this._activeView] = cell.info;
         model.metadata.set('extensions', data as ReadonlyPartialJSONValue);
-        this._context.model.cells.set(i, model);
-      } else {
-        const data = { jupyter_dashboards: cell.info };
+        //this._context.model.cells.set(i, model);
+      } else if (cell) {
+        const data = {
+          jupyter_dashboards: {
+            activeView: 'grid_default',
+            views: {
+              grid_default: cell.info
+            }
+          }
+        };
         model.metadata.set('extensions', data as ReadonlyPartialJSONValue);
-        this._context.model.cells.set(i, model);
+        //this._context.model.cells.set(i, model);
       }
     }
 
@@ -217,6 +278,7 @@ export default class EditorPanel extends SplitPanel {
   private _context: DocumentRegistry.IContext<INotebookModel>;
   private _editorConfig: StaticNotebook.IEditorConfig;
   private _notebookConfig: StaticNotebook.INotebookConfig;
+  private _activeView: string;
   private _gridStackPanel: GridStackPanel;
   private _cells: Map<string, GridItem>;
 }
