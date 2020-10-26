@@ -88,25 +88,11 @@ export class GridStackPanel extends Widget {
     if (!this._grid) {
       this._initGridStack();
     }
-    this._grid?.removeAll();
 
+    this._grid?.removeAll();
     this._cells.forEach((value: GridItem, key: string) => {
       if (!value.info.views[this._info.activeView].hidden) {
-        const view = value.info.views[this._info.activeView];
-        const options = {
-          id: key,
-          x: view.col,
-          y: view.row,
-          width: view.width,
-          height: view.height,
-          autoPosition: false
-        };
-
-        if (view.row === null || view.col === null) {
-          options['autoPosition'] = true;
-        }
-
-        this._grid.addWidget(value.gridCell, options);
+        this._addGridItem(value, key);
       }
     });
   }
@@ -127,6 +113,7 @@ export class GridStackPanel extends Widget {
     this._grid = GridStack.init(
       {
         float: true,
+        dragIn: '.jp-mod-dropSource',
         removable: true,
         removeTimeout: 200,
         acceptWidgets: true,
@@ -153,12 +140,34 @@ export class GridStackPanel extends Widget {
         }
       }
     );
+  }
 
-    this._grid.on(
-      'dropped',
-      (event: Event, items: GridHTMLElement | GridStackNode[]) => {
-        this._onDropped(event, items as GridStackNode);
-      }
+  private _addGridItem(item: GridItem, key: string): void {
+    const view = item.info.views[this._info.activeView];
+    const options = {
+      id: key,
+      x: view.col,
+      y: view.row,
+      width: view.width,
+      height: view.height,
+      autoPosition: false
+    };
+
+    if (view.row === null || view.col === null) {
+      options['autoPosition'] = true;
+    }
+
+    this._grid.addWidget(item.gridCell(true), options);
+  }
+
+  private _updateGridItem(item: GridItem, key: string): void {
+    const view = item.info.views[this._info.activeView];
+    this._grid.update(
+      item.gridCell(false),
+      view.col,
+      view.row,
+      view.width,
+      view.height
     );
   }
 
@@ -186,21 +195,6 @@ export class GridStackPanel extends Widget {
         this._cells.set(el.id as string, cell);
       }
     });
-  }
-
-  private _onDropped(event: Event, item: GridStackNode): void {
-    const cell = this._cells.get(item.id as string);
-    if (cell !== undefined) {
-      cell.info.views[this._info.activeView] = {
-        hidden: false,
-        col: null,
-        row: null,
-        width: 2,
-        height: 2
-      };
-      this._cells.set(item.id as string, cell);
-      this.update();
-    }
   }
 
   /**
@@ -239,15 +233,29 @@ export class GridStackPanel extends Widget {
     }
 
     if (event.source.activeCell instanceof Cell) {
+      const col = Math.floor(
+        (this._grid.getColumn() * event.offsetX) / this.node.offsetWidth
+      );
+      const row = Math.floor(event.offsetY / this._grid.getCellHeight(true));
+
       const widget = (event.source.parent as NotebookPanel).content.activeCell;
       const cell = this._cells.get(widget.model.id);
-      cell.info.views[this._info.activeView].hidden = false;
-      this._cells.set(widget.model.id, cell);
-      this.update();
+
+      if (cell.info.views[this._info.activeView].hidden) {
+        cell.info.views[this._info.activeView].hidden = false;
+        cell.info.views[this._info.activeView].col = col;
+        cell.info.views[this._info.activeView].row = row;
+        this._cells.set(widget.model.id, cell);
+        this._addGridItem(cell, widget.model.id);
+      } else {
+        cell.info.views[this._info.activeView].col = col;
+        cell.info.views[this._info.activeView].row = row;
+        this._cells.set(widget.model.id, cell);
+        this._updateGridItem(cell, widget.model.id);
+      }
     }
 
     this.removeClass('pr-DropTarget');
-    this.update();
   }
 
   private _grid: GridStack;
