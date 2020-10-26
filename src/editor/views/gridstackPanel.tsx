@@ -241,13 +241,13 @@ export class GridStackPanel extends Widget {
       const widget = (event.source.parent as NotebookPanel).content.activeCell;
       const cell = this._cells.get(widget.model.id);
 
-      if (cell.info.views[this._info.activeView].hidden) {
+      if (cell && cell.info.views[this._info.activeView].hidden) {
         cell.info.views[this._info.activeView].hidden = false;
         cell.info.views[this._info.activeView].col = col;
         cell.info.views[this._info.activeView].row = row;
         this._cells.set(widget.model.id, cell);
         this._addGridItem(cell, widget.model.id);
-      } else {
+      } else if (cell) {
         cell.info.views[this._info.activeView].col = col;
         cell.info.views[this._info.activeView].row = row;
         this._cells.set(widget.model.id, cell);
