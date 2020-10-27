@@ -21,3 +21,12 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.trash-can {
+  width: 16px;
+  height: 16px;
+  z-index: 100;
+  background: url('../img/delete.svg') no-repeat center;
+  background-image: url('../img/delete.svg');
+  background-size: contain;
+}

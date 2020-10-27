@@ -113,14 +113,15 @@ export class GridStackPanel extends Widget {
     this._grid = GridStack.init(
       {
         float: true,
-        dragIn: '.jp-mod-dropSource',
-        removable: true,
-        removeTimeout: 200,
-        acceptWidgets: true,
+        column: this._info.numColumns,
+        margin: this._info.cellMargin,
+        cellHeight: this._info.cellHeight,
         styleInHead: true,
         disableOneColumnMode: true,
-        resizable: { autoHide: true, handles: 'e, se, s, sw, w' }
-        // alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        resizable: { autoHide: true, handles: 'e, se, s, sw, w' },
+        alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
       },
       grid
     );

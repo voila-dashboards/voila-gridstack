@@ -99,8 +99,8 @@ export default class EditorPanel extends SplitPanel {
             grid_default: {
               name: 'grid',
               type: 'grid',
-              cellMargin: 1,
-              cellHeight: 1,
+              cellMargin: 10,
+              cellHeight: 30,
               numColumns: 12
             }
           }
@@ -114,8 +114,8 @@ export default class EditorPanel extends SplitPanel {
           grid_default: {
             name: 'grid',
             type: 'grid',
-            cellMargin: 1,
-            cellHeight: 1,
+            cellMargin: 10,
+            cellHeight: 30,
             numColumns: 12
           }
         }
@@ -124,8 +124,8 @@ export default class EditorPanel extends SplitPanel {
       data.jupyter_dashboards.views[this._activeView] = {
         name: 'grid',
         type: 'grid',
-        cellMargin: 1,
-        cellHeight: 1,
+        cellMargin: 10,
+        cellHeight: 30,
         numColumns: 12
       };
     }
