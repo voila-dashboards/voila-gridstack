@@ -2,7 +2,7 @@ import { Cell, CodeCell, MarkdownCell } from '@jupyterlab/cells';
 
 import { SimplifiedOutputArea } from '@jupyterlab/outputarea';
 
-//import { closeIcon } from '@jupyterlab/ui-components';
+import { deleteIcon } from '../icons';
 
 import {
   IRenderMimeRegistry,
@@ -138,7 +138,12 @@ export class GridItem extends Panel {
     button.className = 'close-button';
     const close = document.createElement('div');
     close.className = 'trash-can';
-    close.onclick = () => {
+    deleteIcon.element({
+      container: close,
+      height: '16px',
+      width: '16px'
+    });
+    close.onclick = (): void => {
       console.debug('Close id:', this._cell.model.id);
       this._closeSignal.emit(this._cell.model.id);
     };

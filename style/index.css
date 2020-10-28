@@ -23,10 +23,12 @@
 }
 
 .trash-can {
-  width: 16px;
-  height: 16px;
-  z-index: 100;
-  background: url('../img/delete.svg') no-repeat center;
-  background-image: url('../img/delete.svg');
-  background-size: contain;
+  margin-right: 10px;
+}
+
+.trash-can:hover {
+  cursor: pointer;
+  color: var(--jp-ui-font-color0);
+  background-color: var(--jp-layout-color2);
+  box-shadow: inset 0 0px 1px rgba(0, 0, 0, 0.5);
 }
