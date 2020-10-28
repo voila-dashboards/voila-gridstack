@@ -2,6 +2,8 @@ import { Cell, CodeCell, MarkdownCell } from '@jupyterlab/cells';
 
 import { SimplifiedOutputArea } from '@jupyterlab/outputarea';
 
+import { deleteIcon } from '../icons';
+
 import {
   IRenderMimeRegistry,
   renderMarkdown,
@@ -10,7 +12,7 @@ import {
 
 import { ISessionContext } from '@jupyterlab/apputils';
 
-import { Signal } from '@lumino/signaling';
+import { ISignal, Signal } from '@lumino/signaling';
 
 import { Panel } from '@lumino/widgets';
 
@@ -30,7 +32,7 @@ export type DasboardCellView = {
 export class GridItem extends Panel {
   constructor(
     cell: Cell,
-    info: DasboardCellInfo,
+    info: DasboardCellView,
     rendermime: IRenderMimeRegistry
   ) {
     super();
@@ -57,8 +59,20 @@ export class GridItem extends Panel {
     this._cell.update();
   }
 
+  get info(): DasboardCellView {
+    return this._info;
+  }
+
+  set info(info: DasboardCellView) {
+    this._info = info;
+  }
+
+  get closeSignal(): ISignal<this, string> {
+    return this._closeSignal;
+  }
+
   gridCell(create: boolean): HTMLElement {
-    if (this._gridCell === undefined || create) {
+    if (!this._gridCell || create) {
       this._output();
     }
 
@@ -71,17 +85,12 @@ export class GridItem extends Panel {
         this._cell.model.value.text,
         (this._cell as CodeCell).outputArea,
         sessionContext
-      )
-        .then(value => {
-          // console.info('executed:', value);
-        })
-        .catch(reason => console.error(reason));
+      ).catch(reason => console.error(reason));
     } else if (this._type === 'markdown') {
       (this._cell as MarkdownCell).inputHidden = false;
       (this._cell as MarkdownCell).rendered = true;
     }
 
-    this._output();
     this.update();
   }
 
@@ -124,23 +133,33 @@ export class GridItem extends Panel {
 
     const content = document.createElement('div');
     content.className = 'grid-stack-item-content';
+
+    const button = document.createElement('div');
+    button.className = 'close-button';
+    const close = document.createElement('div');
+    close.className = 'trash-can';
+    deleteIcon.element({
+      container: close,
+      height: '16px',
+      width: '16px'
+    });
+    close.onclick = (): void => {
+      console.debug('Close id:', this._cell.model.id);
+      this._closeSignal.emit(this._cell.model.id);
+    };
+
+    button.appendChild(close);
+    content.appendChild(button);
     content.appendChild(cell);
     item.appendChild(content);
 
     this._gridCell = item;
   }
 
-  get info(): DasboardCellInfo {
-    return this._info;
-  }
-
-  set info(info: DasboardCellInfo) {
-    this._info = info;
-  }
-
   private _cell: Cell;
-  private _info: DasboardCellInfo;
+  private _info: DasboardCellView;
   private _type: 'code' | 'markdown' | 'raw';
   private _rendermime: IRenderMimeRegistry;
   private _gridCell: HTMLElement;
+  private _closeSignal = new Signal<this, string>(this);
 }
