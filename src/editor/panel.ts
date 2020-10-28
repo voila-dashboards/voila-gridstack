@@ -26,9 +26,9 @@ import { SplitPanel } from '@lumino/widgets';
 
 import { Signal } from '@lumino/signaling';
 
-import { GridStackPanel, DasboardView } from './views/gridstackPanel';
+import { GridStackPanel, DashboardView } from './views/gridstackPanel';
 
-import { GridItem, DasboardCellView } from './components/gridItem';
+import { GridItem, DashboardCellView } from './components/gridItem';
 
 export default class EditorPanel extends SplitPanel {
   constructor(options: EditorPanel.IOptions) {
@@ -132,7 +132,7 @@ export default class EditorPanel extends SplitPanel {
 
     this._gridStackPanel.info = data.jupyter_dashboards?.views[
       this._activeView
-    ] as DasboardView;
+    ] as DashboardView;
     this._context.model.metadata.set(
       'extensions',
       data as ReadonlyPartialJSONValue
@@ -202,7 +202,7 @@ export default class EditorPanel extends SplitPanel {
     return new GridItem(item, info, this.rendermime);
   }
 
-  private _checkCellMetadata(cell: ICellModel): DasboardCellView {
+  private _checkCellMetadata(cell: ICellModel): DashboardCellView {
     let data = cell.metadata.get('extensions') as Record<string, any>;
 
     if (!data) {
