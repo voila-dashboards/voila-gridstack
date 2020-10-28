@@ -34,7 +34,7 @@ package_data_spec = {
 labext_name = "voila-editor"
 
 data_files_spec = [
-    ("share/jupyter/labextensions/%s" % labext_name, lab_path, "*.*"),
+    ("share/jupyter/labextensions/%s" % labext_name, lab_path, "**"),
 ]
 
 cmdclass = create_cmdclass("jsdeps",
