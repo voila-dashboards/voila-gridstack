@@ -16,12 +16,12 @@ import { ISignal, Signal } from '@lumino/signaling';
 
 import { Panel } from '@lumino/widgets';
 
-export type DasboardCellInfo = {
+export type DashboardCellInfo = {
   version: number;
-  views: { [id: string]: DasboardCellView };
+  views: { [id: string]: DashboardCellView };
 };
 
-export type DasboardCellView = {
+export type DashboardCellView = {
   hidden: boolean;
   row: number;
   col: number;
@@ -32,7 +32,7 @@ export type DasboardCellView = {
 export class GridItem extends Panel {
   constructor(
     cell: Cell,
-    info: DasboardCellView,
+    info: DashboardCellView,
     rendermime: IRenderMimeRegistry
   ) {
     super();
@@ -59,11 +59,11 @@ export class GridItem extends Panel {
     this._cell.update();
   }
 
-  get info(): DasboardCellView {
+  get info(): DashboardCellView {
     return this._info;
   }
 
-  set info(info: DasboardCellView) {
+  set info(info: DashboardCellView) {
     this._info = info;
   }
 
@@ -157,7 +157,7 @@ export class GridItem extends Panel {
   }
 
   private _cell: Cell;
-  private _info: DasboardCellView;
+  private _info: DashboardCellView;
   private _type: 'code' | 'markdown' | 'raw';
   private _rendermime: IRenderMimeRegistry;
   private _gridCell: HTMLElement;

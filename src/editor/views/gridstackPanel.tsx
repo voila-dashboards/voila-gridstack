@@ -14,13 +14,13 @@ import 'gridstack/dist/gridstack.css';
 
 import { GridItem } from './../components/gridItem';
 
-export type DasboardInfo = {
+export type DashboardInfo = {
   version: number;
   activeView: string;
-  views: { [id: string]: DasboardView };
+  views: { [id: string]: DashboardView };
 };
 
-export type DasboardView = {
+export type DashboardView = {
   name: string;
   type: string;
   cellMargin: number;
@@ -97,11 +97,11 @@ export class GridStackPanel extends Widget {
     });
   }
 
-  get info(): DasboardView {
+  get info(): DashboardView {
     return this._info;
   }
 
-  set info(info: DasboardView) {
+  set info(info: DashboardView) {
     this._info = info;
   }
 
@@ -268,6 +268,6 @@ export class GridStackPanel extends Widget {
   }
 
   private _grid: GridStack;
-  private _info: DasboardView;
+  private _info: DashboardView;
   private _cells: Map<string, GridItem>;
 }
