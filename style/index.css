@@ -1,3 +1,5 @@
+@import 'variables.css';
+
 .grid-editor {
   padding: 2px;
   overflow: scroll;
@@ -31,4 +33,12 @@
   color: var(--jp-ui-font-color0);
   background-color: var(--jp-layout-color2);
   box-shadow: inset 0 0px 1px rgba(0, 0, 0, 0.5);
+}
+
+.jp-VoilaIcon {
+  background-image: var(--jp-icon-voila);
+}
+
+.jp-VoilaPreview-renderOnSave {
+  align-items: center;
 }

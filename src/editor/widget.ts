@@ -8,6 +8,8 @@ import EditorPanel from './panel';
 
 import Save from './toolbar/save';
 
+import Voila from './toolbar/voila';
+
 export default class VoilaEditor extends DocumentWidget<
   EditorPanel,
   INotebookModel
@@ -23,13 +25,11 @@ export default class VoilaEditor extends DocumentWidget<
     this.title.icon = listIcon;
 
     // Adding the buttons to the widget toolbar
-    this._save = new Save(this.content);
-    this.toolbar.addItem('save', this._save);
+    this.toolbar.addItem('save', new Save(this.content));
+    this.toolbar.addItem('voila', new Voila(this.context.path));
   }
 
   dispose(): void {
     super.dispose();
   }
-
-  private _save: Save;
 }

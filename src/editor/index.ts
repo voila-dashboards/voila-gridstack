@@ -16,6 +16,8 @@ import VoilaWidgetFactory from './factory';
 
 import VoilaEditor from './widget';
 
+import { VoilaButton, EditorButton } from './components/notebookButtons';
+
 export const editor: JupyterFrontEndPlugin<void> = {
   id: 'voila-editor/editor',
   autoStart: true,
@@ -70,5 +72,11 @@ export const editor: JupyterFrontEndPlugin<void> = {
     });
 
     app.docRegistry.addWidgetFactory(factory);
+
+    app.docRegistry.addWidgetExtension('Notebook', new VoilaButton());
+    app.docRegistry.addWidgetExtension(
+      'Notebook',
+      new EditorButton(app.commands)
+    );
   }
 };
