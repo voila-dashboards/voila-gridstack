@@ -1,5 +1,7 @@
 import { Cell, CodeCell, MarkdownCell } from '@jupyterlab/cells';
 
+import { DocumentRegistry } from '@jupyterlab/docregistry';
+
 import { SimplifiedOutputArea } from '@jupyterlab/outputarea';
 
 import { deleteIcon } from '../icons';
@@ -15,6 +17,13 @@ import { ISessionContext } from '@jupyterlab/apputils';
 import { ISignal, Signal } from '@lumino/signaling';
 
 import { Panel } from '@lumino/widgets';
+
+import {
+  registerWidgetManager,
+  WidgetRenderer
+} from '@jupyter-widgets/jupyterlab-manager';
+import { INotebookModel } from '@jupyterlab/notebook';
+import { toArray } from '@lumino/algorithm';
 
 export type DashboardCellInfo = {
   version: number;
@@ -33,7 +42,8 @@ export class GridItem extends Panel {
   constructor(
     cell: Cell,
     info: DashboardCellView,
-    rendermime: IRenderMimeRegistry
+    rendermime: IRenderMimeRegistry,
+    context: DocumentRegistry.IContext<INotebookModel>
   ) {
     super();
     this.removeClass('lm-Widget');
@@ -46,6 +56,7 @@ export class GridItem extends Panel {
     this._info = info;
     this._type = cell.model.type;
     this._rendermime = rendermime;
+    this._context = context;
 
     this._cell.model.contentChanged.connect(this.update, this);
   }
@@ -128,6 +139,19 @@ export class GridItem extends Panel {
       });
 
       cell.appendChild(item.node);
+
+      // eslint-disable-next-line no-inner-declarations
+      function* views() {
+        for (const codecell of item.widgets) {
+          for (const output of toArray(codecell.children())) {
+            if (output instanceof WidgetRenderer) {
+              yield output;
+            }
+          }
+        }
+      }
+
+      registerWidgetManager(this._context, this._rendermime, views());
     } else {
       renderText({
         host: cell,
@@ -170,6 +194,7 @@ export class GridItem extends Panel {
   private _info: DashboardCellView;
   private _type: 'code' | 'markdown' | 'raw';
   private _rendermime: IRenderMimeRegistry;
+  private _context: DocumentRegistry.IContext<INotebookModel>;
   private _gridCell: HTMLElement;
   private _closeSignal = new Signal<this, string>(this);
 }
