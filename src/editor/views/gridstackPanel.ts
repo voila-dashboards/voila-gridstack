@@ -102,6 +102,7 @@ export class GridStackPanel extends Widget {
   }
 
   set info(info: DashboardView) {
+    console.debug(info);
     this._info = info;
   }
 

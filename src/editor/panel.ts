@@ -14,6 +14,8 @@ import {
   RawCellModel
 } from '@jupyterlab/cells';
 
+import { showDialog } from '@jupyterlab/apputils';
+
 import { IEditorMimeTypeService } from '@jupyterlab/codeeditor';
 
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
@@ -29,6 +31,8 @@ import { Signal } from '@lumino/signaling';
 import { GridStackPanel, DashboardView } from './views/gridstackPanel';
 
 import { GridItem, DashboardCellView } from './components/gridItem';
+
+import EditorGridstack from './components/editorGridstack';
 
 export default class EditorPanel extends SplitPanel {
   constructor(options: EditorPanel.IOptions) {
@@ -246,6 +250,18 @@ export default class EditorPanel extends SplitPanel {
     cell.metadata.set('extensions', data as ReadonlyPartialJSONValue);
 
     return data.jupyter_dashboards.views[this._activeView];
+  }
+
+  info(): void {
+    const body = new EditorGridstack(this._gridStackPanel.info);
+    showDialog({
+      title: 'Edit grid parameters',
+      body
+    }).then(value => {
+      if (value.button.accept) {
+        this._gridStackPanel.info = body.info;
+      }
+    });
   }
 
   save(): void {
