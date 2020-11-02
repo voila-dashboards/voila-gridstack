@@ -91,7 +91,7 @@ export default class EditorPanel extends SplitPanel {
   }
 
   private _checkMetadata(): void {
-    console.debug('_checkMetadata');
+    //console.debug('_checkMetadata');
     let data = this._context.model.metadata.get('extensions') as Record<
       string,
       any
@@ -148,7 +148,7 @@ export default class EditorPanel extends SplitPanel {
   }
 
   private _initCellsList(): void {
-    console.debug('_initCellsList');
+    //console.debug('_initCellsList');
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const model = this._context.model.cells.get(i);
 
@@ -163,7 +163,7 @@ export default class EditorPanel extends SplitPanel {
   }
 
   private _updateCellsList(): void {
-    console.debug('_updateCellsList');
+    //console.debug('_updateCellsList');
     if (this._gridStackPanel.isReady) {
       this._context.model.deletedCells.forEach(id => {
         this._gridStackPanel.deleteCell(id);
@@ -219,7 +219,7 @@ export default class EditorPanel extends SplitPanel {
         break;
     }
 
-    return new GridItem(item, info, this._activeView, this.rendermime);
+    return new GridItem(item, info, this.rendermime);
   }
 
   private _checkCellMetadata(cell: ICellModel): DashboardCellView {

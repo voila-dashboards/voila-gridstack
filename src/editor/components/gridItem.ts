@@ -33,7 +33,6 @@ export class GridItem extends Panel {
   constructor(
     cell: Cell,
     info: DashboardCellView,
-    activeView: string,
     rendermime: IRenderMimeRegistry
   ) {
     super();
@@ -154,7 +153,7 @@ export class GridItem extends Panel {
       width: '16px'
     });
     close.onclick = (): void => {
-      console.debug('Close id:', this._cell.model.id);
+      //console.debug('Close id:', this._cell.model.id);
       this._closeSignal.emit(this._cell.model.id);
     };
 

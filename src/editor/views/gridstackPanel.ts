@@ -110,12 +110,12 @@ export class GridStackPanel extends Widget {
   }
 
   public getCell(id: string): GridItem {
-    console.info('getCell');
+    //console.info('getCell');
     return this._cells.get(id);
   }
 
   public addCell(cell: GridItem): void {
-    console.info('addCell:', cell, cell.cellId);
+    //console.info('addCell:', cell, cell.cellId);
     this._cells.set(cell.cellId, cell);
     if (!cell.info.hidden) {
       this._addGridItem(cell);
@@ -123,7 +123,7 @@ export class GridStackPanel extends Widget {
   }
 
   public updateCell(cell: GridItem): void {
-    console.info('updateCell');
+    //console.info('updateCell');
     this._cells.set(cell.cellId, cell);
     if (!cell.info.hidden) {
       this._updateGridItem(cell);
@@ -131,7 +131,7 @@ export class GridStackPanel extends Widget {
   }
 
   public deleteCell(id: string): void {
-    console.info('deleteCell');
+    //console.info('deleteCell');
     const cell = this._cells.get(id);
     this._cells.delete(id);
     if (cell && !cell.info.hidden) {
@@ -140,7 +140,7 @@ export class GridStackPanel extends Widget {
   }
 
   public initGridStack(): void {
-    console.info('initGridStack');
+    //console.info('initGridStack');
     const grid = document.createElement('div');
     grid.className = 'grid-stack';
     this.node.appendChild(grid);
@@ -287,7 +287,7 @@ export class GridStackPanel extends Widget {
       const widget = (event.source.parent as NotebookPanel).content.activeCell;
       const cell = this._cells.get(widget.model.id);
 
-      console.info('_evtDrop:', cell, widget.model.id);
+      //console.info('_evtDrop:', cell, widget.model.id);
 
       if (cell && cell.info.hidden) {
         cell.info.hidden = false;
