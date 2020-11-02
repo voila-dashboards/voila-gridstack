@@ -41,6 +41,7 @@ export class GridItem extends Panel {
     this.removeClass('lm-Panel');
     this.removeClass('p-Panel');
 
+    this._id = cell.model.id;
     this._cell = cell;
     this._info = info;
     this._type = cell.model.type;
@@ -57,6 +58,14 @@ export class GridItem extends Panel {
 
   onUpdateRequest(): void {
     this._cell.update();
+  }
+
+  get cellId(): string {
+    return this._id;
+  }
+
+  set cellId(id: string) {
+    this._id = id;
   }
 
   get info(): DashboardCellView {
@@ -144,7 +153,7 @@ export class GridItem extends Panel {
       width: '16px'
     });
     close.onclick = (): void => {
-      console.debug('Close id:', this._cell.model.id);
+      //console.debug('Close id:', this._cell.model.id);
       this._closeSignal.emit(this._cell.model.id);
     };
 
@@ -156,6 +165,7 @@ export class GridItem extends Panel {
     this._gridCell = item;
   }
 
+  private _id: string;
   private _cell: Cell;
   private _info: DashboardCellView;
   private _type: 'code' | 'markdown' | 'raw';
