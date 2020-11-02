@@ -46,16 +46,18 @@ export default class EditorPanel extends SplitPanel {
     this._editorConfig = options.editorConfig;
     this._notebookConfig = options.notebookConfig;
 
-    this._cells = new Map<string, GridItem>();
-
     this._activeView = 'grid_default';
-    this._gridStackPanel = new GridStackPanel(this._cells);
+    this._gridStackPanel = new GridStackPanel();
     this.addWidget(this._gridStackPanel);
 
-    this._checkMetadata();
     this._context.sessionContext.ready.then(() => {
+      console.debug('ready!');
+      this._checkMetadata();
+      this._gridStackPanel.initGridStack();
       this._initCellsList();
     });
+
+    this._context.model.contentChanged.connect(this._updateCellsList, this);
   }
 
   dispose(): void {
@@ -89,6 +91,7 @@ export default class EditorPanel extends SplitPanel {
   }
 
   private _checkMetadata(): void {
+    console.debug('_checkMetadata');
     let data = this._context.model.metadata.get('extensions') as Record<
       string,
       any
@@ -145,31 +148,45 @@ export default class EditorPanel extends SplitPanel {
   }
 
   private _initCellsList(): void {
+    console.debug('_initCellsList');
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const model = this._context.model.cells.get(i);
-      const cell = this._cells.get(model.id);
 
-      if (model.value.text.length === 0) {
-        if (cell !== undefined) {
-          this._cells.delete(model.id);
-        }
-        continue;
-      } else if (cell === undefined) {
+      if (model.value.text.length !== 0) {
         const item = this._createCell(model);
-        item.execute(this._context.sessionContext);
-        this._cells.set(model.id, item);
-      } else {
-        this._cells.set(model.id, cell);
+        //item.execute(this._context.sessionContext);
+        this._gridStackPanel.addCell(item);
       }
     }
 
     this._context.save();
-    this.update();
+  }
+
+  private _updateCellsList(): void {
+    console.debug('_updateCellsList');
+    if (this._gridStackPanel.isReady) {
+      this._context.model.deletedCells.forEach(id => {
+        this._gridStackPanel.deleteCell(id);
+      });
+
+      for (let i = 0; i < this._context.model.cells?.length; i++) {
+        const model = this._context.model.cells.get(i);
+        const cell = this._gridStackPanel.getCell(model.id);
+
+        if (cell && model.value.text.length === 0) {
+          this._gridStackPanel.deleteCell(model.id);
+        }
+
+        if (!cell && model.value.text.length !== 0) {
+          const item = this._createCell(model);
+          this._gridStackPanel.addCell(item);
+        }
+      }
+    }
   }
 
   private _createCell(cell: ICellModel): GridItem {
     const info = this._checkCellMetadata(cell);
-
     let item = null;
     switch (cell.type) {
       case 'code':
@@ -180,7 +197,6 @@ export default class EditorPanel extends SplitPanel {
           editorConfig: this._editorConfig.code,
           updateEditorOnShow: true
         });
-        item.outputArea.model.clear();
         break;
 
       case 'markdown':
@@ -203,7 +219,7 @@ export default class EditorPanel extends SplitPanel {
         break;
     }
 
-    return new GridItem(item, info, this.rendermime);
+    return new GridItem(item, info, this._activeView, this.rendermime);
   }
 
   private _checkCellMetadata(cell: ICellModel): DashboardCellView {
@@ -248,7 +264,6 @@ export default class EditorPanel extends SplitPanel {
     }
 
     cell.metadata.set('extensions', data as ReadonlyPartialJSONValue);
-
     return data.jupyter_dashboards.views[this._activeView];
   }
 
@@ -260,6 +275,21 @@ export default class EditorPanel extends SplitPanel {
     }).then(value => {
       if (value.button.accept) {
         this._gridStackPanel.info = body.info;
+
+        const data = {
+          jupyter_dashboards: {
+            version: 1,
+            activeView: 'grid_default',
+            views: {
+              grid_default: this._gridStackPanel.info
+            }
+          }
+        };
+        this._context.model.metadata.set(
+          'extensions',
+          data as ReadonlyPartialJSONValue
+        );
+        this._context.save();
       }
     });
   }
@@ -267,13 +297,12 @@ export default class EditorPanel extends SplitPanel {
   save(): void {
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const model = this._context.model.cells.get(i);
-      const cell = this._cells.get(model.id);
+      const cell = this._gridStackPanel.getCell(model.id);
       const data = model.metadata.get('extensions') as Record<string, any>;
 
       if (cell && data) {
         data.jupyter_dashboards.views[this._activeView] = cell.info;
         model.metadata.set('extensions', data as ReadonlyPartialJSONValue);
-        //this._context.model.cells.set(i, model);
       } else if (cell) {
         const data = {
           jupyter_dashboards: {
@@ -284,7 +313,6 @@ export default class EditorPanel extends SplitPanel {
           }
         };
         model.metadata.set('extensions', data as ReadonlyPartialJSONValue);
-        //this._context.model.cells.set(i, model);
       }
     }
 
@@ -296,7 +324,6 @@ export default class EditorPanel extends SplitPanel {
   private _notebookConfig: StaticNotebook.INotebookConfig;
   private _activeView: string;
   private _gridStackPanel: GridStackPanel;
-  private _cells: Map<string, GridItem>;
 }
 
 export namespace EditorPanel {

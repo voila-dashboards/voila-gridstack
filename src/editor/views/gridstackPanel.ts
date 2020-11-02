@@ -29,11 +29,11 @@ export type DashboardView = {
 };
 
 export class GridStackPanel extends Widget {
-  constructor(cells: Map<string, GridItem>) {
+  constructor() {
     super();
     this.addClass('grid-editor');
 
-    this._cells = cells;
+    this._cells = new Map<string, GridItem>();
   }
 
   dispose(): void {
@@ -85,16 +85,15 @@ export class GridStackPanel extends Widget {
   }
 
   onUpdateRequest(): void {
-    if (!this._grid) {
-      this._initGridStack();
-    }
-
-    this._grid?.removeAll();
-    this._cells.forEach((value: GridItem, key: string) => {
+    /* this._cells.forEach((value: GridItem) => {
       if (!value.info.hidden) {
-        this._addGridItem(value, key);
+        this._updateGridItem(value);
       }
-    });
+    }); */
+  }
+
+  get isReady(): boolean {
+    return this._ready;
   }
 
   get info(): DashboardView {
@@ -102,11 +101,46 @@ export class GridStackPanel extends Widget {
   }
 
   set info(info: DashboardView) {
-    console.debug(info);
     this._info = info;
+    if (this._grid) {
+      this._grid.margin(this._info.cellMargin);
+      this._grid.cellHeight(this._info.cellHeight);
+      this._grid.column(this._info.numColumns);
+    }
   }
 
-  private _initGridStack(): void {
+  public getCell(id: string): GridItem {
+    console.info('getCell');
+    return this._cells.get(id);
+  }
+
+  public addCell(cell: GridItem): void {
+    console.info('addCell:', cell, cell.cellId);
+    this._cells.set(cell.cellId, cell);
+    if (!cell.info.hidden) {
+      this._addGridItem(cell);
+    }
+  }
+
+  public updateCell(cell: GridItem): void {
+    console.info('updateCell');
+    this._cells.set(cell.cellId, cell);
+    if (!cell.info.hidden) {
+      this._updateGridItem(cell);
+    }
+  }
+
+  public deleteCell(id: string): void {
+    console.info('deleteCell');
+    const cell = this._cells.get(id);
+    this._cells.delete(id);
+    if (cell && !cell.info.hidden) {
+      this._removeGridItem(cell);
+    }
+  }
+
+  public initGridStack(): void {
+    console.info('initGridStack');
     const grid = document.createElement('div');
     grid.className = 'grid-stack';
     this.node.appendChild(grid);
@@ -127,6 +161,8 @@ export class GridStackPanel extends Widget {
       grid
     );
 
+    this._ready = true;
+
     this._grid.on(
       'change',
       (event: Event, items: GridHTMLElement | GridStackNode[]) => {
@@ -144,9 +180,9 @@ export class GridStackPanel extends Widget {
     );
   }
 
-  private _addGridItem(item: GridItem, key: string): void {
+  private _addGridItem(item: GridItem): void {
     const options = {
-      id: key,
+      id: item.cellId,
       x: item.info.col,
       y: item.info.row,
       width: item.info.width,
@@ -162,7 +198,7 @@ export class GridStackPanel extends Widget {
     this._grid.addWidget(item.gridCell(true), options);
   }
 
-  private _updateGridItem(item: GridItem, key: string): void {
+  private _updateGridItem(item: GridItem): void {
     this._grid.update(
       item.gridCell(false),
       item.info.col,
@@ -172,7 +208,7 @@ export class GridStackPanel extends Widget {
     );
   }
 
-  private _removeGridItem = (item: GridItem, id: string): void => {
+  private _removeGridItem = (item: GridItem): void => {
     if (item) {
       item.info.hidden = true;
       item.closeSignal.disconnect(this._removeGridItem);
@@ -191,7 +227,7 @@ export class GridStackPanel extends Widget {
           width: el.width,
           height: el.height
         };
-        this._cells.set(el.id as string, cell);
+        //this._cells.set(el.id as string, cell);
       }
     });
   }
@@ -202,7 +238,7 @@ export class GridStackPanel extends Widget {
       if (cell) {
         cell.info.hidden = true;
         cell.closeSignal.disconnect(this._removeGridItem);
-        this._cells.set(el.id as string, cell);
+        //this._cells.set(el.id as string, cell);
       }
     });
   }
@@ -251,23 +287,21 @@ export class GridStackPanel extends Widget {
       const widget = (event.source.parent as NotebookPanel).content.activeCell;
       const cell = this._cells.get(widget.model.id);
 
+      console.info('_evtDrop:', cell, widget.model.id);
+
       if (cell && cell.info.hidden) {
         cell.info.hidden = false;
         cell.info.col = col;
         cell.info.row = row;
-        this._cells.set(widget.model.id, cell);
-        this._addGridItem(cell, widget.model.id);
-      } else if (cell) {
-        cell.info.col = col;
-        cell.info.row = row;
-        this._cells.set(widget.model.id, cell);
-        this._updateGridItem(cell, widget.model.id);
+        //this._cells.set(cell.cellId, cell);
+        this._addGridItem(cell);
       }
     }
 
     this.removeClass('pr-DropTarget');
   }
 
+  private _ready: boolean;
   private _grid: GridStack;
   private _info: DashboardView;
   private _cells: Map<string, GridItem>;

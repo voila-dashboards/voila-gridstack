@@ -15,11 +15,6 @@ export default class EditorGridstack extends ReactWidget {
   }
 
   render(): JSX.Element {
-    /* const submit = (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      //this._gridStackPanel.info = this._info;
-    } */
-
     const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
       this._info.name = event.target.value;
       this.update();
@@ -96,10 +91,6 @@ export default class EditorGridstack extends ReactWidget {
             onChange={handleColumns}
           />
         </div>
-
-        {/* <div className="row">
-          <input type="submit" value="Submit" className="jp-Dialog-button jp-mod-accept jp-mod-styled" />
-        </div> */}
       </form>
     );
   }
