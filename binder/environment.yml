@@ -1,10 +1,14 @@
 name: voila-editor
 channels:
+- conda-forge/label/jupyterlab_rc
+- conda-forge/label/jupyterlab_server_rc
+- conda-forge/label/jupyterlab_widgets_rc
 - conda-forge
 dependencies:
 - bqplot
-- ipympl
-- ipywidgets
+- ipywidgets=7
+- jupyterlab=3
+- jupyterlab_widgets=1
 - python
 - nodejs
 - scipy
