@@ -87,6 +87,12 @@
   "jupyterlab": {
     "extension": true,
     "schemaDir": "schema",
-    "outputDir": "voila-editor/static"
+    "outputDir": "voila-editor/static",
+    "sharedPackages": {
+      "@jupyter-widgets/jupyterlab-manager": {
+        "bundled": false,
+        "singleton": true
+      }
+    }
   }
 }

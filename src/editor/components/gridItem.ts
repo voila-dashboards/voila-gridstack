@@ -1,6 +1,13 @@
+import {
+  registerWidgetManager,
+  WidgetRenderer
+} from '@jupyter-widgets/jupyterlab-manager';
+
 import { Cell, CodeCell, MarkdownCell } from '@jupyterlab/cells';
 
 import { DocumentRegistry } from '@jupyterlab/docregistry';
+
+import { INotebookModel } from '@jupyterlab/notebook';
 
 import { SimplifiedOutputArea } from '@jupyterlab/outputarea';
 
@@ -17,13 +24,6 @@ import { ISessionContext } from '@jupyterlab/apputils';
 import { ISignal, Signal } from '@lumino/signaling';
 
 import { Panel } from '@lumino/widgets';
-
-import {
-  registerWidgetManager,
-  WidgetRenderer
-} from '@jupyter-widgets/jupyterlab-manager';
-import { INotebookModel } from '@jupyterlab/notebook';
-import { toArray } from '@lumino/algorithm';
 
 export type DashboardCellInfo = {
   version: number;
@@ -142,11 +142,9 @@ export class GridItem extends Panel {
 
       // eslint-disable-next-line no-inner-declarations
       function* views() {
-        for (const codecell of item.widgets) {
-          for (const output of toArray(codecell.children())) {
-            if (output instanceof WidgetRenderer) {
-              yield output;
-            }
+        for (const w of item.widgets) {
+          if (w instanceof WidgetRenderer) {
+            yield w;
           }
         }
       }
