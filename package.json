@@ -54,7 +54,9 @@
     "@jupyterlab/filebrowser": "^3.0.0-rc.5",
     "@jupyterlab/notebook": "^3.0.0-rc.5",
     "@jupyterlab/ui-components": "^3.0.0-rc.5",
+    "@jupyter-widgets/base": "^3.0.0-alpha.2",
     "@jupyter-widgets/jupyterlab-manager": "^3.0.0-alpha.2",
+    "@lumino/coreutils": "^1.5.3",
     "@lumino/widgets": "^1.14.0",
     "@types/codemirror": "^0.0.97",
     "gridstack": "^2.1.0",
@@ -89,6 +91,10 @@
     "schemaDir": "schema",
     "outputDir": "voila-editor/static",
     "sharedPackages": {
+      "@jupyter-widgets/base": {
+        "bundled": false,
+        "singleton": true
+      },
       "@jupyter-widgets/jupyterlab-manager": {
         "bundled": false,
         "singleton": true
