@@ -29,11 +29,8 @@ The `jlpm` command is JupyterLab's pinned version of
 # Change directory to the voila-editor directory
 
 # create a new environment
-mamba create -n voila-editor -c conda-forge python nodejs -y
+mamba create -n voila-editor -c conda-forge/label/jupyterlab_rc -c conda-forge/label/jupyterlab_server_rc -c conda-forge/label/jupyterlab_widgets_rc -c conda-forge jupyterlab=3 ipywidgets jupyterlab_widgets nodejs python -y
 conda activate voila-editor
-
-# install the JupyterLab pre-release
-python -m pip install --pre jupyterlab
 
 # Install package in development mode
 pip install -e .
