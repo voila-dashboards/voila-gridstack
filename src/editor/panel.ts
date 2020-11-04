@@ -219,7 +219,7 @@ export default class EditorPanel extends SplitPanel {
         break;
     }
 
-    return new GridItem(item, info, this.rendermime);
+    return new GridItem(item, info, this.rendermime, this._context);
   }
 
   private _checkCellMetadata(cell: ICellModel): DashboardCellView {

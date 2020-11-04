@@ -1,4 +1,13 @@
+import {
+  registerWidgetManager,
+  WidgetRenderer
+} from '@jupyter-widgets/jupyterlab-manager';
+
 import { Cell, CodeCell, MarkdownCell } from '@jupyterlab/cells';
+
+import { DocumentRegistry } from '@jupyterlab/docregistry';
+
+import { INotebookModel } from '@jupyterlab/notebook';
 
 import { SimplifiedOutputArea } from '@jupyterlab/outputarea';
 
@@ -33,7 +42,8 @@ export class GridItem extends Panel {
   constructor(
     cell: Cell,
     info: DashboardCellView,
-    rendermime: IRenderMimeRegistry
+    rendermime: IRenderMimeRegistry,
+    context: DocumentRegistry.IContext<INotebookModel>
   ) {
     super();
     this.removeClass('lm-Widget');
@@ -46,6 +56,7 @@ export class GridItem extends Panel {
     this._info = info;
     this._type = cell.model.type;
     this._rendermime = rendermime;
+    this._context = context;
 
     this._cell.model.contentChanged.connect(this.update, this);
   }
@@ -128,6 +139,17 @@ export class GridItem extends Panel {
       });
 
       cell.appendChild(item.node);
+
+      // eslint-disable-next-line no-inner-declarations
+      function* views() {
+        for (const w of item.widgets) {
+          if (w instanceof WidgetRenderer) {
+            yield w;
+          }
+        }
+      }
+
+      registerWidgetManager(this._context, this._rendermime, views());
     } else {
       renderText({
         host: cell,
@@ -170,6 +192,7 @@ export class GridItem extends Panel {
   private _info: DashboardCellView;
   private _type: 'code' | 'markdown' | 'raw';
   private _rendermime: IRenderMimeRegistry;
+  private _context: DocumentRegistry.IContext<INotebookModel>;
   private _gridCell: HTMLElement;
   private _closeSignal = new Signal<this, string>(this);
 }
