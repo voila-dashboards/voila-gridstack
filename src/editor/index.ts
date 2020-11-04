@@ -12,15 +12,16 @@ import { IEditorServices } from '@jupyterlab/codeeditor';
 
 import { WidgetTracker } from '@jupyterlab/apputils';
 
-import VoilaWidgetFactory from './factory';
+import { VoilaWidgetFactory } from './factory';
 
-import VoilaEditor from './widget';
+import { IVoilaEditorTracker, VoilaEditor } from './widget';
 
 import { VoilaButton, EditorButton } from './components/notebookButtons';
 
-export const editor: JupyterFrontEndPlugin<void> = {
+export const editor: JupyterFrontEndPlugin<IVoilaEditorTracker> = {
   id: 'voila-editor/editor',
   autoStart: true,
+  provides: IVoilaEditorTracker,
   optional: [],
   requires: [
     ILayoutRestorer,
@@ -78,5 +79,7 @@ export const editor: JupyterFrontEndPlugin<void> = {
       'Notebook',
       new EditorButton(app.commands)
     );
+
+    return tracker;
   }
 };

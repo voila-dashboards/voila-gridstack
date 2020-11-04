@@ -10,11 +10,11 @@ import { IEditorMimeTypeService } from '@jupyterlab/codeeditor';
 
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
-import VoilaEditor from './widget';
+import { VoilaEditor } from './widget';
 
-import EditorPanel from './panel';
+import { EditorPanel } from './panel';
 
-export default class VoilaWidgetFactory extends ABCWidgetFactory<
+export class VoilaWidgetFactory extends ABCWidgetFactory<
   VoilaEditor,
   INotebookModel
 > {

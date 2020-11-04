@@ -34,7 +34,7 @@ import { GridItem, DashboardCellView } from './components/gridItem';
 
 import EditorGridstack from './components/editorGridstack';
 
-export default class EditorPanel extends SplitPanel {
+export class EditorPanel extends SplitPanel {
   constructor(options: EditorPanel.IOptions) {
     super();
     this.addClass('grid-panel');

@@ -1,10 +1,14 @@
+import { IWidgetTracker } from '@jupyterlab/apputils';
+
 import { DocumentWidget, DocumentRegistry } from '@jupyterlab/docregistry';
 
 import { INotebookModel } from '@jupyterlab/notebook';
 
 import { listIcon } from '@jupyterlab/ui-components';
 
-import EditorPanel from './panel';
+import { Token } from '@lumino/coreutils';
+
+import { EditorPanel } from './panel';
 
 import Save from './toolbar/save';
 
@@ -12,10 +16,7 @@ import Edit from './toolbar/edit';
 
 import Voila from './toolbar/voila';
 
-export default class VoilaEditor extends DocumentWidget<
-  EditorPanel,
-  INotebookModel
-> {
+export class VoilaEditor extends DocumentWidget<EditorPanel, INotebookModel> {
   constructor(
     context: DocumentRegistry.IContext<INotebookModel>,
     content: EditorPanel
@@ -36,3 +37,15 @@ export default class VoilaEditor extends DocumentWidget<
     super.dispose();
   }
 }
+
+/**
+ * A class that tracks Voila Editor widgets.
+ */
+export interface IVoilaEditorTracker extends IWidgetTracker<VoilaEditor> {}
+
+/**
+ * The Voila Editor tracker token.
+ */
+export const IVoilaEditorTracker = new Token<IVoilaEditorTracker>(
+  'voila-editor:IVoilaEditorTracker'
+);

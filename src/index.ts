@@ -2,6 +2,8 @@ import { JupyterFrontEndPlugin } from '@jupyterlab/application';
 
 import { editor } from './editor';
 
-const voilaEditor: JupyterFrontEndPlugin<any>[] = [editor];
+import { widgets } from './widgets';
 
-export default voilaEditor;
+const plugins: JupyterFrontEndPlugin<any>[] = [editor, widgets];
+
+export default plugins;

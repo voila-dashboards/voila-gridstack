@@ -4,7 +4,7 @@ import { editIcon } from '@jupyterlab/ui-components';
 
 import * as React from 'react';
 
-import EditorPanel from '../panel';
+import { EditorPanel } from '../panel';
 
 export default class Edit extends ReactWidget {
   constructor(panel: EditorPanel) {
