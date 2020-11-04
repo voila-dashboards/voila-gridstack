@@ -28,11 +28,13 @@ import { SplitPanel } from '@lumino/widgets';
 
 import { Signal } from '@lumino/signaling';
 
-import { GridStackPanel, DashboardView } from './views/gridstackPanel';
+import { GridStackPanel } from './views/gridstackPanel';
 
 import { GridItem, DashboardCellView } from './components/gridItem';
 
-import EditorGridstack from './components/editorGridstack';
+import { EditorGridstack } from './components/editorGridstack';
+
+import { DashboardView } from './format';
 
 export class EditorPanel extends SplitPanel {
   constructor(options: EditorPanel.IOptions) {
@@ -71,6 +73,10 @@ export class EditorPanel extends SplitPanel {
   readonly contentFactory: NotebookPanel.IContentFactory;
 
   readonly mimeTypeService: IEditorMimeTypeService;
+
+  get gridStackPanel(): GridStackPanel {
+    return this._gridStackPanel;
+  }
 
   get editorConfig(): StaticNotebook.IEditorConfig {
     return this._editorConfig;
@@ -219,7 +225,7 @@ export class EditorPanel extends SplitPanel {
         break;
     }
 
-    return new GridItem(item, info, this.rendermime, this._context);
+    return new GridItem(item, info, this.rendermime);
   }
 
   private _checkCellMetadata(cell: ICellModel): DashboardCellView {

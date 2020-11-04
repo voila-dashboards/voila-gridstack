@@ -2,9 +2,9 @@ import { ReactWidget } from '@jupyterlab/apputils';
 
 import * as React from 'react';
 
-import { DashboardView } from '../views/gridstackPanel';
+import { DashboardView } from '../format';
 
-export default class EditorGridstack extends ReactWidget {
+export class EditorGridstack extends ReactWidget {
   constructor(info: DashboardView) {
     super();
     this._info = info;

@@ -12,21 +12,9 @@ import { GridStack, GridHTMLElement, GridStackNode } from 'gridstack';
 
 import 'gridstack/dist/gridstack.css';
 
+import { DashboardView } from '../format';
+
 import { GridItem } from './../components/gridItem';
-
-export type DashboardInfo = {
-  version: number;
-  activeView: string;
-  views: { [id: string]: DashboardView };
-};
-
-export type DashboardView = {
-  name: string;
-  type: string;
-  cellMargin: number;
-  cellHeight: number;
-  numColumns: number;
-};
 
 export class GridStackPanel extends Widget {
   constructor() {
@@ -34,6 +22,10 @@ export class GridStackPanel extends Widget {
     this.addClass('grid-editor');
 
     this._cells = new Map<string, GridItem>();
+  }
+
+  get cells(): Map<string, GridItem> {
+    return this._cells;
   }
 
   dispose(): void {
