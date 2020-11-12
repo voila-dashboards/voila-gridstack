@@ -31,7 +31,10 @@ export class EditorGridstack extends ReactWidget {
     };
 
     const handleColumns = (event: React.ChangeEvent<HTMLInputElement>) => {
-      this._info.numColumns = parseInt(event.target.value, 10);
+      let col = parseInt(event.target.value, 10);
+      col = col > 12 ? 12 : col;
+      col = col < 1 ? 1 : col;
+      this._info.numColumns = col;
       this.update();
     };
 

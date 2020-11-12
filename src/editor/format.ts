@@ -11,3 +11,16 @@ export type DashboardView = {
   cellHeight: number;
   numColumns: number;
 };
+
+export type DashboardCellInfo = {
+  version: number;
+  views: { [id: string]: DashboardCellView };
+};
+
+export type DashboardCellView = {
+  hidden: boolean;
+  row: number;
+  col: number;
+  width: number;
+  height: number;
+};

@@ -4,8 +4,6 @@ import { DocumentWidget, DocumentRegistry } from '@jupyterlab/docregistry';
 
 import { INotebookModel } from '@jupyterlab/notebook';
 
-import { listIcon } from '@jupyterlab/ui-components';
-
 import { Token } from '@lumino/coreutils';
 
 import { EditorPanel } from './panel';
@@ -23,9 +21,9 @@ export class VoilaEditor extends DocumentWidget<EditorPanel, INotebookModel> {
   ) {
     super({ context, content });
     this.id = 'voila-editor/editor:widget';
-    this.title.label = 'Voila GridStack Editor';
+    this.title.label = context.localPath;
     this.title.closable = true;
-    this.title.icon = listIcon;
+    this.title.iconClass = "jp-MaterialIcon jp-VoilaIcon"
 
     // Adding the buttons to the widget toolbar
     this.toolbar.addItem('save', new Save(this.content));
