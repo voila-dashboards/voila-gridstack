@@ -57,28 +57,24 @@
     }, 100)
     $(function () {
         GridStack.init({
-            alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
-            {% if resources.gridstack.show_handles %}
-            resizable: {
-                handles: 'e, se, s, sw, w'
-            },
-            {% else %}
-            resizable: {
-                handles: 'none'
-            },
-            {% endif %}
-            {% if gridstack_conf.defaultCellHeight %}
-            cellHeight: {{gridstack_conf.defaultCellHeight}},
-            {% endif %}
-            {% if gridstack_conf.maxColumns %}
-            column: {{gridstack_conf.maxColumns}},
+            float: true,
+            {% if gridstack_conf.numColumns %}
+            column: {{gridstack_conf.numColumns}},
             {% endif %}
             {% if gridstack_conf.cellMargin is defined %}
             margin: {{gridstack_conf.cellMargin}},
             {% endif %}
-            draggable: {
-                handle: '.gridhandle',
-            }
+            {% if gridstack_conf.cellHeight %}
+            cellHeight: {{gridstack_conf.cellHeight}},
+            {% endif %}
+            disableOneColumnMode: true,
+            {% if resources.gridstack.show_handles %}
+            resizable: { handles: 'e, se, s, sw, w' },
+            {% else %}
+            resizable: { handles: 'none' },
+            {% endif %}
+            draggable: { handle: '.gridhandle' },
+            alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
         }).on('resizestop', function(event, elem) {
             resize_workaround()
         })
