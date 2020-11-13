@@ -4,11 +4,7 @@ import {
   StaticNotebook
 } from '@jupyterlab/notebook';
 
-import {
-  ICellModel,
-  CodeCell,
-  CodeCellModel
-} from '@jupyterlab/cells';
+import { ICellModel, CodeCell, CodeCellModel } from '@jupyterlab/cells';
 
 import {
   IRenderMimeRegistry,
@@ -59,14 +55,14 @@ export class GridStackModel {
     this._context.sessionContext.ready.then(() => {
       this._checkMetadata();
       this._checkCellsMetadata();
-      this._context.save().then( v => {
+      this._context.save().then(v => {
         this.ready.emit(void 0);
       });
     });
-    
+
     this._context.model.contentChanged.connect(this._updateCells, this);
   }
-  
+
   readonly ready: Signal<this, null>;
 
   readonly cellRemoved: Signal<this, string>;
@@ -101,9 +97,10 @@ export class GridStackModel {
 
   set info(info: DashboardView) {
     this._info = info;
-    const data = this._context.model.metadata.get(
-      'extensions'
-    ) as Record<string, any>;
+    const data = this._context.model.metadata.get('extensions') as Record<
+      string,
+      any
+    >;
 
     data.jupyter_dashboards.views[VIEW] = this._info;
     this._context.model.metadata.set('extensions', data);
@@ -122,8 +119,8 @@ export class GridStackModel {
   public getCellInfo(id: string): DashboardCellView {
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const cell = this._context.model.cells.get(i);
-      
-      if ( cell.id === id ) {
+
+      if (cell.id === id) {
         const data = cell.metadata.get('extensions') as Record<string, any>;
         return data.jupyter_dashboards.views[VIEW];
       }
@@ -133,8 +130,8 @@ export class GridStackModel {
   public setCellInfo(id: string, info: DashboardCellView): void {
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const cell = this._context.model.cells.get(i);
-      
-      if ( cell.id === id ) {
+
+      if (cell.id === id) {
         const data = cell.metadata.get('extensions') as Record<string, any>;
         data.jupyter_dashboards.views[VIEW] = info;
         cell.metadata.set('extensions', data);
@@ -146,8 +143,8 @@ export class GridStackModel {
   public hideCell(id: string): void {
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const cell = this._context.model.cells.get(i);
-      
-      if ( cell.id === id ) {
+
+      if (cell.id === id) {
         const data = cell.metadata.get('extensions') as Record<string, any>;
         data.jupyter_dashboards.views[VIEW].hidden = true;
         cell.metadata.set('extensions', data);
@@ -161,7 +158,7 @@ export class GridStackModel {
     cell.className = 'grid-item-widget';
 
     switch (cellModel.type) {
-      case 'code':
+      case 'code': {
         const out = new CodeCell({
           model: cellModel as CodeCellModel,
           rendermime: this.rendermime,
@@ -178,7 +175,7 @@ export class GridStackModel {
 
         cell.appendChild(item.node);
         break;
-
+      }
       case 'markdown':
         renderMarkdown({
           host: cell,
@@ -203,7 +200,7 @@ export class GridStackModel {
 
     const close = document.createElement('div');
     close.className = 'trash-can';
-    deleteIcon.element({container: close, height: '16px', width: '16px'});
+    deleteIcon.element({ container: close, height: '16px', width: '16px' });
 
     close.onclick = (): void => {
       const data = cellModel.metadata.get('extensions') as Record<string, any>;
@@ -245,7 +242,8 @@ export class GridStackModel {
     if (!data) {
       data = {
         jupyter_dashboards: {
-          version: 1, activeView: VIEW,
+          version: 1,
+          activeView: VIEW,
           views: {
             grid_default: this._info
           }
@@ -253,25 +251,23 @@ export class GridStackModel {
       };
     } else if (!data.jupyter_dashboards) {
       data['jupyter_dashboards'] = {
-        version: 1, activeView: VIEW,
+        version: 1,
+        activeView: VIEW,
         views: {
           grid_default: this._info
         }
       };
     } else if (
-        !data.jupyter_dashboards.views[VIEW] ||
-        !('name' in data.jupyter_dashboards.views[VIEW]) ||
-        !('type' in data.jupyter_dashboards.views[VIEW]) ||
-        !('cellMargin' in data.jupyter_dashboards.views[VIEW]) ||
-        !('cellHeight' in data.jupyter_dashboards.views[VIEW]) ||
-        !('numColumns' in data.jupyter_dashboards.views[VIEW])
-      ) {
+      !data.jupyter_dashboards.views[VIEW] ||
+      !('name' in data.jupyter_dashboards.views[VIEW]) ||
+      !('type' in data.jupyter_dashboards.views[VIEW]) ||
+      !('cellMargin' in data.jupyter_dashboards.views[VIEW]) ||
+      !('cellHeight' in data.jupyter_dashboards.views[VIEW]) ||
+      !('numColumns' in data.jupyter_dashboards.views[VIEW])
+    ) {
       data.jupyter_dashboards.views[VIEW] = this._info;
-    
     } else {
-      this._info = data.jupyter_dashboards?.views[
-        VIEW
-      ] as DashboardView;
+      this._info = data.jupyter_dashboards?.views[VIEW] as DashboardView;
     }
 
     this._context.model.metadata.set('extensions', data);
@@ -293,34 +289,44 @@ export class GridStackModel {
           activeView: VIEW,
           views: {
             grid_default: {
-              hidden: true, row: null, col: null, width: 2, height: 2
+              hidden: true,
+              row: null,
+              col: null,
+              width: 2,
+              height: 2
             }
           }
         }
       };
       cell.metadata.set('extensions', data);
-
     } else if (!data.jupyter_dashboards) {
       data['jupyter_dashboards'] = {
         activeView: VIEW,
         views: {
-          grid_default: { 
-            hidden: true, row: null, col: null, width: 2, height: 2
+          grid_default: {
+            hidden: true,
+            row: null,
+            col: null,
+            width: 2,
+            height: 2
           }
         }
       };
       cell.metadata.set('extensions', data);
-
     } else if (
-        !data.jupyter_dashboards.views[VIEW] ||
-        !('hidden' in data.jupyter_dashboards.views[VIEW]) ||
-        !('row' in data.jupyter_dashboards.views[VIEW]) ||
-        !('col' in data.jupyter_dashboards.views[VIEW]) ||
-        !('width' in data.jupyter_dashboards.views[VIEW]) ||
-        !('height' in data.jupyter_dashboards.views[VIEW])
-      ) {
+      !data.jupyter_dashboards.views[VIEW] ||
+      !('hidden' in data.jupyter_dashboards.views[VIEW]) ||
+      !('row' in data.jupyter_dashboards.views[VIEW]) ||
+      !('col' in data.jupyter_dashboards.views[VIEW]) ||
+      !('width' in data.jupyter_dashboards.views[VIEW]) ||
+      !('height' in data.jupyter_dashboards.views[VIEW])
+    ) {
       data.jupyter_dashboards.views[VIEW] = {
-        hidden: true, row: null, col: null, width: 2, height: 2
+        hidden: true,
+        row: null,
+        col: null,
+        width: 2,
+        height: 2
       };
       cell.metadata.set('extensions', data);
     }
@@ -331,7 +337,6 @@ export class GridStackModel {
   private _notebookConfig: StaticNotebook.INotebookConfig;
   private _info: DashboardView;
 }
-
 
 export namespace GridStackModel {
   /**

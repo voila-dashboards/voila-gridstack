@@ -23,7 +23,7 @@ export class VoilaEditor extends DocumentWidget<EditorPanel, INotebookModel> {
     this.id = 'voila-editor/editor:widget';
     this.title.label = context.localPath;
     this.title.closable = true;
-    this.title.iconClass = "jp-MaterialIcon jp-VoilaIcon"
+    this.title.iconClass = 'jp-MaterialIcon jp-VoilaIcon';
 
     // Adding the buttons to the widget toolbar
     this.toolbar.addItem('save', new Save(this.content));
