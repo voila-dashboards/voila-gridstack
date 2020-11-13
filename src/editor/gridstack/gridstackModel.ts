@@ -273,14 +273,14 @@ export class GridStackModel {
     this._context.model.metadata.set('extensions', data);
   }
 
-  private _checkCellsMetadata() {
+  private _checkCellsMetadata(): void {
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const cell = this._context.model.cells.get(i);
       this._checkCellMetadata(cell);
     }
   }
 
-  private _checkCellMetadata(cell: ICellModel) {
+  private _checkCellMetadata(cell: ICellModel): void {
     let data = cell.metadata.get('extensions') as Record<string, any>;
 
     if (!data) {
