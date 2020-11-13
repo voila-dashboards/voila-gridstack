@@ -63,7 +63,7 @@
     "react": "^17.0.1"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "^3.0.0-rc.2",
+    "@jupyterlab/builder": "^3.0.0-rc.8",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
     "eslint": "^7.5.0",
