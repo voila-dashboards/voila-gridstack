@@ -213,21 +213,6 @@ export class GridStackModel {
     return new GridStackItem(cellModel.id, cell, close);
   }
 
-  /* execute(sessionContext: ISessionContext): void {
-    if (this._type === 'code') {
-      SimplifiedOutputArea.execute(
-        this._cell.model.value.text,
-        (this._cell as CodeCell).outputArea,
-        sessionContext
-      ).catch(reason => console.error(reason));
-    } else if (this._type === 'markdown') {
-      (this._cell as MarkdownCell).inputHidden = false;
-      (this._cell as MarkdownCell).rendered = true;
-    }
-
-    this.update();
-  } */
-
   private _updateCells(): void {
     this._checkCellsMetadata();
     this.contentChanged.emit(void 0);
