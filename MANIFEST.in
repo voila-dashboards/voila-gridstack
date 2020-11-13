@@ -4,9 +4,10 @@ include pyproject.toml
 include jupyter-config/voila-editor.json
 
 include package.json
+include install.json
 include ts*.json
 
-graft voila-editor/static
+graft voila-editor/labextension
 
 # Javascript files
 graft src
