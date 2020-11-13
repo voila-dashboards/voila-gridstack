@@ -15,23 +15,28 @@ export class EditorGridstack extends ReactWidget {
   }
 
   render(): JSX.Element {
-    const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleName = (event: React.ChangeEvent<HTMLInputElement>): void => {
       this._info.name = event.target.value;
       this.update();
     };
 
-    const handleMargin = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleMargin = (event: React.ChangeEvent<HTMLInputElement>): void => {
       this._info.cellMargin = parseInt(event.target.value, 10);
       this.update();
     };
 
-    const handleHeight = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleHeight = (event: React.ChangeEvent<HTMLInputElement>): void => {
       this._info.cellHeight = parseInt(event.target.value, 10);
       this.update();
     };
 
-    const handleColumns = (event: React.ChangeEvent<HTMLInputElement>) => {
-      this._info.numColumns = parseInt(event.target.value, 10);
+    const handleColumns = (
+      event: React.ChangeEvent<HTMLInputElement>
+    ): void => {
+      let col = parseInt(event.target.value, 10);
+      col = col > 12 ? 12 : col;
+      col = col < 1 ? 1 : col;
+      this._info.numColumns = col;
       this.update();
     };
 

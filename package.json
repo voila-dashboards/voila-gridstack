@@ -33,7 +33,7 @@
     "build:prod": "jlpm run build:lib && jlpm run build:labextension",
     "clean": "jlpm run clean:lib",
     "clean:all": "jlpm run clean:lib && jlpm run clean:labextension",
-    "clean:labextension": "rimraf voila-editor/static",
+    "clean:labextension": "rimraf voila-editor/labextension",
     "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
     "eslint": "eslint . --ext .ts,.tsx --fix",
     "eslint:check": "eslint . --ext .ts,.tsx",
@@ -46,24 +46,24 @@
     "watch:src": "tsc -w"
   },
   "dependencies": {
-    "@jupyter-widgets/base": "^3.0.0-alpha.2",
+    "@jupyter-widgets/base": "^4.0.0-alpha.2",
     "@jupyter-widgets/jupyterlab-manager": "^3.0.0-alpha.2",
-    "@jupyterlab/application": "^3.0.0-rc.5",
-    "@jupyterlab/apputils": "^3.0.0-rc.5",
-    "@jupyterlab/cells": "^3.0.0-rc.5",
-    "@jupyterlab/codeeditor": "^3.0.0-rc.5",
-    "@jupyterlab/codemirror": "^3.0.0-rc.5",
-    "@jupyterlab/filebrowser": "^3.0.0-rc.5",
-    "@jupyterlab/notebook": "^3.0.0-rc.5",
-    "@jupyterlab/ui-components": "^3.0.0-rc.5",
+    "@jupyterlab/application": "^3.0.0-rc.8",
+    "@jupyterlab/apputils": "^3.0.0-rc.8",
+    "@jupyterlab/cells": "^3.0.0-rc.8",
+    "@jupyterlab/codeeditor": "^3.0.0-rc.8",
+    "@jupyterlab/codemirror": "^3.0.0-rc.8",
+    "@jupyterlab/filebrowser": "^3.0.0-rc.8",
+    "@jupyterlab/notebook": "^3.0.0-rc.8",
+    "@jupyterlab/ui-components": "^3.0.0-rc.8",
     "@lumino/coreutils": "^1.5.3",
     "@lumino/widgets": "^1.14.0",
     "@types/codemirror": "^0.0.97",
     "gridstack": "^2.1.0",
-    "react": "^16.13.1"
+    "react": "^17.0.1"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "^3.0.0-rc.5",
+    "@jupyterlab/builder": "^3.0.0-rc.8",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
     "eslint": "^7.5.0",
@@ -89,7 +89,7 @@
   "jupyterlab": {
     "extension": true,
     "schemaDir": "schema",
-    "outputDir": "voila-editor/static",
+    "outputDir": "voila-editor/labextension",
     "sharedPackages": {
       "@jupyter-widgets/base": {
         "bundled": false,

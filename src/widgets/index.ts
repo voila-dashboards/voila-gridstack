@@ -17,7 +17,7 @@ import { IVoilaEditorTracker } from '../editor/widget';
 function* widgetRenderers(
   editor: EditorPanel
 ): IterableIterator<WidgetRenderer> {
-  for (const w of editor.gridStackPanel.cells.values()) {
+  for (const w of editor.gridWidgets) {
     if (w instanceof WidgetRenderer) {
       yield w;
     }
