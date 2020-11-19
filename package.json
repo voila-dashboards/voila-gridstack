@@ -1,14 +1,14 @@
 {
-  "name": "voila-editor",
+  "name": "jupyterlab-gridstack",
   "version": "0.0.1",
   "description": "A JupyterLab extension to create voila dashboards.",
-  "homepage": "https://github.com/hbcarlos/voila-editor",
+  "homepage": "https://github.com/hbcarlos/jupyterlab-gridstack",
   "repository": {
     "type": "git",
-    "url": "https://github.com/hbcarlos/voila-editor"
+    "url": "https://github.com/hbcarlos/jupyterlab-gridstack"
   },
   "bugs": {
-    "url": "https://github.com/hbcarlos/voila-editor/issues"
+    "url": "https://github.com/hbcarlos/jupyterlab-gridstack/issues"
   },
   "license": "BSD-3-Clause",
   "author": "QuantStack",
@@ -33,7 +33,7 @@
     "build:prod": "jlpm run build:lib && jlpm run build:labextension",
     "clean": "jlpm run clean:lib",
     "clean:all": "jlpm run clean:lib && jlpm run clean:labextension",
-    "clean:labextension": "rimraf voila-editor/labextension",
+    "clean:labextension": "rimraf jupyterlab-gridstack/labextension",
     "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
     "eslint": "eslint . --ext .ts,.tsx --fix",
     "eslint:check": "eslint . --ext .ts,.tsx",
@@ -89,7 +89,7 @@
   "jupyterlab": {
     "extension": true,
     "schemaDir": "schema",
-    "outputDir": "voila-editor/labextension",
+    "outputDir": "jupyterlab-gridstack/labextension",
     "sharedPackages": {
       "@jupyter-widgets/base": {
         "bundled": false,

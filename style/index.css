@@ -3,7 +3,7 @@
 .grid-editor {
   width: 100%;
   height: 100%;
-  padding: 2px;
+  overflow: scroll;
   background-color: var(--jp-layout-color2);
 }
 

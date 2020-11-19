@@ -20,7 +20,7 @@ import { SimplifiedOutputArea } from '@jupyterlab/outputarea';
 
 import { IObservableUndoableList } from '@jupyterlab/observables';
 
-import { Signal } from '@lumino/signaling';
+import { Signal, ISignal } from '@lumino/signaling';
 
 import { deleteIcon } from '../icons';
 
@@ -39,37 +39,45 @@ export class GridStackModel {
     this._editorConfig = options.editorConfig;
     this._notebookConfig = options.notebookConfig;
 
-    this.ready = new Signal<this, null>(this);
-    this.cellRemoved = new Signal<this, string>(this);
-    this.stateChanged = new Signal<this, null>(this);
-    this.contentChanged = new Signal<this, null>(this);
+    this._ready = new Signal<this, null>(this);
+    this._cellRemoved = new Signal<this, string>(this);
+    this._stateChanged = new Signal<this, null>(this);
+    this._contentChanged = new Signal<this, null>(this);
 
     this._info = {
       name: 'grid',
       type: 'grid',
-      cellMargin: 5,
-      cellHeight: 60,
-      numColumns: 12
+      maxColumns: 12,
+      cellMargin: 10,
+      defaultCellHeight: 60
     };
 
     this._context.sessionContext.ready.then(() => {
       this._checkMetadata();
       this._checkCellsMetadata();
       this._context.save().then(v => {
-        this.ready.emit(void 0);
+        this._ready.emit(null);
       });
     });
 
     this._context.model.contentChanged.connect(this._updateCells, this);
   }
 
-  readonly ready: Signal<this, null>;
+  get ready(): ISignal<this, null> {
+    return this._ready;
+  }
 
-  readonly cellRemoved: Signal<this, string>;
+  get cellRemoved(): ISignal<this, string> {
+    return this._cellRemoved;
+  }
 
-  readonly stateChanged: Signal<this, null>;
+  get stateChanged(): ISignal<this, null> {
+    return this._stateChanged;
+  }
 
-  readonly contentChanged: Signal<this, null>;
+  get contentChanged(): ISignal<this, null> {
+    return this._contentChanged;
+  }
 
   readonly rendermime: IRenderMimeRegistry;
 
@@ -116,7 +124,7 @@ export class GridStackModel {
     return this._context.model.deletedCells;
   }
 
-  public getCellInfo(id: string): DashboardCellView {
+  public getCellInfo(id: string): DashboardCellView | undefined {
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const cell = this._context.model.cells.get(i);
 
@@ -125,6 +133,8 @@ export class GridStackModel {
         return data.jupyter_dashboards.views[VIEW];
       }
     }
+
+    return undefined;
   }
 
   public setCellInfo(id: string, info: DashboardCellView): void {
@@ -207,7 +217,7 @@ export class GridStackModel {
       data.jupyter_dashboards.views[VIEW].hidden = true;
       cellModel.metadata.set('extensions', data);
       this._context.model.dirty = true;
-      this.cellRemoved.emit(cellModel.id);
+      this._cellRemoved.emit(cellModel.id);
     };
 
     return new GridStackItem(cellModel.id, cell, close);
@@ -215,7 +225,7 @@ export class GridStackModel {
 
   private _updateCells(): void {
     this._checkCellsMetadata();
-    this.contentChanged.emit(void 0);
+    this._contentChanged.emit(null);
   }
 
   private _checkMetadata(): void {
@@ -246,9 +256,9 @@ export class GridStackModel {
       !data.jupyter_dashboards.views[VIEW] ||
       !('name' in data.jupyter_dashboards.views[VIEW]) ||
       !('type' in data.jupyter_dashboards.views[VIEW]) ||
+      !('maxColumns' in data.jupyter_dashboards.views[VIEW]) ||
       !('cellMargin' in data.jupyter_dashboards.views[VIEW]) ||
-      !('cellHeight' in data.jupyter_dashboards.views[VIEW]) ||
-      !('numColumns' in data.jupyter_dashboards.views[VIEW])
+      !('defaultCellHeight' in data.jupyter_dashboards.views[VIEW])
     ) {
       data.jupyter_dashboards.views[VIEW] = this._info;
     } else {
@@ -321,6 +331,11 @@ export class GridStackModel {
   private _editorConfig: StaticNotebook.IEditorConfig;
   private _notebookConfig: StaticNotebook.INotebookConfig;
   private _info: DashboardView;
+
+  private _ready: Signal<this, null>;
+  private _cellRemoved: Signal<this, string>;
+  private _stateChanged: Signal<this, null>;
+  private _contentChanged: Signal<this, null>;
 }
 
 export namespace GridStackModel {

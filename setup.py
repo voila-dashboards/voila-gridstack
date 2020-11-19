@@ -1,5 +1,5 @@
 """
-voila-editor setup
+jupyterlab-gridstack setup
 """
 import json
 import os
@@ -13,7 +13,7 @@ import setuptools
 HERE = os.path.abspath(os.path.dirname(__file__))
 
 # The name of the project
-name="voila-editor"
+name="jupyterlab-gridstack"
 
 # Get our version
 with open(os.path.join(HERE, 'package.json')) as f:
@@ -33,7 +33,7 @@ package_data_spec = {
     ]
 }
 
-labext_name = "voila-editor"
+labext_name = "jupyterlab-gridstack"
 
 data_files_spec = [
     ("share/jupyter/labextensions/%s" % labext_name, lab_path, "**"),
@@ -56,7 +56,7 @@ with open("README.md", "r") as fh:
 setup_args = dict(
     name=name,
     version=version,
-    url="https://github.com/hbcarlos/voila-editor",
+    url="https://github.com/hbcarlos/jupyterlab-gridstack",
     author="QuantStack",
     description="A JupyterLab extension to create voila dashboards.",
     long_description= long_description,

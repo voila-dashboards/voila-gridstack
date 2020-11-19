@@ -1,6 +1,6 @@
 {
-  "title": "Voila Editor",
-  "description": "Settings for Voila Editor.",
+  "title": "Voila Gridstack",
+  "description": "Settings for Voila Gridstack.",
   "type": "object",
   "properties": {
     "env": {

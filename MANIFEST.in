@@ -1,13 +1,13 @@
 include LICENSE
 include README.md
 include pyproject.toml
-include jupyter-config/voila-editor.json
+include jupyter-config/jupyterlab-gridstack.json
 
 include package.json
 include install.json
 include ts*.json
 
-graft voila-editor/labextension
+graft jupyterlab-gridstack/labextension
 
 # Javascript files
 graft src

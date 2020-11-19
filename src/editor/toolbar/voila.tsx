@@ -18,7 +18,7 @@ export default class Voila extends ReactWidget {
         `${baseUrl}voila/render/${this._path + conf}`,
         '_blank'
       );
-      win.focus();
+      win?.focus();
     };
 
     return (

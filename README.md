@@ -1,6 +1,6 @@
-# voila-editor
+# jupyterlab-gridstack
 
-![Github Actions Status](https://github.com/hbcarlos/voila-editor/workflows/Build/badge.svg)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hbcarlos/voila-editor/master?urlpath=lab)
+![Github Actions Status](https://github.com/hbcarlos/jupyterlab-gridstack/workflows/Build/badge.svg)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hbcarlos/jupyterlab-gridstack/master?urlpath=lab)
 
 A JupyterLab extension to create voila dashboards.
 
@@ -11,7 +11,7 @@ A JupyterLab extension to create voila dashboards.
 ## Install
 
 ```bash
-pip install voila-editor
+pip install jupyterlab-gridstack
 ```
 
 ## Contributing
@@ -26,11 +26,11 @@ The `jlpm` command is JupyterLab's pinned version of
 
 ```bash
 # Clone the repo to your local environment
-# Change directory to the voila-editor directory
+# Change directory to the jupyterlab-gridstack directory
 
 # create a new environment
-mamba create -n voila-editor -c conda-forge/label/jupyterlab_rc -c conda-forge/label/jupyterlab_server_rc -c conda-forge/label/jupyterlab_widgets_rc -c conda-forge jupyterlab=3 ipywidgets jupyterlab_widgets nodejs python -y
-conda activate voila-editor
+mamba create -n jupyterlab-gridstack -c conda-forge/label/jupyterlab_rc -c conda-forge/label/jupyterlab_server_rc -c conda-forge/label/jupyterlab_widgets_rc -c conda-forge jupyterlab=3 ipywidgets jupyterlab_widgets nodejs python -y
+conda activate jupyterlab-gridstack
 
 # Install package in development mode
 pip install -e .
@@ -56,6 +56,6 @@ With the watch command running, every saved change will immediately be built loc
 ### Uninstall
 
 ```bash
-pip uninstall voila-editor
-jupyter labextension uninstall voila-editor
+pip uninstall jupyterlab-gridstack
+jupyter labextension uninstall jupyterlab-gridstack
 ```

@@ -2,7 +2,7 @@ import { Layout, Widget } from '@lumino/widgets';
 
 import { IIterator, ArrayIterator } from '@lumino/algorithm';
 
-import { Signal } from '@lumino/signaling';
+import { Signal, ISignal } from '@lumino/signaling';
 
 import {
   GridStack,
@@ -21,21 +21,33 @@ export class GridStackLayout extends Layout {
   constructor(info: DashboardView) {
     super();
     this._margin = info.cellMargin;
-    this._cellHeight = info.cellHeight;
-    this._columns = info.numColumns;
+    this._cellHeight = info.defaultCellHeight;
+    this._columns = info.maxColumns;
 
     this._gridItems = new Array<GridStackItem>();
 
-    this.gridItemChanged = new Signal<this, GridStackNode[]>(this);
+    this._gridItemChanged = new Signal<this, GridStackNode[]>(this);
   }
 
-  readonly gridItemChanged: Signal<this, GridStackNode[]>;
+  get gridItemChanged(): ISignal<this, GridStackNode[]> {
+    return this._gridItemChanged;
+  }
 
   dispose(): void {
-    this._gridItems = null;
+    this._gridItems = undefined;
     this._grid?.destroy();
-    this._grid = null;
+    this._grid = undefined;
     super.dispose();
+  }
+
+  onUpdateRequest() {
+    if (this._grid) {
+      const items = this._grid.getGridItems();
+      items.forEach(item => {
+        this._grid!.removeWidget(item, true, false);
+        this._grid!.addWidget(item);
+      });
+    }
   }
 
   onResize(): void {
@@ -51,7 +63,7 @@ export class GridStackLayout extends Layout {
   }
 
   iter(): IIterator<Widget> {
-    return new ArrayIterator(this._gridItems);
+    return new ArrayIterator(this._gridItems!);
   }
 
   removeWidget(widget: Widget): void {
@@ -65,44 +77,47 @@ export class GridStackLayout extends Layout {
   setMargin(margin: number): void {
     if (this._margin !== margin) {
       this._margin = margin;
-      this._grid.margin(this._margin);
+      this._grid?.margin(this._margin);
+      this.parent!.update();
     }
   }
 
   getCellHeight(forcePixel?: boolean): number {
-    return this._grid.getCellHeight(forcePixel);
+    return this._grid!.getCellHeight(forcePixel);
   }
 
   setCellHeight(height: number): void {
     if (this._cellHeight !== height) {
       this._cellHeight = height;
-      this._grid.cellHeight(this._cellHeight);
+      this._grid?.cellHeight(this._cellHeight);
+      this.parent!.update();
     }
   }
 
   getColumn(): number {
-    return this._grid.getColumn();
+    return this._grid!.getColumn();
   }
 
   setColumn(columns: number): void {
     if (this._columns !== columns) {
       this._columns = columns;
-      this._grid.column(columns);
+      this._grid?.column(columns);
+      this.parent!.update();
     }
   }
 
   get gridWidgets(): Array<GridStackItem> {
-    return this._gridItems;
+    return this._gridItems!;
   }
 
   get gridItems(): GridItemHTMLElement[] {
-    return this._grid.getGridItems();
+    return this._grid!.getGridItems();
   }
 
   initGridStack(info: DashboardView): void {
     this._margin = info.cellMargin;
-    this._cellHeight = info.cellHeight;
-    this._columns = info.numColumns;
+    this._cellHeight = info.defaultCellHeight;
+    this._columns = info.maxColumns;
 
     const grid = document.createElement('div');
     grid.className = 'grid-stack';
@@ -127,14 +142,14 @@ export class GridStackLayout extends Layout {
 
     this._grid.on(
       'change',
-      (event: Event, items: GridHTMLElement | GridStackNode[]) => {
+      (event: Event, items: GridHTMLElement | GridStackNode[] | undefined) => {
         this._onChange(event, items as GridStackNode[]);
       }
     );
 
     this._grid.on(
       'removed',
-      (event: Event, items: GridHTMLElement | GridStackNode[]) => {
+      (event: Event, items: GridHTMLElement | GridStackNode[] | undefined) => {
         if ((items as GridStackNode[]).length <= 1) {
           this._onRemoved(event, items as GridStackNode[]);
         }
@@ -156,29 +171,29 @@ export class GridStackLayout extends Layout {
       options['autoPosition'] = true;
     }
 
-    this._gridItems.push(item);
-    this._grid.addWidget(item.node, options);
+    this._gridItems!.push(item);
+    this._grid!.addWidget(item.node, options);
   }
 
   updateGridItem(id: string, info: DashboardCellView): void {
-    const items = this._grid.getGridItems();
-    const item = items.find(value => value.gridstackNode.id === id);
-    this._grid.update(item, info.col, info.row, info.width, info.height);
+    const items = this._grid!.getGridItems();
+    const item = items.find(value => value.gridstackNode?.id === id);
+    this._grid!.update(item!, info.col, info.row, info.width, info.height);
   }
 
   removeGridItem(id: string): void {
-    const items = this._grid.getGridItems();
-    const item = items.find(value => value.gridstackNode.id === id);
+    const items = this._grid!.getGridItems();
+    const item = items.find(value => value.gridstackNode?.id === id);
 
     if (item) {
-      this._gridItems = this._gridItems.filter(obj => obj.cellId !== id);
-      this._grid.removeWidget(item, true, false);
+      this._gridItems = this._gridItems!.filter(obj => obj.cellId !== id);
+      this._grid!.removeWidget(item, true, false);
     }
   }
 
   private _onChange(event: Event, items: GridStackNode[]): void {
     if (items) {
-      this.gridItemChanged.emit(items);
+      this._gridItemChanged.emit(items);
     }
   }
 
@@ -191,6 +206,7 @@ export class GridStackLayout extends Layout {
   private _margin: number;
   private _cellHeight: number;
   private _columns: number;
-  private _grid: GridStack = null;
-  private _gridItems: Array<GridStackItem> = null;
+  private _grid: GridStack | undefined = undefined;
+  private _gridItems: Array<GridStackItem> | undefined = undefined;
+  private _gridItemChanged: Signal<this, GridStackNode[]>;
 }
