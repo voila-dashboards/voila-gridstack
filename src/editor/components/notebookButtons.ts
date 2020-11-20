@@ -29,17 +29,17 @@ export class EditorButton
    */
   createNew(panel: NotebookPanel): IDisposable {
     const button = new ToolbarButton({
-      className: 'voilaEditor',
-      tooltip: 'Open with Voilà Editor',
+      className: 'jupyterlab-gridstack',
+      tooltip: 'Open with Voilà Gridstack',
       icon: editIcon,
       onClick: () => {
         this._commands.execute('docmanager:open', {
           path: panel.context.path,
-          factory: 'Voila Editor'
+          factory: 'Voila Gridstack'
         });
       }
     });
-    panel.toolbar.insertAfter('voila', 'voilaEditor', button);
+    panel.toolbar.insertAfter('voila', 'jupyterlab-gridstack', button);
     return button;
   }
 
@@ -62,7 +62,7 @@ export class VoilaButton
           `${baseUrl}voila/render/${panel.context.path}`,
           '_blank'
         );
-        win.focus();
+        win?.focus();
       }
     });
     panel.toolbar.insertAfter('cellType', 'voila', button);

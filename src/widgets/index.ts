@@ -12,7 +12,7 @@ import {
 
 import { EditorPanel } from '../editor/panel';
 
-import { IVoilaEditorTracker } from '../editor/widget';
+import { IVoilaGridstackTracker } from '../editor/widget';
 
 function* widgetRenderers(
   editor: EditorPanel
@@ -25,18 +25,18 @@ function* widgetRenderers(
 }
 
 export const widgets: JupyterFrontEndPlugin<void> = {
-  id: 'voila-editor/widgets',
+  id: 'jupyterlab-gridstack/widgets',
   autoStart: true,
-  optional: [IVoilaEditorTracker, IJupyterWidgetRegistry],
+  optional: [IVoilaGridstackTracker, IJupyterWidgetRegistry],
   activate: (
     app: JupyterFrontEnd,
-    voilaEditorTracker: IVoilaEditorTracker | null,
+    voilaEditorTracker: IVoilaGridstackTracker | null,
     widgetRegistry: IJupyterWidgetRegistry | null
   ) => {
     if (!widgetRegistry) {
       return;
     }
-    voilaEditorTracker.forEach(panel => {
+    voilaEditorTracker?.forEach(panel => {
       registerWidgetManager(
         panel.context,
         panel.content.rendermime,
@@ -44,7 +44,7 @@ export const widgets: JupyterFrontEndPlugin<void> = {
       );
     });
 
-    voilaEditorTracker.widgetAdded.connect((sender, panel) => {
+    voilaEditorTracker?.widgetAdded.connect((sender, panel) => {
       registerWidgetManager(
         panel.context,
         panel.content.rendermime,

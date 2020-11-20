@@ -101,8 +101,8 @@ export class GridStackWidget extends Widget {
 
         if (this.layout) {
           this.layout.setMargin(body.info.cellMargin);
-          this.layout.setCellHeight(body.info.cellHeight);
-          this.layout.setColumn(body.info.numColumns);
+          this.layout.setCellHeight(body.info.defaultCellHeight);
+          this.layout.setColumn(body.info.maxColumns);
         }
       }
     });
@@ -116,7 +116,7 @@ export class GridStackWidget extends Widget {
       const info = this._model.getCellInfo(model.id);
       //this._model.execute();
 
-      if (!info.hidden && model.value.text.length !== 0) {
+      if (info && !info.hidden && model.value.text.length !== 0) {
         if (
           model.type === 'code' &&
           (model as CodeCellModel).executionCount &&
@@ -159,10 +159,10 @@ export class GridStackWidget extends Widget {
       const model = this._model.cells.get(i);
       const info = this._model.getCellInfo(model.id);
       const items = this.layout.gridItems;
-      const item = items.find(value => value.gridstackNode.id === model.id);
+      const item = items.find(value => value.gridstackNode?.id === model.id);
 
       // If the cell is not in gridstack but it should add to gridstack
-      if (!item && !info.hidden && model.value.text.length !== 0) {
+      if (!item && info && !info.hidden && model.value.text.length !== 0) {
         // Add this cell to the gridstack
         if (
           model.type === 'code' &&
@@ -192,19 +192,19 @@ export class GridStackWidget extends Widget {
         }
       }
 
-      if (item && !info.hidden && model.value.text.length !== 0) {
+      if (item && info && !info.hidden && model.value.text.length !== 0) {
         this.layout.updateGridItem(model.id, info);
         continue;
       }
 
-      if (item && !info.hidden && model.value.text.length === 0) {
+      if (item && info && !info.hidden && model.value.text.length === 0) {
         this._model.hideCell(model.id);
         this.layout.removeGridItem(model.id);
         continue;
       }
 
       // If the cell is in gridstack and shoud not delete
-      if (item && info.hidden) {
+      if (item && info?.hidden) {
         this._model.hideCell(model.id);
         this.layout.removeGridItem(model.id);
         continue;
@@ -222,10 +222,10 @@ export class GridStackWidget extends Widget {
     items.forEach(el => {
       this._model.setCellInfo(el.id as string, {
         hidden: false,
-        col: el.x,
-        row: el.y,
-        width: el.width,
-        height: el.height
+        col: el.x!,
+        row: el.y!,
+        width: el.width!,
+        height: el.height!
       });
     });
   }
@@ -274,13 +274,13 @@ export class GridStackWidget extends Widget {
       const widget = (event.source.parent as NotebookPanel).content.activeCell;
       const items = this.layout.gridItems;
       const item = items.find(
-        value => value.gridstackNode.id === widget.model.id
+        value => value.gridstackNode?.id === widget?.model.id
       );
-      const info = this._model.getCellInfo(widget.model.id);
+      const info = this._model.getCellInfo(widget!.model.id);
 
       if (!item && info?.hidden) {
         if (
-          widget.model.type === 'code' &&
+          widget?.model.type === 'code' &&
           (widget.model as CodeCellModel).executionCount &&
           (widget.model as CodeCellModel).outputs.length !== 0
         ) {
@@ -302,15 +302,15 @@ export class GridStackWidget extends Widget {
           const item = this._model.createCell(widget.model);
           this.layout.addGridItem(widget.model.id, item, info);
         } else if (
-          widget.model.type !== 'code' &&
-          widget.model.value.text.length !== 0
+          widget?.model.type !== 'code' &&
+          widget?.model.value.text.length !== 0
         ) {
           info.hidden = false;
           info.col = col;
           info.row = row;
-          this._model.setCellInfo(widget.model.id, info);
-          const item = this._model.createCell(widget.model);
-          this.layout.addGridItem(widget.model.id, item, info);
+          this._model.setCellInfo(widget!.model.id, info);
+          const item = this._model.createCell(widget!.model);
+          this.layout.addGridItem(widget!.model.id, item, info);
         } else {
           showErrorMessage('Empty cell', 'Is not possible to add empty cells.');
         }
@@ -318,8 +318,8 @@ export class GridStackWidget extends Widget {
         info.hidden = false;
         info.col = col;
         info.row = row;
-        this._model.setCellInfo(widget.model.id, info);
-        this.layout.updateGridItem(widget.model.id, info);
+        this._model.setCellInfo(widget!.model.id, info);
+        this.layout.updateGridItem(widget!.model.id, info);
       } else if (!info) {
         showErrorMessage(
           'Wrong notebook',

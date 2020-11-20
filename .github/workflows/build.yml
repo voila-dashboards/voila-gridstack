@@ -30,7 +30,7 @@ jobs:
       run: |
         python -m pip install .
         jupyter labextension develop . --overwrite
-        jupyter labextension list 2>&1 | grep -ie "voila-editor.*enabled.*ok" -
+        jupyter labextension list 2>&1 | grep -ie "jupyterlab-gridstack.*enabled.*ok" -
         python -m jupyterlab.browser_check
     - name: Lint
       run: |

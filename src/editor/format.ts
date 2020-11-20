@@ -7,9 +7,9 @@ export type DashboardInfo = {
 export type DashboardView = {
   name: string;
   type: string;
+  maxColumns: number;
   cellMargin: number;
-  cellHeight: number;
-  numColumns: number;
+  defaultCellHeight: number;
 };
 
 export type DashboardCellInfo = {

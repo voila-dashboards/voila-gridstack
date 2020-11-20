@@ -44,7 +44,7 @@ export class EditorPanel extends Panel {
   }
 
   dispose(): void {
-    this._gridstackWidget = null;
+    this._gridstackWidget = undefined;
     Signal.clearData(this);
     super.dispose();
   }
@@ -70,15 +70,15 @@ export class EditorPanel extends Panel {
   }
 
   onUpdateRequest(): void {
-    this._gridstackWidget.update();
+    this._gridstackWidget?.update();
   }
 
   get gridWidgets(): Widget[] {
-    return this._gridstackWidget.gridWidgets;
+    return this._gridstackWidget!.gridWidgets;
   }
 
   info(): void {
-    this._gridstackWidget.infoEditor();
+    this._gridstackWidget?.infoEditor();
   }
 
   save(): void {
@@ -88,7 +88,7 @@ export class EditorPanel extends Panel {
   private _context: DocumentRegistry.IContext<INotebookModel>;
   private _editorConfig: StaticNotebook.IEditorConfig;
   private _notebookConfig: StaticNotebook.INotebookConfig;
-  private _gridstackWidget: GridStackWidget;
+  private _gridstackWidget: GridStackWidget | undefined;
 }
 
 export namespace EditorPanel {

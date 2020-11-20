@@ -14,13 +14,16 @@ import Edit from './toolbar/edit';
 
 import Voila from './toolbar/voila';
 
-export class VoilaEditor extends DocumentWidget<EditorPanel, INotebookModel> {
+export class VoilaGridstack extends DocumentWidget<
+  EditorPanel,
+  INotebookModel
+> {
   constructor(
     context: DocumentRegistry.IContext<INotebookModel>,
     content: EditorPanel
   ) {
     super({ context, content });
-    this.id = 'voila-editor/editor:widget';
+    this.id = 'jupyterlab-gridstack/editor:widget';
     this.title.label = context.localPath;
     this.title.closable = true;
     this.title.iconClass = 'jp-MaterialIcon jp-VoilaIcon';
@@ -37,13 +40,14 @@ export class VoilaEditor extends DocumentWidget<EditorPanel, INotebookModel> {
 }
 
 /**
- * A class that tracks Voila Editor widgets.
+ * A class that tracks Voila Gridstack widgets.
  */
-export interface IVoilaEditorTracker extends IWidgetTracker<VoilaEditor> {}
+export interface IVoilaGridstackTracker
+  extends IWidgetTracker<VoilaGridstack> {}
 
 /**
- * The Voila Editor tracker token.
+ * The Voila Gridstack tracker token.
  */
-export const IVoilaEditorTracker = new Token<IVoilaEditorTracker>(
-  'voila-editor:IVoilaEditorTracker'
+export const IVoilaGridstackTracker = new Token<IVoilaGridstackTracker>(
+  'jupyterlab-gridstack:IVoilaGridstackTracker'
 );

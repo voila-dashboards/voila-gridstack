@@ -26,7 +26,8 @@ export class EditorGridstack extends ReactWidget {
     };
 
     const handleHeight = (event: React.ChangeEvent<HTMLInputElement>): void => {
-      this._info.cellHeight = parseInt(event.target.value, 10);
+      const height = parseInt(event.target.value, 10);
+      this._info.defaultCellHeight = height < 40 ? 40 : height;
       this.update();
     };
 
@@ -36,7 +37,7 @@ export class EditorGridstack extends ReactWidget {
       let col = parseInt(event.target.value, 10);
       col = col > 12 ? 12 : col;
       col = col < 1 ? 1 : col;
-      this._info.numColumns = col;
+      this._info.maxColumns = col;
       this.update();
     };
 
@@ -81,7 +82,7 @@ export class EditorGridstack extends ReactWidget {
             type="number"
             name="height"
             className="jp-mod-styled col-75"
-            value={this._info.cellHeight}
+            value={this._info.defaultCellHeight}
             onChange={handleHeight}
           />
         </div>
@@ -92,8 +93,9 @@ export class EditorGridstack extends ReactWidget {
             type="number"
             name="columns"
             className="jp-mod-styled col-75"
-            value={this._info.numColumns}
+            value={this._info.maxColumns}
             onChange={handleColumns}
+            disabled={true}
           />
         </div>
       </form>

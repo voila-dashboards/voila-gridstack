@@ -10,15 +10,15 @@ import { IEditorMimeTypeService } from '@jupyterlab/codeeditor';
 
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
-import { VoilaEditor } from './widget';
+import { VoilaGridstack } from './widget';
 
 import { EditorPanel } from './panel';
 
 export class VoilaWidgetFactory extends ABCWidgetFactory<
-  VoilaEditor,
+  VoilaGridstack,
   INotebookModel
 > {
-  constructor(options: VoilaWidgetFactory.IOptions<VoilaEditor>) {
+  constructor(options: VoilaWidgetFactory.IOptions<VoilaGridstack>) {
     super(options);
     this.rendermime = options.rendermime;
     this.contentFactory =
@@ -67,8 +67,8 @@ export class VoilaWidgetFactory extends ABCWidgetFactory<
 
   protected createNewWidget(
     context: DocumentRegistry.IContext<INotebookModel>,
-    source?: VoilaEditor
-  ): VoilaEditor {
+    source?: VoilaGridstack
+  ): VoilaGridstack {
     const options = {
       context: context,
       rendermime: source
@@ -82,7 +82,7 @@ export class VoilaWidgetFactory extends ABCWidgetFactory<
         : this._notebookConfig
     };
 
-    return new VoilaEditor(context, new EditorPanel(options));
+    return new VoilaGridstack(context, new EditorPanel(options));
   }
 
   private _editorConfig: StaticNotebook.IEditorConfig;
@@ -93,7 +93,7 @@ export namespace VoilaWidgetFactory {
   /**
    * The options used to construct a `NotebookWidgetFactory`.
    */
-  export interface IOptions<T extends VoilaEditor>
+  export interface IOptions<T extends VoilaGridstack>
     extends DocumentRegistry.IWidgetFactoryOptions<T> {
     /*
      * A rendermime instance.
