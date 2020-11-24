@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: master
+    branches: [ master ]
   pull_request:
     branches: '*'
 
@@ -37,3 +37,8 @@ jobs:
         jlpm
         jlpm run eslint:check
         jlpm run prettier:check
+
+    - name: Test
+      run: |
+        jlpm run build:test
+        jlpm run test
