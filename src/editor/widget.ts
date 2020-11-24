@@ -6,7 +6,7 @@ import { INotebookModel } from '@jupyterlab/notebook';
 
 import { Token } from '@lumino/coreutils';
 
-import { EditorPanel } from './panel';
+import { VoilaGridstackPanel } from './panel';
 
 import Save from './toolbar/save';
 
@@ -14,13 +14,22 @@ import Edit from './toolbar/edit';
 
 import Voila from './toolbar/voila';
 
-export class VoilaGridstack extends DocumentWidget<
-  EditorPanel,
+/**
+ * A `DocumentWidget` for Voila Gridstack to host the toolbar and content area.
+ */
+export class VoilaGridstackWidget extends DocumentWidget<
+  VoilaGridstackPanel,
   INotebookModel
 > {
+  /**
+   * Construct a `VoilaGridstackWidget`.
+   *
+   * @param context - The Notebook context.
+   * @param content - The `VoilaGridstackPanel` to render in the widget.
+   */
   constructor(
     context: DocumentRegistry.IContext<INotebookModel>,
-    content: EditorPanel
+    content: VoilaGridstackPanel
   ) {
     super({ context, content });
     this.id = 'jupyterlab-gridstack/editor:widget';
@@ -33,17 +42,13 @@ export class VoilaGridstack extends DocumentWidget<
     this.toolbar.addItem('edit', new Edit(this.content));
     this.toolbar.addItem('voila', new Voila(this.context.path));
   }
-
-  dispose(): void {
-    super.dispose();
-  }
 }
 
 /**
  * A class that tracks Voila Gridstack widgets.
  */
 export interface IVoilaGridstackTracker
-  extends IWidgetTracker<VoilaGridstack> {}
+  extends IWidgetTracker<VoilaGridstackWidget> {}
 
 /**
  * The Voila Gridstack tracker token.

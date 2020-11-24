@@ -18,9 +18,17 @@ import { GridStackLayout } from './gridstackLayout';
 
 import { GridStackModel } from './gridstackModel';
 
-import { EditorGridstack } from '../components/editorGridstack';
+import { DashboardMetadataEditor } from '../components/dasboardMetadataEditor';
 
-export class GridStackWidget extends Widget {
+/**
+ * A gridstack widget to host the visible Notebook's Cells.
+ */
+export class GridstackWidget extends Widget {
+  /**
+   * Construct a `GridstackWidget`.
+   *
+   * @param model - The `GridstackModel`.
+   */
   constructor(model: GridStackModel) {
     super();
     this.removeClass('lm-Widget');
@@ -39,38 +47,51 @@ export class GridStackWidget extends Widget {
     });
   }
 
+  /**
+   * Dispose of the resources held by the widget.
+   */
   dispose(): void {
     Signal.clearData(this);
     super.dispose();
   }
 
-  onAfterAttach(msg: Message): void {
+  /**
+   * Handle `after-attach` messages sent to the widget.
+   *
+   * ### Note
+   * Add event listeners for the drag and drop event.
+   */
+  protected onAfterAttach(msg: Message): void {
     super.onAfterAttach(msg);
     this.node.addEventListener('lm-dragenter', this, true);
     this.node.addEventListener('lm-dragleave', this, true);
     this.node.addEventListener('lm-dragover', this, true);
     this.node.addEventListener('lm-drop', this, true);
     this.node.addEventListener('lm-dragend', this, true);
-    this.node.addEventListener('scroll', this);
   }
 
   /**
-   * Remove click listeners on detach
+   * Handle `befor-detach` messages sent to the widget.
+   *
+   * ### Note
+   * Remove event listeners for the drag and drop event.
    */
-  onBeforeDetach(msg: Message): void {
+  protected onBeforeDetach(msg: Message): void {
     super.onBeforeDetach(msg);
     this.node.removeEventListener('lm-dragenter', this, true);
     this.node.removeEventListener('lm-dragleave', this, true);
     this.node.removeEventListener('lm-dragover', this, true);
     this.node.removeEventListener('lm-drop', this, true);
-    this.node.removeEventListener('scroll', this);
   }
 
-  handleEvent(event: Event): void {
+  /**
+   * Handle event messages sent to the widget.
+   *
+   * ### Note
+   * Calling the pertinent function depending on the drag and drop stage.
+   */
+  public handleEvent(event: Event): void {
     switch (event.type) {
-      case 'scroll':
-        // this._evtScroll(event);
-        break;
       case 'lm-dragenter':
         this._evtDragEnter(event as IDragEvent);
         break;
@@ -86,12 +107,18 @@ export class GridStackWidget extends Widget {
     }
   }
 
+  /**
+   * Getter to acces the list of `GridstackItemWidget`.
+   */
   get gridWidgets(): Widget[] {
     return this.layout.gridWidgets;
   }
 
-  infoEditor(): void {
-    const body = new EditorGridstack(this._model.info);
+  /**
+   * Launch the `DashboardMetadataEditor`.
+   */
+  public infoEditor(): void {
+    const body = new DashboardMetadataEditor(this._model.info);
     showDialog({
       title: 'Edit grid parameters',
       body
@@ -108,47 +135,48 @@ export class GridStackWidget extends Widget {
     });
   }
 
+  /**
+   * Initialize the `GridstackItemWidget` from Notebook's metadata.
+   */
   private _initGridItems(): void {
     const cells = this._model.cells;
 
     for (let i = 0; i < cells?.length; i++) {
       const model = cells.get(i);
       const info = this._model.getCellInfo(model.id);
-      //this._model.execute();
 
       if (info && !info.hidden && model.value.text.length !== 0) {
-        if (
+        if (model.type === 'code' && (model as CodeCellModel).executionCount) {
+          const item = this._model.createCell(model, false);
+          this.layout.addGridItem(model.id, item, info);
+        } else if (
           model.type === 'code' &&
-          (model as CodeCellModel).executionCount &&
-          (model as CodeCellModel).outputs.length !== 0
+          !(model as CodeCellModel).executionCount
         ) {
-          const outputs = (model as CodeCellModel).outputs;
-          let error = false;
-          for (let i = 0; i < outputs.length; i++) {
-            if (outputs.get(i).type === 'error') {
-              error = true;
-              break;
-            }
-          }
-          if (!error) {
-            const item = this._model.createCell(model);
-            this.layout.addGridItem(model.id, item, info);
-          }
-        }
-
-        if (model.type !== 'code') {
-          const item = this._model.createCell(model);
+          const item = this._model.createCell(model, true);
+          this.layout.addGridItem(model.id, item, info);
+        } else {
+          const item = this._model.createCell(model, false);
           this.layout.addGridItem(model.id, item, info);
         }
       }
     }
   }
 
+  /**
+   * A handler invoked when a grid item has to be removed.
+   *
+   * @param model - The `GridstackModel` that sends the signal.
+   * @param id - The Cell id.
+   */
   private _removeCell(model: GridStackModel, id: string): void {
     this._model.hideCell(id);
     this.layout.removeGridItem(id);
   }
 
+  /**
+   * Update the `GridstackItemWidget` from Notebook's metadata.
+   */
   private _updateGridItems(): void {
     this._model.deletedCells.forEach(id => {
       this._model.hideCell(id);
@@ -159,7 +187,7 @@ export class GridStackWidget extends Widget {
       const model = this._model.cells.get(i);
       const info = this._model.getCellInfo(model.id);
       const items = this.layout.gridItems;
-      const item = items.find(value => value.gridstackNode?.id === model.id);
+      const item = items?.find(value => value.gridstackNode?.id === model.id);
 
       // If the cell is not in gridstack but it should add to gridstack
       if (!item && info && !info.hidden && model.value.text.length !== 0) {
@@ -180,13 +208,13 @@ export class GridStackWidget extends Widget {
           if (error) {
             continue;
           }
-          const item = this._model.createCell(model);
+          const item = this._model.createCell(model, false);
           this.layout.addGridItem(model.id, item, info);
           continue;
         }
 
         if (model.type !== 'code') {
-          const item = this._model.createCell(model);
+          const item = this._model.createCell(model, false);
           this.layout.addGridItem(model.id, item, info);
           continue;
         }
@@ -214,6 +242,9 @@ export class GridStackWidget extends Widget {
 
   /**
    * A signal handler invoked when a grid item change.
+   *
+   * @param sender - The `GridStackLayout` that sends the signal.
+   * @param items - The list of `GridStackNode`.
    */
   private _onGridItemChange(
     sender: GridStackLayout,
@@ -257,6 +288,9 @@ export class GridStackWidget extends Widget {
     event.stopPropagation();
   }
 
+  /**
+   * Handle the `'lm-drop'` event for the widget.
+   */
   private _evtDrop(event: IDragEvent): void {
     event.preventDefault();
     event.stopPropagation();
@@ -266,21 +300,21 @@ export class GridStackWidget extends Widget {
     }
 
     if (event.source.activeCell instanceof Cell) {
-      const row = Math.floor(event.offsetY / this.layout.getCellHeight(true));
+      const row = Math.floor(event.offsetY / this.layout.getCellHeight(true)!);
       const col = Math.floor(
-        (this.layout.getColumn() * event.offsetX) / this.node.offsetWidth
+        (this.layout.getColumn()! * event.offsetX) / this.node.offsetWidth
       );
 
       const widget = (event.source.parent as NotebookPanel).content.activeCell;
       const items = this.layout.gridItems;
-      const item = items.find(
+      const item = items?.find(
         value => value.gridstackNode?.id === widget?.model.id
       );
       const info = this._model.getCellInfo(widget!.model.id);
 
-      if (!item && info?.hidden) {
+      if (!item && info?.hidden && widget) {
         if (
-          widget?.model.type === 'code' &&
+          widget.model.type === 'code' &&
           (widget.model as CodeCellModel).executionCount &&
           (widget.model as CodeCellModel).outputs.length !== 0
         ) {
@@ -299,27 +333,27 @@ export class GridStackWidget extends Widget {
           info.col = col;
           info.row = row;
           this._model.setCellInfo(widget.model.id, info);
-          const item = this._model.createCell(widget.model);
+          const item = this._model.createCell(widget.model, false);
           this.layout.addGridItem(widget.model.id, item, info);
         } else if (
-          widget?.model.type !== 'code' &&
-          widget?.model.value.text.length !== 0
+          widget.model.type !== 'code' &&
+          widget.model.value.text.length !== 0
         ) {
           info.hidden = false;
           info.col = col;
           info.row = row;
-          this._model.setCellInfo(widget!.model.id, info);
-          const item = this._model.createCell(widget!.model);
-          this.layout.addGridItem(widget!.model.id, item, info);
+          this._model.setCellInfo(widget.model.id, info);
+          const item = this._model.createCell(widget!.model, false);
+          this.layout.addGridItem(widget.model.id, item, info);
         } else {
           showErrorMessage('Empty cell', 'Is not possible to add empty cells.');
         }
-      } else if (item && info) {
+      } else if (item && info && widget) {
         info.hidden = false;
         info.col = col;
         info.row = row;
-        this._model.setCellInfo(widget!.model.id, info);
-        this.layout.updateGridItem(widget!.model.id, info);
+        this._model.setCellInfo(widget.model.id, info);
+        this.layout.updateGridItem(widget.model.id, info);
       } else if (!info) {
         showErrorMessage(
           'Wrong notebook',

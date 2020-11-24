@@ -12,9 +12,9 @@ import { IEditorServices } from '@jupyterlab/codeeditor';
 
 import { WidgetTracker } from '@jupyterlab/apputils';
 
-import { VoilaWidgetFactory } from './factory';
+import { VoilaGridstackWidgetFactory } from './factory';
 
-import { IVoilaGridstackTracker, VoilaGridstack } from './widget';
+import { IVoilaGridstackTracker, VoilaGridstackWidget } from './widget';
 
 import { VoilaButton, EditorButton } from './components/notebookButtons';
 
@@ -36,7 +36,7 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridstackTracker> = {
     editorServices: IEditorServices,
     rendermime: IRenderMimeRegistry
   ) => {
-    const tracker = new WidgetTracker<VoilaGridstack>({
+    const tracker = new WidgetTracker<VoilaGridstackWidget>({
       namespace: 'jupyterlab-gridstack'
     });
 
@@ -52,7 +52,7 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridstackTracker> = {
       });
     }
 
-    const factory = new VoilaWidgetFactory({
+    const factory = new VoilaGridstackWidgetFactory({
       name: 'Voila Gridstack',
       fileTypes: ['notebook'],
       modelName: 'notebook',

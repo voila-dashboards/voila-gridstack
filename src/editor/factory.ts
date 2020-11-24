@@ -10,15 +10,25 @@ import { IEditorMimeTypeService } from '@jupyterlab/codeeditor';
 
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
-import { VoilaGridstack } from './widget';
+import { VoilaGridstackWidget } from './widget';
 
-import { EditorPanel } from './panel';
+import { VoilaGridstackPanel } from './panel';
 
-export class VoilaWidgetFactory extends ABCWidgetFactory<
-  VoilaGridstack,
+/**
+ * A widget factory for `VoilaGridstack` Widget.
+ */
+export class VoilaGridstackWidgetFactory extends ABCWidgetFactory<
+  VoilaGridstackWidget,
   INotebookModel
 > {
-  constructor(options: VoilaWidgetFactory.IOptions<VoilaGridstack>) {
+  /**
+   * Construct a new `VoilaGridstackWidgetFactory`.
+   *
+   * @param options - The options used to construct the factory.
+   */
+  constructor(
+    options: VoilaGridstackWidgetFactory.IOptions<VoilaGridstackWidget>
+  ) {
     super(options);
     this.rendermime = options.rendermime;
     this.contentFactory =
@@ -65,10 +75,19 @@ export class VoilaWidgetFactory extends ABCWidgetFactory<
     this._notebookConfig = value;
   }
 
+  /**
+   * Creates a new `VoilaGridstackWidget`.
+   *
+   * @param context - The Notebook context.
+   * @param source - An optional `VoilaGridstackWidget`.
+   *
+   * #### Notes
+   * The factory will start the appropriate kernel.
+   */
   protected createNewWidget(
     context: DocumentRegistry.IContext<INotebookModel>,
-    source?: VoilaGridstack
-  ): VoilaGridstack {
+    source?: VoilaGridstackWidget
+  ): VoilaGridstackWidget {
     const options = {
       context: context,
       rendermime: source
@@ -82,18 +101,18 @@ export class VoilaWidgetFactory extends ABCWidgetFactory<
         : this._notebookConfig
     };
 
-    return new VoilaGridstack(context, new EditorPanel(options));
+    return new VoilaGridstackWidget(context, new VoilaGridstackPanel(options));
   }
 
   private _editorConfig: StaticNotebook.IEditorConfig;
   private _notebookConfig: StaticNotebook.INotebookConfig;
 }
 
-export namespace VoilaWidgetFactory {
+export namespace VoilaGridstackWidgetFactory {
   /**
-   * The options used to construct a `NotebookWidgetFactory`.
+   * The options used to construct a `VoilaGridstackWidgetFactory`.
    */
-  export interface IOptions<T extends VoilaGridstack>
+  export interface IOptions<T extends VoilaGridstackWidget>
     extends DocumentRegistry.IWidgetFactoryOptions<T> {
     /*
      * A rendermime instance.

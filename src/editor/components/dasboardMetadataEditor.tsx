@@ -4,33 +4,53 @@ import * as React from 'react';
 
 import { DashboardView } from '../format';
 
-export class EditorGridstack extends ReactWidget {
+/**
+ * A ReactWidget to edit the dashboard notebook metadata.
+ */
+export class DashboardMetadataEditor extends ReactWidget {
+  /**
+   * Construct a `DashboardMetadataEditor`.
+   *
+   * @param info - The `DashboardView` info.
+   */
   constructor(info: DashboardView) {
     super();
     this._info = info;
   }
 
+  /**
+   * Getter to obtain the new dashboard metadata info.
+   */
   get info(): DashboardView {
     return this._info;
   }
 
   render(): JSX.Element {
+    /**
+     * Handler for name input changes
+     */
     const handleName = (event: React.ChangeEvent<HTMLInputElement>): void => {
       this._info.name = event.target.value;
       this.update();
     };
-
+    /**
+     * Handler for margin input changes
+     */
     const handleMargin = (event: React.ChangeEvent<HTMLInputElement>): void => {
       this._info.cellMargin = parseInt(event.target.value, 10);
       this.update();
     };
-
+    /**
+     * Handler for height input changes
+     */
     const handleHeight = (event: React.ChangeEvent<HTMLInputElement>): void => {
       const height = parseInt(event.target.value, 10);
       this._info.defaultCellHeight = height < 40 ? 40 : height;
       this.update();
     };
-
+    /**
+     * Handler for columns input changes
+     */
     const handleColumns = (
       event: React.ChangeEvent<HTMLInputElement>
     ): void => {
