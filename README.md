@@ -53,6 +53,13 @@ jupyter lab
 
 With the watch command running, every saved change will immediately be built locally and available in your running JupyterLab. Refresh JupyterLab to load the change in your browser (you may need to wait several seconds for the extension to be rebuilt).
 
+To run the tests:
+
+```bash
+jlpm run build:test
+jlpm run test
+```
+
 ### Uninstall
 
 ```bash
