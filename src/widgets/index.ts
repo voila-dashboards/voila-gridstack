@@ -10,12 +10,12 @@ import {
   WidgetRenderer
 } from '@jupyter-widgets/jupyterlab-manager';
 
-import { EditorPanel } from '../editor/panel';
+import { VoilaGridstackPanel } from '../editor/panel';
 
 import { IVoilaGridstackTracker } from '../editor/widget';
 
 function* widgetRenderers(
-  editor: EditorPanel
+  editor: VoilaGridstackPanel
 ): IterableIterator<WidgetRenderer> {
   for (const w of editor.gridWidgets) {
     if (w instanceof WidgetRenderer) {

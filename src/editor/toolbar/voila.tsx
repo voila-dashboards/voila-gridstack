@@ -4,6 +4,9 @@ import { PageConfig } from '@jupyterlab/coreutils';
 
 import * as React from 'react';
 
+/**
+ * A toolbar widget to launch Voila.
+ */
 export default class Voila extends ReactWidget {
   constructor(path: string) {
     super();

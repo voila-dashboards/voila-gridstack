@@ -26,11 +26,24 @@ import { deleteIcon } from '../icons';
 
 import { GridStackItem } from './gridstackItemWidget';
 
-import { DashboardView, DashboardCellView } from '../format';
+import {
+  DashboardView,
+  DashboardCellView,
+  validateDashboardView,
+  validateDashboardCellView
+} from '../format';
 
 export const VIEW = 'grid_default';
 
+/**
+ * A gridstack model to keep the state.
+ */
 export class GridStackModel {
+  /**
+   * Construct a `GridStackModel`.
+   *
+   * @param options - The options to construct a new `GridStackModel`.
+   */
   constructor(options: GridStackModel.IOptions) {
     this._context = options.context;
     this.rendermime = options.rendermime;
@@ -63,46 +76,89 @@ export class GridStackModel {
     this._context.model.contentChanged.connect(this._updateCells, this);
   }
 
+  /**
+   * A signal emitted when the model is ready.
+   */
   get ready(): ISignal<this, null> {
     return this._ready;
   }
 
+  /**
+   * A signal emitted when a cell is removed.
+   */
   get cellRemoved(): ISignal<this, string> {
     return this._cellRemoved;
   }
 
+  /**
+   * A signal emitted when the model state changes.
+   */
   get stateChanged(): ISignal<this, null> {
     return this._stateChanged;
   }
 
+  /**
+   * A signal emitted when the model content changes.
+   */
   get contentChanged(): ISignal<this, null> {
     return this._contentChanged;
   }
 
+  /**
+   * The rendermime instance for this context.
+   */
   readonly rendermime: IRenderMimeRegistry;
-
+  /**
+   * A notebook panel content factory.
+   */
   readonly contentFactory: NotebookPanel.IContentFactory;
-
+  /**
+   * The service used to look up mime types.
+   */
   readonly mimeTypeService: IEditorMimeTypeService;
 
+  /**
+   * A config object for cell editors.
+   */
   get editorConfig(): StaticNotebook.IEditorConfig {
     return this._editorConfig;
   }
+  /**
+   * A config object for cell editors.
+   *
+   * @param value - A `StaticNotebook.IEditorConfig`.
+   */
   set editorConfig(value: StaticNotebook.IEditorConfig) {
     this._editorConfig = value;
   }
 
+  /**
+   * A config object for notebook widget.
+   */
   get notebookConfig(): StaticNotebook.INotebookConfig {
     return this._notebookConfig;
   }
+  /**
+   * A config object for notebook widget.
+   *
+   * @param value - A `StaticNotebook.INotebookConfig`.
+   */
   set notebookConfig(value: StaticNotebook.INotebookConfig) {
     this._notebookConfig = value;
   }
 
+  /**
+   * Getter for the dashboard metadata info.
+   */
   get info(): DashboardView {
     return this._info;
   }
 
+  /**
+   * Setter for the dashboard metadata info.
+   *
+   * @param value - The new `DashboardView` metadata info.
+   */
   set info(info: DashboardView) {
     this._info = info;
     const data = this._context.model.metadata.get('extensions') as Record<
@@ -113,17 +169,27 @@ export class GridStackModel {
     data.jupyter_dashboards.views[VIEW] = this._info;
     this._context.model.metadata.set('extensions', data);
     this._context.model.dirty = true;
-    //this._context.save();
   }
 
+  /**
+   * The Notebook's cells.
+   */
   get cells(): IObservableUndoableList<ICellModel> {
     return this._context.model.cells;
   }
 
+  /**
+   * Ids of the notebooks's deleted cells.
+   */
   get deletedCells(): string[] {
     return this._context.model.deletedCells;
   }
 
+  /**
+   * Get the dashboard cell's metadata.
+   *
+   * @param id - Cell id.
+   */
   public getCellInfo(id: string): DashboardCellView | undefined {
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const cell = this._context.model.cells.get(i);
@@ -137,6 +203,12 @@ export class GridStackModel {
     return undefined;
   }
 
+  /**
+   * Set the dashboard cell's metadata.
+   *
+   * @param id - Cell id.
+   * @param info - DashboardCellView.
+   */
   public setCellInfo(id: string, info: DashboardCellView): void {
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const cell = this._context.model.cells.get(i);
@@ -150,6 +222,11 @@ export class GridStackModel {
     }
   }
 
+  /**
+   * Hide a cell.
+   *
+   * @param id - Cell id.
+   */
   public hideCell(id: string): void {
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const cell = this._context.model.cells.get(i);
@@ -163,26 +240,34 @@ export class GridStackModel {
     }
   }
 
-  public createCell(cellModel: ICellModel): GridStackItem {
+  /**
+   * Create a new cell widget from a `CellModel`.
+   *
+   * @param cellModel - `ICellModel`.
+   */
+  public createCell(cellModel: ICellModel, execute: boolean): GridStackItem {
     const cell = document.createElement('div');
     cell.className = 'grid-item-widget';
 
     switch (cellModel.type) {
       case 'code': {
-        const out = new CodeCell({
+        const codeCell = new CodeCell({
           model: cellModel as CodeCellModel,
           rendermime: this.rendermime,
           contentFactory: this.contentFactory,
           editorConfig: this._editorConfig.code,
           updateEditorOnShow: true
-        }).outputArea;
-
-        const item = new SimplifiedOutputArea({
-          model: out.model,
-          rendermime: out.rendermime,
-          contentFactory: out.contentFactory
         });
 
+        const item = new SimplifiedOutputArea({
+          model: codeCell.outputArea.model,
+          rendermime: codeCell.outputArea.rendermime,
+          contentFactory: codeCell.outputArea.contentFactory
+        });
+
+        if (execute) {
+          this._execute(codeCell);
+        }
         cell.appendChild(item.node);
         break;
       }
@@ -223,11 +308,30 @@ export class GridStackModel {
     return new GridStackItem(cellModel.id, cell, close);
   }
 
+  /**
+   * Execute a CodeCell.
+   *
+   * @param cell - `CodeCell`.
+   */
+  private _execute(cell: CodeCell): void {
+    SimplifiedOutputArea.execute(
+      cell.model.value.text,
+      cell.outputArea,
+      this._context.sessionContext
+    ).catch(reason => console.error(reason));
+  }
+
+  /**
+   * Update cells.
+   */
   private _updateCells(): void {
     this._checkCellsMetadata();
     this._contentChanged.emit(null);
   }
 
+  /**
+   * Check the dashboard notebook's metadata.
+   */
   private _checkMetadata(): void {
     let data = this._context.model.metadata.get('extensions') as Record<
       string,
@@ -252,14 +356,7 @@ export class GridStackModel {
           grid_default: this._info
         }
       };
-    } else if (
-      !data.jupyter_dashboards.views[VIEW] ||
-      !('name' in data.jupyter_dashboards.views[VIEW]) ||
-      !('type' in data.jupyter_dashboards.views[VIEW]) ||
-      !('maxColumns' in data.jupyter_dashboards.views[VIEW]) ||
-      !('cellMargin' in data.jupyter_dashboards.views[VIEW]) ||
-      !('defaultCellHeight' in data.jupyter_dashboards.views[VIEW])
-    ) {
+    } else if (!validateDashboardView(data.jupyter_dashboards.views[VIEW])) {
       data.jupyter_dashboards.views[VIEW] = this._info;
     } else {
       this._info = data.jupyter_dashboards?.views[VIEW] as DashboardView;
@@ -268,6 +365,9 @@ export class GridStackModel {
     this._context.model.metadata.set('extensions', data);
   }
 
+  /**
+   * Check the dashboard cell's metadata.
+   */
   private _checkCellsMetadata(): void {
     for (let i = 0; i < this._context.model.cells?.length; i++) {
       const cell = this._context.model.cells.get(i);
@@ -275,6 +375,11 @@ export class GridStackModel {
     }
   }
 
+  /**
+   * Check the dashboard cell metadata.
+   *
+   * @param cell - `ICellModel`.
+   */
   private _checkCellMetadata(cell: ICellModel): void {
     let data = cell.metadata.get('extensions') as Record<string, any>;
 
@@ -309,12 +414,7 @@ export class GridStackModel {
       };
       cell.metadata.set('extensions', data);
     } else if (
-      !data.jupyter_dashboards.views[VIEW] ||
-      !('hidden' in data.jupyter_dashboards.views[VIEW]) ||
-      !('row' in data.jupyter_dashboards.views[VIEW]) ||
-      !('col' in data.jupyter_dashboards.views[VIEW]) ||
-      !('width' in data.jupyter_dashboards.views[VIEW]) ||
-      !('height' in data.jupyter_dashboards.views[VIEW])
+      !validateDashboardCellView(data.jupyter_dashboards.views[VIEW])
     ) {
       data.jupyter_dashboards.views[VIEW] = {
         hidden: true,
@@ -340,15 +440,24 @@ export class GridStackModel {
 
 export namespace GridStackModel {
   /**
-   * Notebook config interface for NotebookPanel
+   * Notebook config interface for GridStackModel
    */
   export interface IOptions {
+    /**
+     * The Notebook context.
+     */
     context: DocumentRegistry.IContext<INotebookModel>;
-
+    /**
+     * The rendermime instance for this context.
+     */
     rendermime: IRenderMimeRegistry;
-
+    /**
+     * A notebook panel content factory.
+     */
     contentFactory: NotebookPanel.IContentFactory;
-
+    /**
+     * The service used to look up mime types.
+     */
     mimeTypeService: IEditorMimeTypeService;
     /**
      * A config object for cell editors

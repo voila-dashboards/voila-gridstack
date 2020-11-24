@@ -14,12 +14,22 @@ import { Panel, Widget } from '@lumino/widgets';
 
 import { Signal } from '@lumino/signaling';
 
-import { GridStackWidget } from './gridstack/gridstackWidget';
+import { Message } from '@lumino/messaging';
+
+import { GridstackWidget } from './gridstack/gridstackWidget';
 
 import { GridStackModel } from './gridstack/gridstackModel';
 
-export class EditorPanel extends Panel {
-  constructor(options: EditorPanel.IOptions) {
+/**
+ * A Widget to host and interact with gridstack.
+ */
+export class VoilaGridstackPanel extends Panel {
+  /**
+   * Construct a `VoilaGridstackPanel`.
+   *
+   * @param options - The options to construct `VoilaGridstackPanel`.
+   */
+  constructor(options: VoilaGridstackPanel.IOptions) {
     super();
     this.addClass('grid-panel');
 
@@ -39,48 +49,84 @@ export class EditorPanel extends Panel {
       notebookConfig: this._notebookConfig
     });
 
-    this._gridstackWidget = new GridStackWidget(gridModel);
+    this._gridstackWidget = new GridstackWidget(gridModel);
     this.addWidget(this._gridstackWidget);
   }
 
+  /**
+   * Dispose of the resources held by the widget.
+   */
   dispose(): void {
     this._gridstackWidget = undefined;
     Signal.clearData(this);
     super.dispose();
   }
 
+  /**
+   * The rendermime instance for this context.
+   */
   readonly rendermime: IRenderMimeRegistry;
-
+  /**
+   * A notebook panel content factory.
+   */
   readonly contentFactory: NotebookPanel.IContentFactory;
-
+  /**
+   * The service used to look up mime types.
+   */
   readonly mimeTypeService: IEditorMimeTypeService;
-
+  /**
+   * Getter for the notebook cell editor configuration.
+   */
   get editorConfig(): StaticNotebook.IEditorConfig {
     return this._editorConfig;
   }
+  /**
+   * Setter for the notebook cell editor configuration.
+   *
+   * @param value - The `EditorConfig` of the notebook.
+   */
   set editorConfig(value: StaticNotebook.IEditorConfig) {
     this._editorConfig = value;
   }
-
+  /**
+   * Getter for the notebook configuration.
+   */
   get notebookConfig(): StaticNotebook.INotebookConfig {
     return this._notebookConfig;
   }
+  /**
+   * Setter for the notebook configuration.
+   *
+   * @param value - The configuration of the notebook.
+   */
   set notebookConfig(value: StaticNotebook.INotebookConfig) {
     this._notebookConfig = value;
   }
 
-  onUpdateRequest(): void {
+  /**
+   * Getter for the list of grid items widgets
+   */
+  get gridWidgets(): Widget[] {
+    return this._gridstackWidget?.gridWidgets ?? [];
+  }
+
+  /**
+   * Handle `update-request` messages sent to the widget.
+   */
+  protected onUpdateRequest(msg: Message): void {
     this._gridstackWidget?.update();
   }
 
-  get gridWidgets(): Widget[] {
-    return this._gridstackWidget!.gridWidgets;
-  }
-
+  /**
+   * Open a dialog to edit the gridstack metadata information.
+   */
   info(): void {
     this._gridstackWidget?.infoEditor();
   }
 
+  /**
+   * Save the gridstack configuration into the notebook metadata.
+   */
   save(): void {
     this._context.save();
   }
@@ -88,20 +134,29 @@ export class EditorPanel extends Panel {
   private _context: DocumentRegistry.IContext<INotebookModel>;
   private _editorConfig: StaticNotebook.IEditorConfig;
   private _notebookConfig: StaticNotebook.INotebookConfig;
-  private _gridstackWidget: GridStackWidget | undefined;
+  private _gridstackWidget: GridstackWidget | undefined;
 }
 
-export namespace EditorPanel {
+export namespace VoilaGridstackPanel {
   /**
-   * Notebook config interface for NotebookPanel
+   * Options interface for VoilaGridstackPanel
    */
   export interface IOptions {
+    /**
+     * The Notebook context.
+     */
     context: DocumentRegistry.IContext<INotebookModel>;
-
+    /**
+     * The rendermime instance for this context.
+     */
     rendermime: IRenderMimeRegistry;
-
+    /**
+     * A notebook panel content factory.
+     */
     contentFactory: NotebookPanel.IContentFactory;
-
+    /**
+     * The service used to look up mime types.
+     */
     mimeTypeService: IEditorMimeTypeService;
     /**
      * A config object for cell editors

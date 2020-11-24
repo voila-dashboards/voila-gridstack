@@ -14,6 +14,9 @@ import { IDisposable } from '@lumino/disposable';
 
 const VOILA_ICON_CLASS = 'jp-MaterialIcon jp-VoilaIcon';
 
+/**
+ * A WidgetExtension for Notebook's toolbar to open a `VoilaGridstack` widget.
+ */
 export class EditorButton
   implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel> {
   /**
@@ -46,6 +49,9 @@ export class EditorButton
   private _commands: CommandRegistry;
 }
 
+/**
+ * A WidgetExtension for Notebook's toolbar to launch Voila.
+ */
 export class VoilaButton
   implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel> {
   /**

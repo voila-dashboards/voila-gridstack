@@ -1,5 +1,8 @@
 import { Widget } from '@lumino/widgets';
 
+/**
+ * A Lumino widget for gridstack items.
+ */
 export class GridStackItem extends Widget {
   constructor(cellId: string, widget: HTMLElement, close: HTMLElement) {
     super();
