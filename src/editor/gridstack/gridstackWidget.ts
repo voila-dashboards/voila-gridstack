@@ -127,9 +127,9 @@ export class GridstackWidget extends Widget {
         this._model.info = body.info;
 
         if (this.layout) {
-          this.layout.setMargin(body.info.cellMargin);
-          this.layout.setCellHeight(body.info.defaultCellHeight);
-          this.layout.setColumn(body.info.maxColumns);
+          this.layout.margin = body.info.cellMargin;
+          this.layout.cellHeight = body.info.defaultCellHeight;
+          this.layout.columns = body.info.maxColumns;
         }
       }
     });
@@ -143,22 +143,13 @@ export class GridstackWidget extends Widget {
 
     for (let i = 0; i < cells?.length; i++) {
       const model = cells.get(i);
+      this._model.execute(model);
+      console.debug('running');
       const info = this._model.getCellInfo(model.id);
 
       if (info && !info.hidden && model.value.text.length !== 0) {
-        if (model.type === 'code' && (model as CodeCellModel).executionCount) {
-          const item = this._model.createCell(model, false);
-          this.layout.addGridItem(model.id, item, info);
-        } else if (
-          model.type === 'code' &&
-          !(model as CodeCellModel).executionCount
-        ) {
-          const item = this._model.createCell(model, true);
-          this.layout.addGridItem(model.id, item, info);
-        } else {
-          const item = this._model.createCell(model, false);
-          this.layout.addGridItem(model.id, item, info);
-        }
+        const item = this._model.createCell(model);
+        this.layout.addGridItem(model.id, item, info);
       }
     }
   }
@@ -208,13 +199,13 @@ export class GridstackWidget extends Widget {
           if (error) {
             continue;
           }
-          const item = this._model.createCell(model, false);
+          const item = this._model.createCell(model);
           this.layout.addGridItem(model.id, item, info);
           continue;
         }
 
         if (model.type !== 'code') {
-          const item = this._model.createCell(model, false);
+          const item = this._model.createCell(model);
           this.layout.addGridItem(model.id, item, info);
           continue;
         }
@@ -253,10 +244,10 @@ export class GridstackWidget extends Widget {
     items.forEach(el => {
       this._model.setCellInfo(el.id as string, {
         hidden: false,
-        col: el.x!,
-        row: el.y!,
-        width: el.width!,
-        height: el.height!
+        col: el.x || 0,
+        row: el.y || 0,
+        width: el.width || 2,
+        height: el.height || 2!
       });
     });
   }
@@ -300,9 +291,9 @@ export class GridstackWidget extends Widget {
     }
 
     if (event.source.activeCell instanceof Cell) {
-      const row = Math.floor(event.offsetY / this.layout.getCellHeight(true)!);
+      const row = Math.floor(event.offsetY / this.layout.cellHeight);
       const col = Math.floor(
-        (this.layout.getColumn()! * event.offsetX) / this.node.offsetWidth
+        (this.layout.columns * event.offsetX) / this.node.offsetWidth
       );
 
       const widget = (event.source.parent as NotebookPanel).content.activeCell;
@@ -333,7 +324,7 @@ export class GridstackWidget extends Widget {
           info.col = col;
           info.row = row;
           this._model.setCellInfo(widget.model.id, info);
-          const item = this._model.createCell(widget.model, false);
+          const item = this._model.createCell(widget.model);
           this.layout.addGridItem(widget.model.id, item, info);
         } else if (
           widget.model.type !== 'code' &&
@@ -343,7 +334,7 @@ export class GridstackWidget extends Widget {
           info.col = col;
           info.row = row;
           this._model.setCellInfo(widget.model.id, info);
-          const item = this._model.createCell(widget!.model, false);
+          const item = this._model.createCell(widget!.model);
           this.layout.addGridItem(widget.model.id, item, info);
         } else {
           showErrorMessage('Empty cell', 'Is not possible to add empty cells.');
