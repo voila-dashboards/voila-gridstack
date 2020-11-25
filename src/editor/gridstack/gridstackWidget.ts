@@ -244,10 +244,10 @@ export class GridstackWidget extends Widget {
     items.forEach(el => {
       this._model.setCellInfo(el.id as string, {
         hidden: false,
-        col: el.x || 0,
-        row: el.y || 0,
-        width: el.width || 2,
-        height: el.height || 2!
+        col: el.x ?? 0,
+        row: el.y ?? 0,
+        width: el.width ?? 2,
+        height: el.height ?? 2
       });
     });
   }
