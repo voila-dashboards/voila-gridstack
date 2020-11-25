@@ -1,6 +1,6 @@
 # jupyterlab-gridstack
 
-![Github Actions Status](https://github.com/hbcarlos/jupyterlab-gridstack/workflows/Build/badge.svg)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hbcarlos/jupyterlab-gridstack/master?urlpath=lab)
+![Github Actions Status](https://github.com/hbcarlos/voila-editor/workflows/Build/badge.svg)[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hbcarlos/voila-editor/master?urlpath=lab)
 
 A JupyterLab extension to create voila dashboards.
 

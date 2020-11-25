@@ -245,7 +245,7 @@ export class GridStackModel {
    *
    * @param cellModel - `ICellModel`.
    */
-  public createCell(cellModel: ICellModel, execute: boolean): GridStackItem {
+  public createCell(cellModel: ICellModel): GridStackItem {
     const cell = document.createElement('div');
     cell.className = 'grid-item-widget';
 
@@ -265,9 +265,6 @@ export class GridStackModel {
           contentFactory: codeCell.outputArea.contentFactory
         });
 
-        if (execute) {
-          this._execute(codeCell);
-        }
         cell.appendChild(item.node);
         break;
       }
@@ -311,12 +308,24 @@ export class GridStackModel {
   /**
    * Execute a CodeCell.
    *
-   * @param cell - `CodeCell`.
+   * @param cell - `ICellModel`.
    */
-  private _execute(cell: CodeCell): void {
+  public execute(cell: ICellModel): void {
+    if (cell.type !== 'code') {
+      return;
+    }
+
+    const codeCell = new CodeCell({
+      model: cell as CodeCellModel,
+      rendermime: this.rendermime,
+      contentFactory: this.contentFactory,
+      editorConfig: this._editorConfig.code,
+      updateEditorOnShow: true
+    });
+
     SimplifiedOutputArea.execute(
-      cell.model.value.text,
-      cell.outputArea,
+      cell.value.text,
+      codeCell.outputArea,
       this._context.sessionContext
     ).catch(reason => console.error(reason));
   }

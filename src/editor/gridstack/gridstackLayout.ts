@@ -82,7 +82,7 @@ export class GridStackLayout extends Layout {
    * Create an iterator over the widgets in the layout.
    */
   iter(): IIterator<Widget> {
-    return new ArrayIterator(this._gridItems!);
+    return new ArrayIterator(this._gridItems ?? []);
   }
 
   /**
@@ -94,16 +94,19 @@ export class GridStackLayout extends Layout {
     return;
   }
 
-  /* isReady(): boolean {
-    return this._grid !== null;
-  } */
+  /**
+   * Get gridstack's items margin.
+   */
+  get margin(): number {
+    return this._margin;
+  }
 
   /**
    * Change gridstack's items margin.
    *
    * @param margin - The new margin.
    */
-  setMargin(margin: number): void {
+  set margin(margin: number) {
     if (this._margin !== margin) {
       this._margin = margin;
       this._grid?.margin(this._margin);
@@ -116,8 +119,8 @@ export class GridStackLayout extends Layout {
    *
    * @param forcePixel - An optional boolean.
    */
-  getCellHeight(forcePixel?: boolean): number | undefined {
-    return this._grid?.getCellHeight(forcePixel);
+  get cellHeight(): number {
+    return this._grid?.getCellHeight(true) ?? this._cellHeight;
   }
 
   /**
@@ -125,7 +128,7 @@ export class GridStackLayout extends Layout {
    *
    * @param height - The new height.
    */
-  setCellHeight(height: number): void {
+  set cellHeight(height: number) {
     if (this._cellHeight !== height) {
       this._cellHeight = height;
       this._grid?.cellHeight(this._cellHeight);
@@ -136,8 +139,8 @@ export class GridStackLayout extends Layout {
   /**
    * Get gridstack's number of columns.
    */
-  getColumn(): number | undefined {
-    return this._grid?.getColumn();
+  get columns(): number {
+    return this._columns;
   }
 
   /**
@@ -145,7 +148,7 @@ export class GridStackLayout extends Layout {
    *
    * @param columns - The new number of columns.
    */
-  setColumn(columns: number): void {
+  set columns(columns: number) {
     if (this._columns !== columns) {
       this._columns = columns;
       this._grid?.column(columns);
@@ -157,14 +160,14 @@ export class GridStackLayout extends Layout {
    * Get the list of `GridStackItem` (Lumino widgets).
    */
   get gridWidgets(): Array<GridStackItem> {
-    return this._gridItems!;
+    return this._gridItems ?? [];
   }
 
   /**
    * Get the list of `GridItemHTMLElement`.
    */
-  get gridItems(): GridItemHTMLElement[] | undefined {
-    return this._grid?.getGridItems();
+  get gridItems(): GridItemHTMLElement[] {
+    return this._grid?.getGridItems() ?? [];
   }
 
   /**
@@ -271,9 +274,7 @@ export class GridStackLayout extends Layout {
    * Handle change-event messages sent to from gridstack.
    */
   private _onChange(event: Event, items: GridStackNode[]): void {
-    if (items) {
-      this._gridItemChanged.emit(items);
-    }
+    this._gridItemChanged.emit(items ?? []);
   }
 
   /**
