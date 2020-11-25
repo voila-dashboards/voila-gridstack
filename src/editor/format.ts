@@ -87,7 +87,7 @@ export type DashboardCellView = {
  *
  * @param view - The json schema.
  */
-export function validateDashboardView(view: any): boolean {
+export function validateDashboardView(view: Partial<DashboardView>): boolean {
   if (
     view &&
     'name' in view &&
@@ -107,7 +107,9 @@ export function validateDashboardView(view: any): boolean {
  *
  * @param view - The json schema.
  */
-export function validateDashboardCellView(view: any): boolean {
+export function validateDashboardCellView(
+  view: Partial<DashboardCellView>
+): boolean {
   if (
     view &&
     'hidden' in view &&

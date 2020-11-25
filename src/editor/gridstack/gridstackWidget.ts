@@ -18,7 +18,7 @@ import { GridStackLayout } from './gridstackLayout';
 
 import { GridStackModel } from './gridstackModel';
 
-import { DashboardMetadataEditor } from '../components/dasboardMetadataEditor';
+import { DashboardMetadataEditor } from '../components/dashboardMetadataEditor';
 
 /**
  * A gridstack widget to host the visible Notebook's Cells.
@@ -40,7 +40,6 @@ export class GridstackWidget extends Widget {
     this.layout.gridItemChanged.connect(this._onGridItemChange, this);
 
     this._model.ready.connect(() => {
-      this.layout.initGridStack(this._model.info);
       this._initGridItems();
       this._model.cellRemoved.connect(this._removeCell, this);
       this._model.contentChanged.connect(this._updateGridItems, this);
@@ -144,7 +143,6 @@ export class GridstackWidget extends Widget {
     for (let i = 0; i < cells?.length; i++) {
       const model = cells.get(i);
       this._model.execute(model);
-      console.debug('running');
       const info = this._model.getCellInfo(model.id);
 
       if (info && !info.hidden && model.value.text.length !== 0) {
@@ -297,13 +295,16 @@ export class GridstackWidget extends Widget {
       );
 
       const widget = (event.source.parent as NotebookPanel).content.activeCell;
+      if (!widget) {
+        return;
+      }
       const items = this.layout.gridItems;
       const item = items?.find(
         value => value.gridstackNode?.id === widget?.model.id
       );
-      const info = this._model.getCellInfo(widget!.model.id);
+      const info = this._model.getCellInfo(widget.model.id);
 
-      if (!item && info?.hidden && widget) {
+      if (!item && info?.hidden) {
         if (
           widget.model.type === 'code' &&
           (widget.model as CodeCellModel).executionCount &&
@@ -334,12 +335,12 @@ export class GridstackWidget extends Widget {
           info.col = col;
           info.row = row;
           this._model.setCellInfo(widget.model.id, info);
-          const item = this._model.createCell(widget!.model);
+          const item = this._model.createCell(widget.model);
           this.layout.addGridItem(widget.model.id, item, info);
         } else {
           showErrorMessage('Empty cell', 'Is not possible to add empty cells.');
         }
-      } else if (item && info && widget) {
+      } else if (item && info) {
         info.hidden = false;
         info.col = col;
         info.row = row;
