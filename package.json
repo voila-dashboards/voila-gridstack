@@ -18,6 +18,7 @@
   "scripts": {
     "build": "lerna run build",
     "build:prod": "lerna run build:prod",
+    "build:test": "lerna run build:test",
     "clean": "lerna run clean",
     "install": "lerna bootstrap",
     "eslint": "eslint . --ext .ts,.tsx --fix",
