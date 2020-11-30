@@ -8,7 +8,7 @@ module.exports = {
   },
   bail: true,
   devtool: 'source-map',
-  mode: 'production',
+  mode: 'development',
   module: {
     rules: [
       { test: /\.css$/, use: ['style-loader', 'css-loader'] },

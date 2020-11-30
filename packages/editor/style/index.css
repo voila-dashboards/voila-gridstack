@@ -1,5 +1,8 @@
 @import url('~@jupyterlab/application/style/index.css');
+@import url('~@jupyterlab/codemirror/style/index.css');
+@import url('~@jupyterlab/documentsearch/style/index.css');
 @import url('~@jupyterlab/mainmenu/style/index.css');
+@import url('~@jupyterlab/notebook/style/index.css');
 @import url('~@jupyterlab/theme-light-extension/style/index.css');
 @import url('~@jupyterlab/ui-components/style/index.css');
 
