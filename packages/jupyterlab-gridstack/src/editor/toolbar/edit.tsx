@@ -4,13 +4,13 @@ import { editIcon } from '@jupyterlab/ui-components';
 
 import * as React from 'react';
 
-import { VoilaGridstackPanel } from '../panel';
+import { VoilaGridStackPanel } from '../panel';
 
 /**
  * A toolbar widget to open the dashboard metadata editor dialog.
  */
 export default class Edit extends ReactWidget {
-  constructor(panel: VoilaGridstackPanel) {
+  constructor(panel: VoilaGridStackPanel) {
     super();
     this._panel = panel;
   }
@@ -29,5 +29,5 @@ export default class Edit extends ReactWidget {
     );
   }
 
-  private _panel: VoilaGridstackPanel;
+  private _panel: VoilaGridStackPanel;
 }

@@ -16,20 +16,20 @@ import { Signal } from '@lumino/signaling';
 
 import { Message } from '@lumino/messaging';
 
-import { GridstackWidget } from './gridstack/gridstackWidget';
+import { GridStackWidget } from './gridstack/gridstackWidget';
 
 import { GridStackModel } from './gridstack/gridstackModel';
 
 /**
  * A Widget to host and interact with gridstack.
  */
-export class VoilaGridstackPanel extends Panel {
+export class VoilaGridStackPanel extends Panel {
   /**
    * Construct a `VoilaGridstackPanel`.
    *
    * @param options - The options to construct `VoilaGridstackPanel`.
    */
-  constructor(options: VoilaGridstackPanel.IOptions) {
+  constructor(options: VoilaGridStackPanel.IOptions) {
     super();
     this.addClass('grid-panel');
 
@@ -49,7 +49,7 @@ export class VoilaGridstackPanel extends Panel {
       notebookConfig: this._notebookConfig
     });
 
-    this._gridstackWidget = new GridstackWidget(gridModel);
+    this._gridstackWidget = new GridStackWidget(gridModel);
     this.addWidget(this._gridstackWidget);
   }
 
@@ -134,10 +134,10 @@ export class VoilaGridstackPanel extends Panel {
   private _context: DocumentRegistry.IContext<INotebookModel>;
   private _editorConfig: StaticNotebook.IEditorConfig;
   private _notebookConfig: StaticNotebook.INotebookConfig;
-  private _gridstackWidget: GridstackWidget | undefined;
+  private _gridstackWidget: GridStackWidget | undefined;
 }
 
-export namespace VoilaGridstackPanel {
+export namespace VoilaGridStackPanel {
   /**
    * Options interface for VoilaGridstackPanel
    */

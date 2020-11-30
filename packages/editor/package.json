@@ -29,6 +29,7 @@
     "@jupyterlab/apputils": "^3.0.0-rc.10",
     "@jupyterlab/codeeditor": "^3.0.0-rc.10",
     "@jupyterlab/docmanager": "^3.0.0-rc.10",
+    "@jupyterlab/docregistry": "^3.0.0-rc.10",
     "@jupyterlab/documentsearch": "^3.0.0-rc.10",
     "@jupyterlab/mathjax2": "^3.0.0-rc.10",
     "@jupyterlab/notebook": "^3.0.0-rc.10",
@@ -37,6 +38,7 @@
     "@jupyterlab/theme-light-extension": "^3.0.0-rc.10",
     "@jupyterlab/translation": "^3.0.0-rc.10",
     "@jupyterlab/ui-components": "^3.0.0-rc.10",
+    "jupyterlab-gridstack": "^0.1.0",
     "@lumino/widgets": "^1.14.0",
     "es6-promise": "~4.2.8"
   },

@@ -1,5 +1,7 @@
 import { JupyterFrontEnd } from '@jupyterlab/application';
 
+import { DocumentRegistry } from '@jupyterlab/docregistry';
+
 import { classes, DockPanelSvg, LabIcon } from '@jupyterlab/ui-components';
 
 import { IIterator, iter, toArray } from '@lumino/algorithm';
@@ -54,11 +56,15 @@ export class Shell extends Widget implements JupyterFrontEnd.IShell {
    * be added.
    *
    */
-  add(widget: Widget, area?: IShell.Area): void {
+  add(
+    widget: Widget,
+    area?: IShell.Area,
+    options?: DocumentRegistry.IOpenOptions
+  ): void {
     if (area !== 'main') {
       return;
     }
-    return this._addToMainArea(widget);
+    return this._addToMainArea(widget, options);
   }
 
   /**
@@ -81,7 +87,10 @@ export class Shell extends Widget implements JupyterFrontEnd.IShell {
    *
    * @param widget The widget to add.
    */
-  private _addToMainArea(widget: Widget): void {
+  private _addToMainArea(
+    widget: Widget,
+    options?: DocumentRegistry.IOpenOptions
+  ): void {
     if (!widget.id) {
       console.error(
         'Widgets added to the app shell must have unique id property.'
@@ -104,7 +113,8 @@ export class Shell extends Widget implements JupyterFrontEnd.IShell {
       title.iconClass = classes(title.iconClass, 'jp-Icon');
     }
 
-    dock.addWidget(widget, { mode: 'tab-after' });
+    const mode = options?.mode ?? 'tab-after';
+    dock.addWidget(widget, { mode });
     dock.activateWidget(widget);
   }
 

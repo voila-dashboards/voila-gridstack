@@ -12,16 +12,16 @@ import { IEditorServices } from '@jupyterlab/codeeditor';
 
 import { WidgetTracker } from '@jupyterlab/apputils';
 
-import { VoilaGridstackWidgetFactory } from './factory';
+import { VoilaGridStackWidgetFactory } from './factory';
 
-import { IVoilaGridstackTracker, VoilaGridstackWidget } from './widget';
+import { IVoilaGridStackTracker, VoilaGridStackWidget } from './widget';
 
 import { VoilaButton, EditorButton } from './components/notebookButtons';
 
-export const editor: JupyterFrontEndPlugin<IVoilaGridstackTracker> = {
+export const editor: JupyterFrontEndPlugin<IVoilaGridStackTracker> = {
   id: 'jupyterlab-gridstack/editor',
   autoStart: true,
-  provides: IVoilaGridstackTracker,
+  provides: IVoilaGridStackTracker,
   requires: [
     NotebookPanel.IContentFactory,
     IEditorServices,
@@ -35,7 +35,7 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridstackTracker> = {
     rendermime: IRenderMimeRegistry,
     restorer: ILayoutRestorer | null
   ) => {
-    const tracker = new WidgetTracker<VoilaGridstackWidget>({
+    const tracker = new WidgetTracker<VoilaGridStackWidget>({
       namespace: 'jupyterlab-gridstack'
     });
 
@@ -44,15 +44,15 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridstackTracker> = {
         command: 'docmanager:open',
         args: panel => ({
           path: panel.context.path,
-          factory: 'Voila Gridstack'
+          factory: 'Voila GridStack'
         }),
         name: panel => panel.context.path,
         when: app.serviceManager.ready
       });
     }
 
-    const factory = new VoilaGridstackWidgetFactory({
-      name: 'Voila Gridstack',
+    const factory = new VoilaGridStackWidgetFactory({
+      name: 'Voila GridStack',
       fileTypes: ['notebook'],
       modelName: 'notebook',
       preferKernel: true,

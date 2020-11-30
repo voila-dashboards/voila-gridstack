@@ -23,6 +23,8 @@ import { editorServices } from '@jupyterlab/codemirror';
 
 import { DocumentManager, IDocumentManager } from '@jupyterlab/docmanager';
 
+import { DocumentRegistry } from '@jupyterlab/docregistry';
+
 import { ITranslator, TranslationManager } from '@jupyterlab/translation';
 
 import { Widget } from '@lumino/widgets';
@@ -63,9 +65,9 @@ const doc: JupyterFrontEndPlugin<IDocumentManager> = {
   autoStart: true,
   activate: (app: JupyterFrontEnd) => {
     const opener = {
-      open: (widget: Widget) => {
+      open: (widget: Widget, options: DocumentRegistry.IOpenOptions) => {
         // add the widget to the notebook area
-        app.shell.add(widget, 'main');
+        app.shell.add(widget, 'main', options);
       }
     };
     const docManager = new DocumentManager({
@@ -73,9 +75,16 @@ const doc: JupyterFrontEndPlugin<IDocumentManager> = {
       manager: app.serviceManager,
       opener
     });
+
+    // TODO: fix this
     setTimeout(() => {
       // TODO: fix this
       docManager.open('basics.ipynb', 'Notebook');
+    }, 1000);
+    setTimeout(() => {
+      docManager.open('basics.ipynb', 'Voila GridStack', undefined, {
+        mode: 'split-right'
+      });
     }, 2000);
     return docManager;
   }
@@ -93,6 +102,7 @@ async function main(): Promise<void> {
     sessionDialogs,
     require('./plugins/paths'),
     require('./plugins/example'),
+    require('jupyterlab-gridstack'),
     require('@jupyterlab/rendermime-extension'),
     require('@jupyterlab/notebook-extension').default.filter(({ id }: any) =>
       [

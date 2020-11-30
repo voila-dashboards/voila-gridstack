@@ -1,6 +1,6 @@
 {
   "name": "jupyterlab-gridstack",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A JupyterLab extension to create voila dashboards.",
   "homepage": "https://github.com/hbcarlos/jupyterlab-gridstack",
   "repository": {
@@ -45,14 +45,14 @@
   "dependencies": {
     "@jupyter-widgets/base": "^4.0.0-alpha.2",
     "@jupyter-widgets/jupyterlab-manager": "^3.0.0-alpha.2",
-    "@jupyterlab/application": "^3.0.0-rc.8",
-    "@jupyterlab/apputils": "^3.0.0-rc.8",
-    "@jupyterlab/cells": "^3.0.0-rc.8",
-    "@jupyterlab/codeeditor": "^3.0.0-rc.8",
-    "@jupyterlab/codemirror": "^3.0.0-rc.8",
-    "@jupyterlab/filebrowser": "^3.0.0-rc.8",
-    "@jupyterlab/notebook": "^3.0.0-rc.8",
-    "@jupyterlab/ui-components": "^3.0.0-rc.8",
+    "@jupyterlab/application": "^3.0.0-rc.10",
+    "@jupyterlab/apputils": "^3.0.0-rc.10",
+    "@jupyterlab/cells": "^3.0.0-rc.10",
+    "@jupyterlab/codeeditor": "^3.0.0-rc.10",
+    "@jupyterlab/codemirror": "^3.0.0-rc.10",
+    "@jupyterlab/filebrowser": "^3.0.0-rc.10",
+    "@jupyterlab/notebook": "^3.0.0-rc.10",
+    "@jupyterlab/ui-components": "^3.0.0-rc.10",
     "@lumino/coreutils": "^1.5.3",
     "@lumino/widgets": "^1.14.0",
     "gridstack": "^2.1.0",
@@ -61,8 +61,8 @@
   "devDependencies": {
     "@babel/core": "^7.10.2",
     "@babel/preset-env": "^7.10.2",
-    "@jupyterlab/builder": "^3.0.0-rc.8",
-    "@jupyterlab/testutils": "^3.0.0-rc.8",
+    "@jupyterlab/builder": "^3.0.0-rc.10",
+    "@jupyterlab/testutils": "^3.0.0-rc.10",
     "@types/codemirror": "^0.0.97"
   },
   "sideEffects": [

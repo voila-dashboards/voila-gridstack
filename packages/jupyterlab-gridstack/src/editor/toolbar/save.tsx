@@ -4,13 +4,13 @@ import { saveIcon } from '@jupyterlab/ui-components';
 
 import * as React from 'react';
 
-import { VoilaGridstackPanel } from '../panel';
+import { VoilaGridStackPanel } from '../panel';
 
 /**
  * A toolbar widget to save the dashboard metadata.
  */
 export default class Save extends ReactWidget {
-  constructor(panel: VoilaGridstackPanel) {
+  constructor(panel: VoilaGridStackPanel) {
     super();
     this._panel = panel;
   }
@@ -29,5 +29,5 @@ export default class Save extends ReactWidget {
     );
   }
 
-  private _panel: VoilaGridstackPanel;
+  private _panel: VoilaGridStackPanel;
 }
