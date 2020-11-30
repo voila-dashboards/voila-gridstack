@@ -22,19 +22,18 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridstackTracker> = {
   id: 'jupyterlab-gridstack/editor',
   autoStart: true,
   provides: IVoilaGridstackTracker,
-  optional: [],
   requires: [
-    ILayoutRestorer,
     NotebookPanel.IContentFactory,
     IEditorServices,
     IRenderMimeRegistry
   ],
+  optional: [ILayoutRestorer],
   activate: (
     app: JupyterFrontEnd,
-    restorer: ILayoutRestorer | null,
     contentFactory: NotebookPanel.IContentFactory,
     editorServices: IEditorServices,
-    rendermime: IRenderMimeRegistry
+    rendermime: IRenderMimeRegistry,
+    restorer: ILayoutRestorer | null
   ) => {
     const tracker = new WidgetTracker<VoilaGridstackWidget>({
       namespace: 'jupyterlab-gridstack'
@@ -76,7 +75,6 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridstackTracker> = {
     });
 
     app.docRegistry.addWidgetFactory(factory);
-
     app.docRegistry.addWidgetExtension('Notebook', new VoilaButton());
     app.docRegistry.addWidgetExtension(
       'Notebook',

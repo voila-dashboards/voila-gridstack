@@ -4,7 +4,7 @@ import { classes, DockPanelSvg, LabIcon } from '@jupyterlab/ui-components';
 
 import { IIterator, iter, toArray } from '@lumino/algorithm';
 
-import { Panel, Widget, BoxLayout } from '@lumino/widgets';
+import { Widget, BoxLayout } from '@lumino/widgets';
 
 export type IShell = Shell;
 
@@ -15,7 +15,7 @@ export namespace IShell {
   /**
    * The areas of the application shell where widgets can reside.
    */
-  export type Area = 'main' | 'top';
+  export type Area = 'main';
 }
 
 /**
@@ -28,19 +28,14 @@ export class Shell extends Widget implements JupyterFrontEnd.IShell {
 
     const rootLayout = new BoxLayout();
 
-    this._top = new Panel();
     this._main = new DockPanelSvg();
-
-    this._top.id = 'top-panel';
     this._main.id = 'main-panel';
 
-    BoxLayout.setStretch(this._top, 0);
     BoxLayout.setStretch(this._main, 1);
 
     this._main.spacing = 5;
 
     rootLayout.spacing = 0;
-    rootLayout.addWidget(this._top);
     rootLayout.addWidget(this._main);
 
     this.layout = rootLayout;
@@ -60,8 +55,8 @@ export class Shell extends Widget implements JupyterFrontEnd.IShell {
    *
    */
   add(widget: Widget, area?: IShell.Area): void {
-    if (area === 'top') {
-      return this._top.addWidget(widget);
+    if (area !== 'main') {
+      return;
     }
     return this._addToMainArea(widget);
   }
@@ -75,8 +70,8 @@ export class Shell extends Widget implements JupyterFrontEnd.IShell {
   }
 
   widgets(area: IShell.Area): IIterator<Widget> {
-    if (area === 'top') {
-      return iter(this._top.widgets);
+    if (area !== 'main') {
+      return iter([]);
     }
     return this._main.widgets();
   }
@@ -114,5 +109,4 @@ export class Shell extends Widget implements JupyterFrontEnd.IShell {
   }
 
   private _main: DockPanelSvg;
-  private _top: Panel;
 }

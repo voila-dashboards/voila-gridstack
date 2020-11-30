@@ -74,6 +74,7 @@ const doc: JupyterFrontEndPlugin<IDocumentManager> = {
       opener
     });
     setTimeout(() => {
+      // TODO: fix this
       docManager.open('basics.ipynb', 'Notebook');
     }, 2000);
     return docManager;
