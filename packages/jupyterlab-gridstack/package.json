@@ -1,0 +1,86 @@
+{
+  "name": "jupyterlab-gridstack",
+  "version": "0.0.1",
+  "description": "A JupyterLab extension to create voila dashboards.",
+  "homepage": "https://github.com/hbcarlos/jupyterlab-gridstack",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hbcarlos/jupyterlab-gridstack"
+  },
+  "bugs": {
+    "url": "https://github.com/hbcarlos/jupyterlab-gridstack/issues"
+  },
+  "license": "BSD-3-Clause",
+  "author": "QuantStack",
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
+  "files": [
+    "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
+    "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
+    "schema/**/*.json"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/src/index.d.ts",
+  "style": "style/index.css",
+  "scripts": {
+    "build": "jlpm run build:lib && jlpm run build:labextension:dev",
+    "build:labextension": "jupyter labextension build .",
+    "build:labextension:dev": "jupyter labextension build --development True .",
+    "build:lib": "tsc",
+    "build:prod": "jlpm run build:lib && jlpm run build:labextension",
+    "build:test": "tsc --build tsconfig.test.json",
+    "clean": "jlpm run clean:lib",
+    "clean:all": "jlpm run clean:lib && jlpm run clean:labextension",
+    "clean:labextension": "rimraf ../../jupyterlab-gridstack/labextension",
+    "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
+    "prepare": "jlpm run clean && jlpm run build:prod",
+    "test": "jest",
+    "watch": "run-p watch:src watch:labextension",
+    "watch:labextension": "jupyter labextension watch .",
+    "watch:src": "tsc -w"
+  },
+  "dependencies": {
+    "@jupyter-widgets/base": "^4.0.0-alpha.2",
+    "@jupyter-widgets/jupyterlab-manager": "^3.0.0-alpha.2",
+    "@jupyterlab/application": "^3.0.0-rc.8",
+    "@jupyterlab/apputils": "^3.0.0-rc.8",
+    "@jupyterlab/cells": "^3.0.0-rc.8",
+    "@jupyterlab/codeeditor": "^3.0.0-rc.8",
+    "@jupyterlab/codemirror": "^3.0.0-rc.8",
+    "@jupyterlab/filebrowser": "^3.0.0-rc.8",
+    "@jupyterlab/notebook": "^3.0.0-rc.8",
+    "@jupyterlab/ui-components": "^3.0.0-rc.8",
+    "@lumino/coreutils": "^1.5.3",
+    "@lumino/widgets": "^1.14.0",
+    "gridstack": "^2.1.0",
+    "react": "^17.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@jupyterlab/builder": "^3.0.0-rc.8",
+    "@jupyterlab/testutils": "^3.0.0-rc.8",
+    "@types/codemirror": "^0.0.97"
+  },
+  "sideEffects": [
+    "style/*.css"
+  ],
+  "jupyterlab": {
+    "extension": true,
+    "schemaDir": "schema",
+    "outputDir": "../../jupyterlab-gridstack/labextension",
+    "sharedPackages": {
+      "@jupyter-widgets/base": {
+        "bundled": false,
+        "singleton": true
+      },
+      "@jupyter-widgets/jupyterlab-manager": {
+        "bundled": false,
+        "singleton": true
+      }
+    }
+  }
+}
