@@ -125,7 +125,7 @@ const shortcuts: JupyterFrontEndPlugin<void> = {
  */
 const translator: JupyterFrontEndPlugin<ITranslator> = {
   id: 'gridstack-editor:translator',
-  activate: (app: App): ITranslator => {
+  activate: (app: JupyterFrontEnd<JupyterFrontEnd.IShell>): ITranslator => {
     const translationManager = new TranslationManager();
     return translationManager;
   },
@@ -139,9 +139,12 @@ const translator: JupyterFrontEndPlugin<ITranslator> = {
 const tree: JupyterFrontEndPlugin<void> = {
   id: 'gridstack-editor:tree-resolver',
   requires: [IDocumentManager],
-  activate: (app: App, docManager: IDocumentManager): void => {
+  activate: (
+    app: JupyterFrontEnd<JupyterFrontEnd.IShell>,
+    docManager: IDocumentManager
+  ): void => {
     const { commands } = app;
-    const path = 'basics.ipynb';
+    const path = 'Untitled.ipynb';
     app.restored.then(() => {
       commands.execute(CommandIDs.open, { path, factory: NOTEBOOK_FACTORY });
       commands.execute(CommandIDs.open, {

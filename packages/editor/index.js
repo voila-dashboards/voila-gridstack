@@ -1,28 +1,19 @@
 // Copyright (c) Jupyter Development Team.
 // Distributed under the terms of the Modified BSD License.
 
-import { PageConfig, URLExt } from '@jupyterlab/coreutils';
-(window as any).__webpack_public_path__ = URLExt.join(
-  PageConfig.getBaseUrl(),
-  'gridstack/'
-);
-
-import { App } from './app';
-
-import plugins from './plugins';
-
-import '../style/index.css';
+require('../style/index.css');
 
 /**
  * The main function
  */
-async function main(): Promise<void> {
+async function main() {
+  const App = require('./app').App;
   const app = new App();
   const mods = [
-    plugins,
+    require('./plugins'),
     require('jupyterlab-gridstack'),
     require('@jupyterlab/rendermime-extension'),
-    require('@jupyterlab/notebook-extension').default.filter(({ id }: any) =>
+    require('@jupyterlab/notebook-extension').default.filter(({ id }) =>
       [
         '@jupyterlab/notebook-extension:factory',
         '@jupyterlab/notebook-extension:widget-factory',
