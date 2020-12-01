@@ -1,6 +1,8 @@
 import {
+  IRouter,
   JupyterFrontEnd,
-  JupyterFrontEndPlugin
+  JupyterFrontEndPlugin,
+  Router
 } from '@jupyterlab/application';
 
 import {
@@ -98,6 +100,31 @@ const paths: JupyterFrontEndPlugin<JupyterFrontEnd.IPaths> = {
 };
 
 /**
+ * The default URL router provider.
+ */
+const router: JupyterFrontEndPlugin<IRouter> = {
+  id: 'gridstack-editor:router',
+  requires: [JupyterFrontEnd.IPaths],
+  activate: (app: JupyterFrontEnd, paths: JupyterFrontEnd.IPaths) => {
+    const { commands } = app;
+    const base = paths.urls.base;
+    const router = new Router({ base, commands });
+    void app.started.then(() => {
+      // Route the very first request on load.
+      void router.route();
+
+      // Route all pop state events.
+      window.addEventListener('popstate', () => {
+        void router.route();
+      });
+    });
+    return router;
+  },
+  autoStart: true,
+  provides: IRouter
+};
+
+/**
  * The default session dialogs plugin
  */
 const sessionDialogs: JupyterFrontEndPlugin<ISessionContextDialogs> = {
@@ -134,33 +161,49 @@ const translator: JupyterFrontEndPlugin<ITranslator> = {
 };
 
 /**
- * A route resolver plugin to open notebooks
+ * The default tree route resolver plugin.
  */
 const tree: JupyterFrontEndPlugin<void> = {
   id: 'gridstack-editor:tree-resolver',
-  requires: [IDocumentManager],
-  activate: (
-    app: JupyterFrontEnd<JupyterFrontEnd.IShell>,
-    docManager: IDocumentManager
-  ): void => {
+  autoStart: true,
+  requires: [IRouter],
+  activate: (app: JupyterFrontEnd, router: IRouter): void => {
     const { commands } = app;
-    const path = 'Untitled.ipynb';
-    app.restored.then(() => {
-      commands.execute(CommandIDs.open, { path, factory: NOTEBOOK_FACTORY });
-      commands.execute(CommandIDs.open, {
-        path,
-        factory: GRIDSTACK_EDITOR_FACTORY,
-        options: { mode: 'split-right' }
-      });
+    const treePattern = new RegExp('/tree/(.*)');
+
+    const command = 'router:tree';
+    commands.addCommand(command, {
+      execute: (args: any) => {
+        const parsed = args as IRouter.ILocation;
+        const matches = parsed.path.match(treePattern);
+        if (!matches) {
+          return;
+        }
+        const [, path] = matches;
+
+        app.restored.then(() => {
+          commands.execute(CommandIDs.open, {
+            path,
+            factory: NOTEBOOK_FACTORY
+          });
+          commands.execute(CommandIDs.open, {
+            path,
+            factory: GRIDSTACK_EDITOR_FACTORY,
+            options: { mode: 'split-right' }
+          });
+        });
+      }
     });
-  },
-  autoStart: true
+
+    router.register({ command, pattern: treePattern });
+  }
 };
 
 const plugins = [
   codeEditorServices,
   doc,
   paths,
+  router,
   sessionDialogs,
   shortcuts,
   translator,
