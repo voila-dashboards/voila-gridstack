@@ -77,7 +77,11 @@ const doc: JupyterFrontEndPlugin<IDocumentManager> = {
         const path = args['path'] as string;
         const factory = args['factory'] as string;
         const options = args['options'] as DocumentRegistry.IOpenOptions;
-        docManager.open(path, factory, undefined, options);
+        const closable = args['closable'] as boolean;
+        const widget = docManager.open(path, factory, undefined, options);
+        if (widget) {
+          widget.title.closable = closable ?? true;
+        }
       }
     });
 
@@ -184,7 +188,8 @@ const tree: JupyterFrontEndPlugin<void> = {
         app.restored.then(() => {
           commands.execute(CommandIDs.open, {
             path,
-            factory: NOTEBOOK_FACTORY
+            factory: NOTEBOOK_FACTORY,
+            closable: false
           });
           commands.execute(CommandIDs.open, {
             path,
