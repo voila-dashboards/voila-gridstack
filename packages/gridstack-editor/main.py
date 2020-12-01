@@ -55,7 +55,8 @@ class GridStackApp(LabServerApp):
 
     extension_url = '/gridstack'
     app_url = "/gridstack"
-    load_other_extensions = False
+    # allow other server extensions such as Voila
+    load_other_extensions = True
     name = __name__
     app_name = 'GridStack Editor'
     static_dir = os.path.join(HERE, 'build')
