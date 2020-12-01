@@ -10,20 +10,3 @@ body {
   right: 0;
   bottom: 0;
 }
-
-#top-panel {
-  border-bottom: var(--jp-border-width) solid var(--jp-border-color0);
-  background: var(--jp-layout-color1);
-  display: flex;
-  min-height: var(--jp-private-menubar-height);
-}
-
-.jp-ExampleWidget {
-  color: var(--jp-ui-font-color1);
-  background: var(--jp-layout-color1);
-  font-size: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
