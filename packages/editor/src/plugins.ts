@@ -24,15 +24,28 @@ import { Widget } from '@lumino/widgets';
 
 import { App } from './app';
 
+/**
+ * The factory to create notebook panels.
+ */
 const NOTEBOOK_FACTORY = 'Notebook';
 
+/**
+ * The factory to create GridStack editor widgets for a notebook.
+ */
 const GRIDSTACK_EDITOR_FACTORY = 'Voila GridStack';
+
+/**
+ * A namespace for default commands.
+ */
+namespace CommandIDs {
+  export const open = 'docmanager:open';
+}
 
 /**
  * The default code editor services plugin
  */
 const codeEditorServices: JupyterFrontEndPlugin<IEditorServices> = {
-  id: 'editor:services',
+  id: 'gridstack-editor:services',
   provides: IEditorServices,
   activate: () => editorServices
 };
@@ -41,7 +54,7 @@ const codeEditorServices: JupyterFrontEndPlugin<IEditorServices> = {
  * A minimal document manager plugin.
  */
 const doc: JupyterFrontEndPlugin<IDocumentManager> = {
-  id: 'editor:docmanager',
+  id: 'gridstack-editor:docmanager',
   provides: IDocumentManager,
   autoStart: true,
   activate: (app: JupyterFrontEnd) => {
@@ -56,15 +69,16 @@ const doc: JupyterFrontEndPlugin<IDocumentManager> = {
       opener
     });
 
-    // TODO: fix this by adding a command
-    setTimeout(() => {
-      docManager.open('basics.ipynb', NOTEBOOK_FACTORY);
-    }, 1000);
-    setTimeout(() => {
-      docManager.open('basics.ipynb', GRIDSTACK_EDITOR_FACTORY, undefined, {
-        mode: 'split-right'
-      });
-    }, 2000);
+    app.commands.addCommand(CommandIDs.open, {
+      label: 'Open a document',
+      execute: (args: any) => {
+        const path = args['path'] as string;
+        const factory = args['factory'] as string;
+        const options = args['options'] as DocumentRegistry.IOpenOptions;
+        docManager.open(path, factory, undefined, options);
+      }
+    });
+
     return docManager;
   }
 };
@@ -87,7 +101,7 @@ const paths: JupyterFrontEndPlugin<JupyterFrontEnd.IPaths> = {
  * The default session dialogs plugin
  */
 const sessionDialogs: JupyterFrontEndPlugin<ISessionContextDialogs> = {
-  id: 'editor:sessionDialogs',
+  id: 'gridstack-editor:sessionDialogs',
   provides: ISessionContextDialogs,
   autoStart: true,
   activate: () => sessionContextDialogs
@@ -110,7 +124,7 @@ const shortcuts: JupyterFrontEndPlugin<void> = {
  * A simplified Translator
  */
 const translator: JupyterFrontEndPlugin<ITranslator> = {
-  id: '@jupyterlab/translation:translator',
+  id: 'gridstack-editor:translator',
   activate: (app: App): ITranslator => {
     const translationManager = new TranslationManager();
     return translationManager;
@@ -119,13 +133,35 @@ const translator: JupyterFrontEndPlugin<ITranslator> = {
   provides: ITranslator
 };
 
+/**
+ * A route resolver plugin to open notebooks
+ */
+const tree: JupyterFrontEndPlugin<void> = {
+  id: 'gridstack-editor:tree-resolver',
+  requires: [IDocumentManager],
+  activate: (app: App, docManager: IDocumentManager): void => {
+    const { commands } = app;
+    const path = 'basics.ipynb';
+    app.restored.then(() => {
+      commands.execute(CommandIDs.open, { path, factory: NOTEBOOK_FACTORY });
+      commands.execute(CommandIDs.open, {
+        path,
+        factory: GRIDSTACK_EDITOR_FACTORY,
+        options: { mode: 'split-right' }
+      });
+    });
+  },
+  autoStart: true
+};
+
 const plugins = [
   codeEditorServices,
   doc,
   paths,
   sessionDialogs,
   shortcuts,
-  translator
+  translator,
+  tree
 ];
 
 export default plugins;
