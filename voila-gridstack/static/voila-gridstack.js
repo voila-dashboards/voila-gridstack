@@ -79,7 +79,7 @@ define(['jquery',
                 cell.output_area.outputs.length === 0) ||
                 cell.cell_type === "raw" ) {
 
-                cell.metadata.extensions.jupyter_dashboards.views[active_view_name].hidden = true;
+                cell.metadata.extensions.jupyter_dashboards.views[active_view_name] = { hidden: true };
                 $(item.el).addClass('grid-stack-item-hidden');
                 grid.removeWidget(item.el, false);
             }
@@ -102,8 +102,16 @@ define(['jquery',
                     return;
                 }
 
+                var views = cell.metadata.extensions.jupyter_dashboards.views;
                 active_view_name = Jupyter.notebook.metadata.extensions.jupyter_dashboards.activeView;
-                gridstack_meta = cell.metadata.extensions.jupyter_dashboards.views[active_view_name];
+
+                // keep only the "hidden" field if hidden
+                if (views[active_view_name].hidden) {
+                    views[active_view_name] = { hidden: true };
+                    return;
+                }
+
+                gridstack_meta = views[active_view_name];
 
                 // modify cell's gridstack metadata
                 gridstack_meta.col = item.x;
