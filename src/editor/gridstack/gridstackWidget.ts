@@ -90,19 +90,25 @@ export class GridstackWidget extends Widget {
    * Calling the pertinent function depending on the drag and drop stage.
    */
   public handleEvent(event: Event): void {
-    switch (event.type) {
-      case 'lm-dragenter':
-        this._evtDragEnter(event as IDragEvent);
-        break;
-      case 'lm-dragleave':
-        this._evtDragLeave(event as IDragEvent);
-        break;
-      case 'lm-dragover':
-        this._evtDragOver(event as IDragEvent);
-        break;
-      case 'lm-drop':
-        this._evtDrop(event as IDragEvent);
-        break;
+    if (!(event as IDragEvent).type) {
+      return;
+    }
+
+    if ((event as IDragEvent).proposedAction === 'copy') {
+      switch (event.type) {
+        case 'lm-dragenter':
+          this._evtDragEnter(event as IDragEvent);
+          break;
+        case 'lm-dragleave':
+          this._evtDragLeave(event as IDragEvent);
+          break;
+        case 'lm-dragover':
+          this._evtDragOver(event as IDragEvent);
+          break;
+        case 'lm-drop':
+          this._evtDrop(event as IDragEvent);
+          break;
+      }
     }
   }
 
@@ -167,9 +173,21 @@ export class GridstackWidget extends Widget {
    * Update the `GridstackItemWidget` from Notebook's metadata.
    */
   private _updateGridItems(): void {
-    this._model.deletedCells.forEach(id => {
-      this._model.hideCell(id);
-      this.layout.removeGridItem(id);
+    // Look for deleted cells. We look manually and not using
+    // `this._model.deletedCells` because when changing cell type
+    // the cell is removed but not added to this list.
+    this.layout.gridItems.forEach(item => {
+      let exist = false;
+      for (let i = 0; i < this._model.cells?.length; i++) {
+        if (item.gridstackNode?.id === this._model.cells.get(i).id) {
+          exist = true;
+          break;
+        }
+      }
+      if (!exist && item.gridstackNode) {
+        this._model.hideCell(item.gridstackNode.id as string);
+        this.layout.removeGridItem(item.gridstackNode.id as string);
+      }
     });
 
     for (let i = 0; i < this._model.cells?.length; i++) {

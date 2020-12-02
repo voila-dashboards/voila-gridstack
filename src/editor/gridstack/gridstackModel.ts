@@ -4,13 +4,17 @@ import {
   StaticNotebook
 } from '@jupyterlab/notebook';
 
-import { ICellModel, CodeCell, CodeCellModel } from '@jupyterlab/cells';
-
 import {
-  IRenderMimeRegistry,
-  renderMarkdown,
-  renderText
-} from '@jupyterlab/rendermime';
+  ICellModel,
+  CodeCell,
+  CodeCellModel,
+  MarkdownCell,
+  MarkdownCellModel,
+  RawCell,
+  RawCellModel
+} from '@jupyterlab/cells';
+
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
 import { IEditorMimeTypeService } from '@jupyterlab/codeeditor';
 
@@ -268,26 +272,46 @@ export class GridStackModel {
         cell.appendChild(item.node);
         break;
       }
-      case 'markdown':
-        renderMarkdown({
-          host: cell,
-          source: cellModel.value.text,
-          sanitizer: this.rendermime.sanitizer,
-          latexTypesetter: this.rendermime.latexTypesetter,
-          linkHandler: this.rendermime.linkHandler,
-          resolver: this.rendermime.resolver,
-          shouldTypeset: false,
-          trusted: true
+      case 'markdown': {
+        const markdownCell = new MarkdownCell({
+          model: cellModel as MarkdownCellModel,
+          rendermime: this.rendermime,
+          contentFactory: this.contentFactory,
+          editorConfig: this._editorConfig.markdown,
+          updateEditorOnShow: false
         });
+        markdownCell.inputHidden = false;
+        markdownCell.rendered = true;
+        const coll = markdownCell.node.getElementsByClassName('jp-Collapser');
+        for (let i = 0; i < coll.length; i++) {
+          coll[i].remove();
+        }
+        const pro = markdownCell.node.getElementsByClassName('jp-InputPrompt');
+        for (let i = 0; i < pro.length; i++) {
+          pro[i].remove();
+        }
+        cell.appendChild(markdownCell.node);
         break;
-
-      default:
-        renderText({
-          host: cell,
-          source: cellModel.value.text,
-          sanitizer: this.rendermime.sanitizer
+      }
+      default: {
+        const rawCell = new RawCell({
+          model: cellModel as RawCellModel,
+          contentFactory: this.contentFactory,
+          editorConfig: this._editorConfig.raw,
+          updateEditorOnShow: false
         });
+        rawCell.inputHidden = false;
+        const coll = rawCell.node.getElementsByClassName('jp-Collapser');
+        for (let i = 0; i < coll.length; i++) {
+          coll[i].remove();
+        }
+        const pro = rawCell.node.getElementsByClassName('jp-InputPrompt');
+        for (let i = 0; i < pro.length; i++) {
+          pro[i].remove();
+        }
+        cell.appendChild(rawCell.node);
         break;
+      }
     }
 
     const close = document.createElement('div');
