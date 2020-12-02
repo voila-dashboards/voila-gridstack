@@ -10,12 +10,12 @@ import {
   WidgetRenderer
 } from '@jupyter-widgets/jupyterlab-manager';
 
-import { VoilaGridstackPanel } from '../editor/panel';
+import { VoilaGridStackPanel } from '../editor/panel';
 
-import { IVoilaGridstackTracker } from '../editor/widget';
+import { IVoilaGridStackTracker } from '../editor/widget';
 
 function* widgetRenderers(
-  editor: VoilaGridstackPanel
+  editor: VoilaGridStackPanel
 ): IterableIterator<WidgetRenderer> {
   for (const w of editor.gridWidgets) {
     if (w instanceof WidgetRenderer) {
@@ -27,10 +27,10 @@ function* widgetRenderers(
 export const widgets: JupyterFrontEndPlugin<void> = {
   id: 'jupyterlab-gridstack/widgets',
   autoStart: true,
-  optional: [IVoilaGridstackTracker, IJupyterWidgetRegistry],
+  optional: [IVoilaGridStackTracker, IJupyterWidgetRegistry],
   activate: (
     app: JupyterFrontEnd,
-    voilaEditorTracker: IVoilaGridstackTracker | null,
+    voilaEditorTracker: IVoilaGridStackTracker | null,
     widgetRegistry: IJupyterWidgetRegistry | null
   ) => {
     if (!widgetRegistry) {

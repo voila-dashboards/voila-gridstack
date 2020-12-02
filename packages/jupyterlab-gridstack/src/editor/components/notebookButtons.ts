@@ -33,12 +33,12 @@ export class EditorButton
   createNew(panel: NotebookPanel): IDisposable {
     const button = new ToolbarButton({
       className: 'jupyterlab-gridstack',
-      tooltip: 'Open with Voilà Gridstack',
+      tooltip: 'Open with Voilà GridStack',
       icon: editIcon,
       onClick: () => {
         this._commands.execute('docmanager:open', {
           path: panel.context.path,
-          factory: 'Voila Gridstack'
+          factory: 'Voila GridStack'
         });
       }
     });
