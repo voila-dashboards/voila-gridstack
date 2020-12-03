@@ -282,13 +282,17 @@ export class GridStackModel {
         });
         markdownCell.inputHidden = false;
         markdownCell.rendered = true;
-        const coll = markdownCell.node.getElementsByClassName('jp-Collapser');
-        for (let i = 0; i < coll.length; i++) {
-          coll[i].remove();
+        const collapser = markdownCell.node.getElementsByClassName(
+          'jp-Collapser'
+        );
+        for (let i = 0; i < collapser.length; i++) {
+          collapser[i].remove();
         }
-        const pro = markdownCell.node.getElementsByClassName('jp-InputPrompt');
-        for (let i = 0; i < pro.length; i++) {
-          pro[i].remove();
+        const prompt = markdownCell.node.getElementsByClassName(
+          'jp-InputPrompt'
+        );
+        for (let i = 0; i < prompt.length; i++) {
+          prompt[i].remove();
         }
         cell.appendChild(markdownCell.node);
         break;
@@ -301,13 +305,13 @@ export class GridStackModel {
           updateEditorOnShow: false
         });
         rawCell.inputHidden = false;
-        const coll = rawCell.node.getElementsByClassName('jp-Collapser');
-        for (let i = 0; i < coll.length; i++) {
-          coll[i].remove();
+        const collapser = rawCell.node.getElementsByClassName('jp-Collapser');
+        for (let i = 0; i < collapser.length; i++) {
+          collapser[i].remove();
         }
-        const pro = rawCell.node.getElementsByClassName('jp-InputPrompt');
-        for (let i = 0; i < pro.length; i++) {
-          pro[i].remove();
+        const prompt = rawCell.node.getElementsByClassName('jp-InputPrompt');
+        for (let i = 0; i < prompt.length; i++) {
+          prompt[i].remove();
         }
         cell.appendChild(rawCell.node);
         break;
