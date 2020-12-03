@@ -282,18 +282,8 @@ export class GridStackModel {
         });
         markdownCell.inputHidden = false;
         markdownCell.rendered = true;
-        const collapser = markdownCell.node.getElementsByClassName(
-          'jp-Collapser'
-        );
-        for (let i = 0; i < collapser.length; i++) {
-          collapser[i].remove();
-        }
-        const prompt = markdownCell.node.getElementsByClassName(
-          'jp-InputPrompt'
-        );
-        for (let i = 0; i < prompt.length; i++) {
-          prompt[i].remove();
-        }
+        Private.removeElements(markdownCell.node, 'jp-Collapser');
+        Private.removeElements(markdownCell.node, 'jp-InputPrompt');
         cell.appendChild(markdownCell.node);
         break;
       }
@@ -305,14 +295,8 @@ export class GridStackModel {
           updateEditorOnShow: false
         });
         rawCell.inputHidden = false;
-        const collapser = rawCell.node.getElementsByClassName('jp-Collapser');
-        for (let i = 0; i < collapser.length; i++) {
-          collapser[i].remove();
-        }
-        const prompt = rawCell.node.getElementsByClassName('jp-InputPrompt');
-        for (let i = 0; i < prompt.length; i++) {
-          prompt[i].remove();
-        }
+        Private.removeElements(rawCell.node, 'jp-Collapser');
+        Private.removeElements(rawCell.node, 'jp-InputPrompt');
         cell.appendChild(rawCell.node);
         break;
       }
@@ -504,5 +488,20 @@ export namespace GridStackModel {
      * A config object for notebook widget
      */
     notebookConfig: StaticNotebook.INotebookConfig;
+  }
+}
+
+/**
+ * A namespace for private module data.
+ */
+namespace Private {
+  /**
+   * Remove children by className from an HTMLElement.
+   */
+  export function removeElements(node: HTMLElement, className: string): void {
+    const elements = node.getElementsByClassName(className);
+    for (let i = 0; i < elements.length; i++) {
+      elements[i].remove();
+    }
   }
 }
