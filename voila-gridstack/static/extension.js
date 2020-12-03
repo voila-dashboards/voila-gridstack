@@ -31,6 +31,12 @@ define(['jquery',
             // disables button
             $('#btn-voila-gridstack_notebook').prop( "disabled", true );
 
+            // unsubsribe from events
+            grid.off('added');
+            grid.off('change');
+            grid.off('removed');
+            grid.off('resizestop');
+
             // saves notebook then formats HTML
             Jupyter.notebook.save_notebook().then(function () {
 
@@ -150,6 +156,7 @@ define(['jquery',
 
                     // init GridStack
                     grid = gridstack.init({
+                        float: true,
                         alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
                         resizable: {
                             handles: 'e, se, s, sw, w',
@@ -174,8 +181,9 @@ define(['jquery',
                     // fake window resize event at init to display bqplot without resizing tile
                     window.dispatchEvent(new Event('resize'));
 
+
                     // saves initial positions and sizes in metadata
-                    $('.grid-stack').trigger("change", grid.engine.nodes[0]);
+                    $('.grid-stack').trigger("change", grid.engine.nodes);
                 });
 
                 // removes spinner and show notebook as gridstack
