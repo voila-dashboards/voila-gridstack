@@ -4,13 +4,17 @@ import {
   StaticNotebook
 } from '@jupyterlab/notebook';
 
-import { ICellModel, CodeCell, CodeCellModel } from '@jupyterlab/cells';
-
 import {
-  IRenderMimeRegistry,
-  renderMarkdown,
-  renderText
-} from '@jupyterlab/rendermime';
+  ICellModel,
+  CodeCell,
+  CodeCellModel,
+  MarkdownCell,
+  MarkdownCellModel,
+  RawCell,
+  RawCellModel
+} from '@jupyterlab/cells';
+
+import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
 import { IEditorMimeTypeService } from '@jupyterlab/codeeditor';
 
@@ -268,26 +272,34 @@ export class GridStackModel {
         cell.appendChild(item.node);
         break;
       }
-      case 'markdown':
-        renderMarkdown({
-          host: cell,
-          source: cellModel.value.text,
-          sanitizer: this.rendermime.sanitizer,
-          latexTypesetter: this.rendermime.latexTypesetter,
-          linkHandler: this.rendermime.linkHandler,
-          resolver: this.rendermime.resolver,
-          shouldTypeset: false,
-          trusted: true
+      case 'markdown': {
+        const markdownCell = new MarkdownCell({
+          model: cellModel as MarkdownCellModel,
+          rendermime: this.rendermime,
+          contentFactory: this.contentFactory,
+          editorConfig: this._editorConfig.markdown,
+          updateEditorOnShow: false
         });
+        markdownCell.inputHidden = false;
+        markdownCell.rendered = true;
+        Private.removeElements(markdownCell.node, 'jp-Collapser');
+        Private.removeElements(markdownCell.node, 'jp-InputPrompt');
+        cell.appendChild(markdownCell.node);
         break;
-
-      default:
-        renderText({
-          host: cell,
-          source: cellModel.value.text,
-          sanitizer: this.rendermime.sanitizer
+      }
+      default: {
+        const rawCell = new RawCell({
+          model: cellModel as RawCellModel,
+          contentFactory: this.contentFactory,
+          editorConfig: this._editorConfig.raw,
+          updateEditorOnShow: false
         });
+        rawCell.inputHidden = false;
+        Private.removeElements(rawCell.node, 'jp-Collapser');
+        Private.removeElements(rawCell.node, 'jp-InputPrompt');
+        cell.appendChild(rawCell.node);
         break;
+      }
     }
 
     const close = document.createElement('div');
@@ -476,5 +488,20 @@ export namespace GridStackModel {
      * A config object for notebook widget
      */
     notebookConfig: StaticNotebook.INotebookConfig;
+  }
+}
+
+/**
+ * A namespace for private module data.
+ */
+namespace Private {
+  /**
+   * Remove children by className from an HTMLElement.
+   */
+  export function removeElements(node: HTMLElement, className: string): void {
+    const elements = node.getElementsByClassName(className);
+    for (let i = 0; i < elements.length; i++) {
+      elements[i].remove();
+    }
   }
 }
