@@ -4,10 +4,7 @@ const upstream = func(__dirname);
 
 let local = {
   preset: 'ts-jest/presets/js-with-babel',
-  transformIgnorePatterns: [
-    '/jupyterlab-gridstack/labextension',
-    '/node_modules/(?!(@jupyterlab/.*)/)'
-  ],
+  transformIgnorePatterns: ['/node_modules/(?!(@jupyterlab/.*)/)'],
   globals: {
     'ts-jest': {
       tsconfig: './tsconfig.test.json'

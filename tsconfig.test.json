@@ -6,7 +6,6 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "es2015",
-    "outDir": "lib",
     "lib": [
       "es2015",
       "es2015.collection",
@@ -19,11 +18,5 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true
-  },
-  "include": ["src/**/*", "test/**/*"],
-  "references": [
-    {
-      "path": "."
-    }
-  ]
+  }
 }

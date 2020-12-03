@@ -23,11 +23,11 @@ import { DashboardMetadataEditor } from '../components/dashboardMetadataEditor';
 /**
  * A gridstack widget to host the visible Notebook's Cells.
  */
-export class GridstackWidget extends Widget {
+export class GridStackWidget extends Widget {
   /**
-   * Construct a `GridstackWidget`.
+   * Construct a `GridStackWidget`.
    *
-   * @param model - The `GridstackModel`.
+   * @param model - The `GridStackModel`.
    */
   constructor(model: GridStackModel) {
     super();

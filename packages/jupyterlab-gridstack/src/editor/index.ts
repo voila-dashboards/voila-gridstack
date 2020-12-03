@@ -12,31 +12,30 @@ import { IEditorServices } from '@jupyterlab/codeeditor';
 
 import { WidgetTracker } from '@jupyterlab/apputils';
 
-import { VoilaGridstackWidgetFactory } from './factory';
+import { VoilaGridStackWidgetFactory } from './factory';
 
-import { IVoilaGridstackTracker, VoilaGridstackWidget } from './widget';
+import { IVoilaGridStackTracker, VoilaGridStackWidget } from './widget';
 
 import { VoilaButton, EditorButton } from './components/notebookButtons';
 
-export const editor: JupyterFrontEndPlugin<IVoilaGridstackTracker> = {
+export const editor: JupyterFrontEndPlugin<IVoilaGridStackTracker> = {
   id: 'jupyterlab-gridstack/editor',
   autoStart: true,
-  provides: IVoilaGridstackTracker,
-  optional: [],
+  provides: IVoilaGridStackTracker,
   requires: [
-    ILayoutRestorer,
     NotebookPanel.IContentFactory,
     IEditorServices,
     IRenderMimeRegistry
   ],
+  optional: [ILayoutRestorer],
   activate: (
     app: JupyterFrontEnd,
-    restorer: ILayoutRestorer | null,
     contentFactory: NotebookPanel.IContentFactory,
     editorServices: IEditorServices,
-    rendermime: IRenderMimeRegistry
+    rendermime: IRenderMimeRegistry,
+    restorer: ILayoutRestorer | null
   ) => {
-    const tracker = new WidgetTracker<VoilaGridstackWidget>({
+    const tracker = new WidgetTracker<VoilaGridStackWidget>({
       namespace: 'jupyterlab-gridstack'
     });
 
@@ -45,15 +44,15 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridstackTracker> = {
         command: 'docmanager:open',
         args: panel => ({
           path: panel.context.path,
-          factory: 'Voila Gridstack'
+          factory: 'Voila GridStack'
         }),
         name: panel => panel.context.path,
         when: app.serviceManager.ready
       });
     }
 
-    const factory = new VoilaGridstackWidgetFactory({
-      name: 'Voila Gridstack',
+    const factory = new VoilaGridStackWidgetFactory({
+      name: 'Voila GridStack',
       fileTypes: ['notebook'],
       modelName: 'notebook',
       preferKernel: true,
@@ -76,7 +75,6 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridstackTracker> = {
     });
 
     app.docRegistry.addWidgetFactory(factory);
-
     app.docRegistry.addWidgetExtension('Notebook', new VoilaButton());
     app.docRegistry.addWidgetExtension(
       'Notebook',

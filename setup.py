@@ -6,7 +6,7 @@ import os
 
 from jupyter_packaging import (
     create_cmdclass, install_npm, ensure_targets,
-    combine_commands, get_version,
+    combine_commands
 )
 import setuptools
 
@@ -15,16 +15,18 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 # The name of the project
 name="jupyterlab-gridstack"
 
-# Get our version
-with open(os.path.join(HERE, 'package.json')) as f:
-    version = json.load(f)['version']
+labext_name = "jupyterlab-gridstack"
+lab_extension_dest = os.path.join(HERE, name, "labextension")
+lab_extension_source = os.path.join(HERE, "packages", labext_name)
 
-lab_path = os.path.join(HERE, name, "labextension")
+# Get our version
+with open(os.path.join(lab_extension_source, 'package.json')) as f:
+    version = json.load(f)['version']
 
 # Representative files that should exist after a successful build
 jstargets = [
-    os.path.join(HERE, "lib", "index.js"),
-    os.path.join(lab_path, "package.json"),
+    os.path.join(lab_extension_source, "lib", "index.js"),
+    os.path.join(lab_extension_dest, "package.json"),
 ]
 
 package_data_spec = {
@@ -33,10 +35,8 @@ package_data_spec = {
     ]
 }
 
-labext_name = "jupyterlab-gridstack"
-
 data_files_spec = [
-    ("share/jupyter/labextensions/%s" % labext_name, lab_path, "**"),
+    ("share/jupyter/labextensions/%s" % labext_name, lab_extension_dest, "**"),
     ("share/jupyter/labextensions/%s" % labext_name, HERE, "install.json"),
 ]
 
@@ -46,7 +46,7 @@ cmdclass = create_cmdclass("jsdeps",
 )
 
 cmdclass["jsdeps"] = combine_commands(
-    install_npm(HERE, build_cmd="build:prod", npm=["jlpm"]),
+    install_npm(lab_extension_source, build_cmd="build:prod", npm=["jlpm"]),
     ensure_targets(jstargets),
 )
 
