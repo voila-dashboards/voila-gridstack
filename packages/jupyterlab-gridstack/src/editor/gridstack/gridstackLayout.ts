@@ -73,6 +73,10 @@ export class GridStackLayout extends Layout {
         }
       }
     );
+
+    this._grid.on('resizestop', (event, elem) => {
+      window.dispatchEvent(new Event('resize'));
+    });
   }
 
   get gridItemChanged(): ISignal<this, GridStackNode[]> {
@@ -93,6 +97,8 @@ export class GridStackLayout extends Layout {
   init(): void {
     super.init();
     this.parent!.node.appendChild(this._gridHost);
+    // fake window resize event to resize bqplot
+    window.dispatchEvent(new Event('resize'));
   }
 
   /**
