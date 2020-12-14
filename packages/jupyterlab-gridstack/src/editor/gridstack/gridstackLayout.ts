@@ -4,7 +4,7 @@ import { IIterator, ArrayIterator } from '@lumino/algorithm';
 
 import { Signal, ISignal } from '@lumino/signaling';
 
-import { Message } from '@lumino/messaging';
+import { Message, MessageLoop } from '@lumino/messaging';
 
 import {
   GridStack,
@@ -240,7 +240,10 @@ export class GridStackLayout extends Layout {
     }
 
     this._gridItems.push(item);
+
+    MessageLoop.sendMessage(item, Widget.Msg.BeforeAttach);
     this._grid.addWidget(item.node, options);
+    MessageLoop.sendMessage(item, Widget.Msg.AfterAttach);
   }
 
   /**
