@@ -24,6 +24,8 @@ import { SimplifiedOutputArea } from '@jupyterlab/outputarea';
 
 import { IObservableUndoableList } from '@jupyterlab/observables';
 
+import { Widget } from '@lumino/widgets';
+
 import { Signal, ISignal } from '@lumino/signaling';
 
 import { deleteIcon } from '../icons';
@@ -250,8 +252,7 @@ export class GridStackModel {
    * @param cellModel - `ICellModel`.
    */
   public createCell(cellModel: ICellModel): GridStackItem {
-    const cell = document.createElement('div');
-    cell.className = 'grid-item-widget';
+    let item: Widget;
 
     switch (cellModel.type) {
       case 'code': {
@@ -263,13 +264,12 @@ export class GridStackModel {
           updateEditorOnShow: true
         });
 
-        const item = new SimplifiedOutputArea({
+        item = new SimplifiedOutputArea({
           model: codeCell.outputArea.model,
           rendermime: codeCell.outputArea.rendermime,
           contentFactory: codeCell.outputArea.contentFactory
         });
 
-        cell.appendChild(item.node);
         break;
       }
       case 'markdown': {
@@ -284,7 +284,7 @@ export class GridStackModel {
         markdownCell.rendered = true;
         Private.removeElements(markdownCell.node, 'jp-Collapser');
         Private.removeElements(markdownCell.node, 'jp-InputPrompt');
-        cell.appendChild(markdownCell.node);
+        item = markdownCell;
         break;
       }
       default: {
@@ -297,7 +297,7 @@ export class GridStackModel {
         rawCell.inputHidden = false;
         Private.removeElements(rawCell.node, 'jp-Collapser');
         Private.removeElements(rawCell.node, 'jp-InputPrompt');
-        cell.appendChild(rawCell.node);
+        item = rawCell;
         break;
       }
     }
@@ -314,7 +314,7 @@ export class GridStackModel {
       this._cellRemoved.emit(cellModel.id);
     };
 
-    return new GridStackItem(cellModel.id, cell, close);
+    return new GridStackItem(cellModel.id, item, close);
   }
 
   /**

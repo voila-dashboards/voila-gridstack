@@ -4,7 +4,7 @@ import { IIterator, ArrayIterator } from '@lumino/algorithm';
 
 import { Signal, ISignal } from '@lumino/signaling';
 
-import { Message } from '@lumino/messaging';
+import { Message, MessageLoop } from '@lumino/messaging';
 
 import {
   GridStack,
@@ -73,6 +73,10 @@ export class GridStackLayout extends Layout {
         }
       }
     );
+
+    this._grid.on('resizestop', (event, elem) => {
+      window.dispatchEvent(new Event('resize'));
+    });
   }
 
   get gridItemChanged(): ISignal<this, GridStackNode[]> {
@@ -93,6 +97,8 @@ export class GridStackLayout extends Layout {
   init(): void {
     super.init();
     this.parent!.node.appendChild(this._gridHost);
+    // fake window resize event to resize bqplot
+    window.dispatchEvent(new Event('resize'));
   }
 
   /**
@@ -234,7 +240,10 @@ export class GridStackLayout extends Layout {
     }
 
     this._gridItems.push(item);
+
+    MessageLoop.sendMessage(item, Widget.Msg.BeforeAttach);
     this._grid.addWidget(item.node, options);
+    MessageLoop.sendMessage(item, Widget.Msg.AfterAttach);
   }
 
   /**
