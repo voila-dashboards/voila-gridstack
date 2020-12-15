@@ -1,5 +1,5 @@
 """
-jupyterlab-gridstack setup
+voila-gridstack setup
 """
 import os
 

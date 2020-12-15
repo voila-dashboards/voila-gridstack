@@ -108,12 +108,11 @@ The `jlpm` command is JupyterLab's pinned version of
 `yarn` or `npm` in lieu of `jlpm` below.
 
 ```bash
-# Clone the repo to your local environment
-# Change directory to the jupyterlab-gridstack directory
+# activate the environment
+conda activate voila-gridstack
 
-# create a new environment
-mamba create -n jupyterlab-gridstack -c conda-forge/label/jupyterlab_rc -c conda-forge/label/jupyterlab_server_rc -c conda-forge/label/jupyterlab_widgets_rc -c conda-forge jupyterlab=3 ipywidgets jupyterlab_widgets nodejs python -y
-conda activate jupyterlab-gridstack
+# install the JupyterLab pre-release
+python -m pip install jupyterlab --pre
 
 # Install package in development mode
 pip install -e .
@@ -121,7 +120,7 @@ pip install -e .
 # Link your development version of the extension with JupyterLab
 jupyter labextension develop . --overwrite
 
-# Rebuild extension Typescript source after making changes
+# Rebuild extension TypeScript source after making changes
 jlpm run build
 ```
 
