@@ -36,7 +36,7 @@ data_files_spec = [
     ("etc/jupyter/jupyter_server_config.d", "etc/jupyter/jupyter_server_config.d", "voila-gridstack.json"),
     ("etc/jupyter/jupyter_notebook_config.d", "etc/jupyter/jupyter_notebook_config.d", "voila-gridstack.json"),
     ("etc/jupyter/nbconfig/notebook.d", "etc/jupyter/nbconfig/notebook.d", "voila-gridstack.json"),
-    ("share/jupyter/nbextensions/voila-gridstack", 'voila-gridstack/static", "**')
+    ("share/jupyter/nbextensions/voila-gridstack", "voila-gridstack/static", "**")
 ]
 
 cmdclass = create_cmdclass("jsdeps",
