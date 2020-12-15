@@ -15,9 +15,9 @@ import {
 
 import 'gridstack/dist/gridstack.css';
 
-import { GridStackItem } from './gridstackItemWidget';
+import { GridStackItem } from './item';
 
-import { DashboardView, DashboardCellView } from './../format';
+import { DashboardView, DashboardCellView } from '../format';
 
 /**
  * A gridstack layout to host the visible Notebook's Cells.

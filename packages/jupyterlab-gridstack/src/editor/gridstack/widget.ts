@@ -14,11 +14,11 @@ import { Signal } from '@lumino/signaling';
 
 import { GridStackNode } from 'gridstack';
 
-import { GridStackLayout } from './gridstackLayout';
+import { GridStackLayout } from './layout';
 
-import { GridStackModel } from './gridstackModel';
+import { GridStackModel } from './model';
 
-import { DashboardMetadataEditor } from '../components/dashboardMetadataEditor';
+import { DashboardMetadataEditor } from '../components/metadata';
 
 /**
  * A gridstack widget to host the visible Notebook's Cells.

@@ -16,9 +16,9 @@ import { Signal } from '@lumino/signaling';
 
 import { Message } from '@lumino/messaging';
 
-import { GridStackWidget } from './gridstack/gridstackWidget';
+import { GridStackWidget } from './gridstack/widget';
 
-import { GridStackModel } from './gridstack/gridstackModel';
+import { GridStackModel } from './gridstack/model';
 
 /**
  * A Widget to host and interact with gridstack.
