@@ -107,6 +107,7 @@ setup_args = dict(
     extras_require={
         "test": [
             'ipykernel',
+            'jupyter_server~=1.0.1',
             'pytest',
             'pytest-tornasync',
             'lxml'
