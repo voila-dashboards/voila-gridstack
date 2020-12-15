@@ -1,0 +1,13 @@
+{
+  "title": "Voila GridStack",
+  "description": "Settings for Voila GridStack.",
+  "type": "object",
+  "properties": {
+    "env": {
+      "type": "string",
+      "title": "Example",
+      "description": "Exampe",
+      "default": ""
+    }
+  }
+}
