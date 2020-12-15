@@ -30,7 +30,7 @@ import { Signal, ISignal } from '@lumino/signaling';
 
 import { deleteIcon } from '../icons';
 
-import { GridStackItem } from './gridstackItemWidget';
+import { GridStackItem } from './item';
 
 import {
   DashboardView,
