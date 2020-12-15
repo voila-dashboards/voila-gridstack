@@ -2,19 +2,12 @@
 voila-gridstack setup
 """
 import os
-import sys
 
 from jupyter_packaging import (
     create_cmdclass, install_npm, ensure_targets,
     combine_commands
 )
 import setuptools
-from setuptools.command.develop import develop
-
-try:
-    import jupyter_core.paths as jupyter_core_paths
-except:
-    jupyter_core_paths = None
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
@@ -38,34 +31,6 @@ package_data_spec = {
 }
 
 
-class DevelopCmd(develop):
-    prefix_targets = [
-        ("nbconvert/templates", 'gridstack'),
-        ("voila/templates", 'gridstack')
-    ]
-    def run(self):
-        target_dir = os.path.join(sys.prefix, 'share', 'jupyter')
-        if '--user' in sys.prefix:  # TODO: is there a better way to find out?
-            target_dir = jupyter_core_paths.user_dir()
-        target_dir = os.path.join(target_dir)
-
-        for prefix_target, name in self.prefix_targets:
-            source = os.path.join('share', 'jupyter', prefix_target, name)
-            target = os.path.join(target_dir, prefix_target, name)
-            target_subdir = os.path.dirname(target)
-            if not os.path.exists(target_subdir):
-                os.makedirs(target_subdir)
-            rel_source = os.path.relpath(os.path.abspath(source), os.path.abspath(target_subdir))
-            try:
-                os.remove(target)
-            except:
-                pass
-            print(rel_source, '->', target)
-            os.symlink(rel_source, target)
-
-        super(DevelopCmd, self).run()
-
-
 data_files_spec = [
     ("share/jupyter/labextensions/%s" % labext_name, lab_extension_dest, "**"),
     ("share/jupyter/labextensions/%s" % labext_name, HERE, "install.json"),
@@ -85,7 +50,6 @@ cmdclass = create_cmdclass("jsdeps",
 cmdclass["jsdeps"] = combine_commands(
     install_npm(lab_extension_source, build_cmd="build:prod", npm=["jlpm"]),
     ensure_targets(jstargets),
-    DevelopCmd
 )
 
 with open("README.md", "r") as fh:
