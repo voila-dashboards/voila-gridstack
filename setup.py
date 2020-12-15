@@ -18,6 +18,25 @@ except:
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 
+# The name of the project
+name="voila-gridstack"
+
+labext_name = "jupyterlab-gridstack"
+lab_extension_dest = os.path.join(HERE, name, "labextension")
+lab_extension_source = os.path.join(HERE, "packages", labext_name)
+
+# Representative files that should exist after a successful build
+jstargets = [
+    os.path.join(lab_extension_source, "lib", "index.js"),
+    os.path.join(lab_extension_dest, "package.json"),
+]
+
+package_data_spec = {
+    name: [
+        "*"
+    ]
+}
+
 
 class DevelopCmd(develop):
     prefix_targets = [
@@ -47,33 +66,16 @@ class DevelopCmd(develop):
         super(DevelopCmd, self).run()
 
 
-# The name of the project
-name="voila-gridstack"
-
-labext_name = "jupyterlab-gridstack"
-lab_extension_dest = os.path.join(HERE, name, "labextension")
-lab_extension_source = os.path.join(HERE, "packages", labext_name)
-
-# Representative files that should exist after a successful build
-jstargets = [
-    os.path.join(lab_extension_source, "lib", "index.js"),
-    os.path.join(lab_extension_dest, "package.json"),
-]
-
-package_data_spec = {
-    name: [
-        "*"
-    ]
-}
-
 data_files_spec = [
     ("share/jupyter/labextensions/%s" % labext_name, lab_extension_dest, "**"),
     ("share/jupyter/labextensions/%s" % labext_name, HERE, "install.json"),
     ("etc/jupyter/jupyter_server_config.d", "etc/jupyter/jupyter_server_config.d", "voila-gridstack.json"),
     ("etc/jupyter/jupyter_notebook_config.d", "etc/jupyter/jupyter_notebook_config.d", "voila-gridstack.json"),
     ("etc/jupyter/nbconfig/notebook.d", "etc/jupyter/nbconfig/notebook.d", "voila-gridstack.json"),
-    ("share/jupyter/nbextensions/voila-gridstack", "voila-gridstack/static", "**")
+    ("share/jupyter/nbextensions/voila-gridstack", "voila-gridstack/static", "**"),
+    ("share/jupyter/nbconvert/templates/gridstack", "share/jupyter/nbconvert/templates/gridstack", "**")
 ]
+
 
 cmdclass = create_cmdclass("jsdeps",
     package_data_spec=package_data_spec,
