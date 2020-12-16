@@ -25,7 +25,7 @@ function* widgetRenderers(
 }
 
 export const widgets: JupyterFrontEndPlugin<void> = {
-  id: 'jupyterlab-gridstack/widgets',
+  id: '@voila-dashboards/jupyterlab-gridstack:widgets',
   autoStart: true,
   optional: [IVoilaGridStackTracker, IJupyterWidgetRegistry],
   activate: (

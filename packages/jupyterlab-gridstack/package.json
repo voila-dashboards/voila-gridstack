@@ -1,7 +1,7 @@
 {
-  "name": "jupyterlab-gridstack",
+  "name": "@voila-dashboards/jupyterlab-gridstack",
   "version": "0.1.0",
-  "description": "A JupyterLab extension to create voila dashboards.",
+  "description": "A JupyterLab extension to create Voila dashboards using GridStack",
   "homepage": "https://github.com/voila-dashboards/voila-gridstack",
   "repository": {
     "type": "git",

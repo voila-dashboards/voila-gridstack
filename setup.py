@@ -14,9 +14,9 @@ HERE = os.path.abspath(os.path.dirname(__file__))
 # The name of the project
 name="voila-gridstack"
 
-labext_name = "jupyterlab-gridstack"
+labext_name = "@voila-dashboards/jupyterlab-gridstack"
 lab_extension_dest = os.path.join(HERE, name, "labextension")
-lab_extension_source = os.path.join(HERE, "packages", labext_name)
+lab_extension_source = os.path.join(HERE, "packages", "jupyterlab-gridstack")
 
 # Representative files that should exist after a successful build
 jstargets = [

@@ -6,6 +6,6 @@
 @import url('~@jupyterlab/theme-light-extension/style/index.css');
 @import url('~@jupyterlab/ui-components/style/index.css');
 
-@import url('~jupyterlab-gridstack/style/index.css');
+@import url('~@voila-dashboards/jupyterlab-gridstack/style/index.css');
 
 @import url('./base.css');

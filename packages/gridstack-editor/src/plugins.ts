@@ -47,7 +47,7 @@ namespace CommandIDs {
  * The default code editor services plugin
  */
 const codeEditorServices: JupyterFrontEndPlugin<IEditorServices> = {
-  id: 'gridstack-editor:services',
+  id: '@voila-dashboards/gridstack-editor:services',
   provides: IEditorServices,
   activate: () => editorServices
 };
@@ -56,7 +56,7 @@ const codeEditorServices: JupyterFrontEndPlugin<IEditorServices> = {
  * A minimal document manager plugin.
  */
 const doc: JupyterFrontEndPlugin<IDocumentManager> = {
-  id: 'gridstack-editor:docmanager',
+  id: '@voila-dashboards/gridstack-editor:docmanager',
   provides: IDocumentManager,
   autoStart: true,
   activate: (app: JupyterFrontEnd) => {
@@ -93,7 +93,7 @@ const doc: JupyterFrontEndPlugin<IDocumentManager> = {
  * The default paths.
  */
 const paths: JupyterFrontEndPlugin<JupyterFrontEnd.IPaths> = {
-  id: 'gridstack-editor:paths',
+  id: '@voila-dashboards/gridstack-editor:paths',
   activate: (
     app: JupyterFrontEnd<JupyterFrontEnd.IShell>
   ): JupyterFrontEnd.IPaths => {
@@ -107,7 +107,7 @@ const paths: JupyterFrontEndPlugin<JupyterFrontEnd.IPaths> = {
  * The default URL router provider.
  */
 const router: JupyterFrontEndPlugin<IRouter> = {
-  id: 'gridstack-editor:router',
+  id: '@voila-dashboards/gridstack-editor:router',
   requires: [JupyterFrontEnd.IPaths],
   activate: (app: JupyterFrontEnd, paths: JupyterFrontEnd.IPaths) => {
     const { commands } = app;
@@ -132,7 +132,7 @@ const router: JupyterFrontEndPlugin<IRouter> = {
  * The default session dialogs plugin
  */
 const sessionDialogs: JupyterFrontEndPlugin<ISessionContextDialogs> = {
-  id: 'gridstack-editor:sessionDialogs',
+  id: '@voila-dashboards/gridstack-editor:sessionDialogs',
   provides: ISessionContextDialogs,
   autoStart: true,
   activate: () => sessionContextDialogs
@@ -142,7 +142,7 @@ const sessionDialogs: JupyterFrontEndPlugin<ISessionContextDialogs> = {
  * A plugin to load some of the default shortcuts
  */
 const shortcuts: JupyterFrontEndPlugin<void> = {
-  id: 'gridstack-editor:shortcuts',
+  id: '@voila-dashboards/gridstack-editor:shortcuts',
   activate: (app: JupyterFrontEnd<JupyterFrontEnd.IShell>): void => {
     // load the default notebook keybindings
     const bindings = trackerSettings['jupyter.lab.shortcuts'];
@@ -155,7 +155,7 @@ const shortcuts: JupyterFrontEndPlugin<void> = {
  * A simplified Translator
  */
 const translator: JupyterFrontEndPlugin<ITranslator> = {
-  id: 'gridstack-editor:translator',
+  id: '@voila-dashboards/gridstack-editor:translator',
   activate: (app: JupyterFrontEnd<JupyterFrontEnd.IShell>): ITranslator => {
     const translationManager = new TranslationManager();
     return translationManager;
@@ -168,7 +168,7 @@ const translator: JupyterFrontEndPlugin<ITranslator> = {
  * The default tree route resolver plugin.
  */
 const tree: JupyterFrontEndPlugin<void> = {
-  id: 'gridstack-editor:tree-resolver',
+  id: '@voila-dashboards/gridstack-editor:tree-resolver',
   autoStart: true,
   requires: [IRouter],
   activate: (app: JupyterFrontEnd, router: IRouter): void => {

@@ -1,5 +1,5 @@
 {
   "packageManager": "python",
-  "packageName": "jupyterlab-gridstack",
-  "uninstallInstructions": "Use your Python package manager (pip, conda, etc.) to uninstall the package jupyterlab-gridstack"
+  "packageName": "voila-gridstack",
+  "uninstallInstructions": "Use your Python package manager (pip, conda, etc.) to uninstall the package voila-gridstack"
 }

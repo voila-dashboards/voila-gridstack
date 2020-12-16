@@ -32,7 +32,7 @@ export class VoilaGridStackWidget extends DocumentWidget<
     content: VoilaGridStackPanel
   ) {
     super({ context, content });
-    this.id = 'jupyterlab-gridstack/editor:widget';
+    this.id = '@voila-dashboards/jupyterlab-gridstack:widget';
     this.title.label = context.localPath;
     this.title.closable = true;
     this.title.iconClass = 'jp-MaterialIcon jp-VoilaIcon';
@@ -54,5 +54,5 @@ export interface IVoilaGridStackTracker
  * The Voila GridStack tracker token.
  */
 export const IVoilaGridStackTracker = new Token<IVoilaGridStackTracker>(
-  'jupyterlab-gridstack:IVoilaGridstackTracker'
+  '@voila-dashboards/jupyterlab-gridstack:IVoilaGridstackTracker'
 );
