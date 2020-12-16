@@ -32,7 +32,6 @@ export class EditorButton
    */
   createNew(panel: NotebookPanel): IDisposable {
     const button = new ToolbarButton({
-      className: 'jupyterlab-gridstack',
       tooltip: 'Open with Voilà GridStack',
       icon: editIcon,
       onClick: () => {
