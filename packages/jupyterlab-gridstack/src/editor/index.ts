@@ -18,6 +18,9 @@ import { IVoilaGridStackTracker, VoilaGridStackWidget } from './widget';
 
 import { VoilaButton, EditorButton } from './components/notebookButtons';
 
+/**
+ * The main editor plugin.
+ */
 export const editor: JupyterFrontEndPlugin<IVoilaGridStackTracker> = {
   id: '@voila-dashboards/jupyterlab-gridstack:editor',
   autoStart: true,

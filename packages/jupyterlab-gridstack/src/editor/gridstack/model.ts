@@ -459,6 +459,9 @@ export class GridStackModel {
   private _contentChanged: Signal<this, null>;
 }
 
+/**
+ * A namespace for GridStackModel statics.
+ */
 export namespace GridStackModel {
   /**
    * Notebook config interface for GridStackModel

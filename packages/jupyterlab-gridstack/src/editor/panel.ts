@@ -137,6 +137,9 @@ export class VoilaGridStackPanel extends Panel {
   private _gridstackWidget: GridStackWidget | undefined;
 }
 
+/**
+ * A namespace for VoilaGridStackPanel statics.
+ */
 export namespace VoilaGridStackPanel {
   /**
    * Options interface for VoilaGridstackPanel

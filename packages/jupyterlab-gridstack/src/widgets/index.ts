@@ -24,6 +24,9 @@ function* widgetRenderers(
   }
 }
 
+/**
+ * A plugin to add support for rendering Jupyter Widgets in the editor.
+ */
 export const widgets: JupyterFrontEndPlugin<void> = {
   id: '@voila-dashboards/jupyterlab-gridstack:widgets',
   autoStart: true,

@@ -70,7 +70,6 @@
   ],
   "jupyterlab": {
     "extension": true,
-    "schemaDir": "schema",
     "outputDir": "../../voila-gridstack/labextension",
     "sharedPackages": {
       "@jupyter-widgets/base": {
