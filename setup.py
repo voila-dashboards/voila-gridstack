@@ -6,7 +6,7 @@ import sys
 
 from jupyter_packaging import (
     create_cmdclass, install_npm, ensure_targets,
-    combine_commands
+    combine_commands, skip_if_exists
 )
 import setuptools
 from setuptools.command.develop import develop
@@ -27,7 +27,6 @@ lab_extension_source = os.path.join(HERE, "packages", "jupyterlab-gridstack")
 
 # Representative files that should exist after a successful build
 jstargets = [
-    os.path.join(lab_extension_source, "lib", "index.js"),
     os.path.join(lab_extension_dest, "package.json"),
 ]
 
@@ -54,10 +53,16 @@ cmdclass = create_cmdclass("jsdeps",
     data_files_spec=data_files_spec
 )
 
-cmdclass["jsdeps"] = combine_commands(
+js_command = combine_commands(
     install_npm(lab_extension_source, build_cmd="build:prod", npm=["jlpm"]),
     ensure_targets(jstargets),
 )
+
+is_repo = os.path.exists(os.path.join(HERE, ".git"))
+if is_repo:
+    cmdclass["jsdeps"] = js_command
+else:
+    cmdclass["jsdeps"] = skip_if_exists(jstargets, js_command)
 
 base_develop_cmd = cmdclass['develop']
 
@@ -102,7 +107,7 @@ setup_args = dict(
     author="Voila Development Team",
     author_email="jupyter@googlegroups.com",
     description="A GridStack template for Voila.",
-    long_description= long_description,
+    long_description=long_description,
     long_description_content_type="text/markdown",
     cmdclass=cmdclass,
     packages=setuptools.find_packages(),
