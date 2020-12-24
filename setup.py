@@ -112,7 +112,7 @@ setup_args = dict(
     cmdclass=cmdclass,
     packages=setuptools.find_packages(),
     install_requires=[
-        "jupyterlab_widgets>=1.0.0a6",
+        "jupyterlab_widgets>=1.0.0rc1",
         "voila>=0.2.0,<0.3.0"
     ],
     extras_require={

@@ -111,8 +111,8 @@ The `jlpm` command is JupyterLab's pinned version of
 # activate the environment
 conda activate voila-gridstack
 
-# install the JupyterLab pre-release
-python -m pip install jupyterlab --pre
+# install JupyterLab
+mamba install -c conda-forge jupyterlab
 
 # Install package in development mode
 pip install -e .
