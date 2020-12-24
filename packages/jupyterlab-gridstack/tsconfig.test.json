@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.test",
+  "compilerOptions": {
+    "outDir": "lib"
+  },
+  "include": ["src/**/*", "test/**/*"],
+  "references": [
+    {
+      "path": "."
+    }
+  ]
+}

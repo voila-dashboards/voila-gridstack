@@ -4,6 +4,7 @@ import pytest
 
 BASE_DIR = os.path.dirname(__file__)
 
+
 class VoilaTest(voila.app.Voila):
     def listen(self):
         pass  # the ioloop is taken care of by the pytest-tornado framework

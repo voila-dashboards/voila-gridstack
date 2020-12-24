@@ -1,7 +1,7 @@
 {
-    "NotebookApp": {
-        "nbserver_extensions": {
-            "voila-gridstack.server_extension": true
-        }
+  "NotebookApp": {
+    "nbserver_extensions": {
+      "voila-gridstack.server_extension": true
     }
+  }
 }

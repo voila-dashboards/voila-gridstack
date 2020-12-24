@@ -27,12 +27,12 @@ The specification is described in `jupyter-dashboards`
 [docs](https://jupyter-dashboards-layout.readthedocs.io/en/latest/metadata.html).
 
 The voila renderer behaves as a "display-only renderer without authoring capabilitiy" as defined in
-the specs.  However, there are a few differences compared to the original implmentation:
+the specs. However, there are a few differences compared to the original implmentation:
 
-* if no metadata is found in the notebook voilà will render the notebook as `grid` layout,
-* it can not persist the state of the cells (i.e. the re-configuration of the layout will
+- if no metadata is found in the notebook voilà will render the notebook as `grid` layout,
+- it can not persist the state of the cells (i.e. the re-configuration of the layout will
   be lost, when the user closes the voila page),
-* if the cell does not contain view configuration for the particular view type (`grid` or
+- if the cell does not contain view configuration for the particular view type (`grid` or
   `report`) or `hidden` attribute is not defined, voilà will treat it as **visible**.
 
 ## Usage
@@ -98,6 +98,40 @@ jupyter notebook
 ```
 
 Then edit the files in `voila-gridstack/static` and reload the page to see the changes.
+
+### JupyterLab Extension
+
+Note: You will need NodeJS to build the extension package.
+
+The `jlpm` command is JupyterLab's pinned version of
+[yarn](https://yarnpkg.com/) that is installed with JupyterLab. You may use
+`yarn` or `npm` in lieu of `jlpm` below.
+
+```bash
+# activate the environment
+conda activate voila-gridstack
+
+# install JupyterLab
+mamba install -c conda-forge jupyterlab
+
+# Install package in development mode
+pip install -e .
+
+# Link your development version of the extension with JupyterLab
+jupyter labextension develop . --overwrite
+
+# Rebuild extension TypeScript source after making changes
+jlpm run build
+```
+
+You can watch the source directory and run JupyterLab at the same time in different terminals to watch for changes in the extension's source and automatically rebuild the extension.
+
+```bash
+# Watch the source directory in one terminal, automatically rebuilding when needed
+jlpm run watch
+# Run JupyterLab in another terminal
+jupyter lab
+```
 
 ## License
 

@@ -1,0 +1,62 @@
+@import 'variables.css';
+
+.grid-editor {
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  background-color: var(--jp-layout-color2);
+}
+
+.grid-stack-item-content {
+  color: var(--jp-content-font-color1);
+  background-color: var(--jp-layout-color1);
+}
+
+.grid-item-toolbar {
+  height: fit-content;
+  margin: 2px;
+  display: flex;
+  justify-content: flex-end;
+  background-color: var(--jp-layout-color2);
+}
+
+.grid-item-widget {
+  margin: 2px;
+}
+
+.trash-can {
+  width: 16px;
+  height: 16px;
+  margin: 2px;
+}
+
+.trash-can:hover {
+  cursor: pointer;
+  color: var(--jp-ui-font-color0);
+  background-color: var(--jp-layout-color2);
+  box-shadow: inset 0 0px 1px rgba(0, 0, 0, 0.5);
+}
+
+.col-25 {
+  float: left;
+  width: 40%;
+  margin: auto;
+}
+
+.col-75 {
+  float: left;
+  width: 60%;
+}
+
+.row {
+  display: table;
+  margin-top: 10px;
+}
+
+.jp-VoilaIcon {
+  background-image: var(--jp-icon-voila);
+}
+
+.jp-VoilaPreview-renderOnSave {
+  align-items: center;
+}
