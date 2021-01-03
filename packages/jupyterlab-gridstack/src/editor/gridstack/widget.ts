@@ -262,8 +262,8 @@ export class GridStackWidget extends Widget {
         hidden: false,
         col: el.x ?? 0,
         row: el.y ?? 0,
-        width: el.width ?? 2,
-        height: el.height ?? 2
+        width: el.w ?? 2,
+        height: el.h ?? 2
       });
     });
   }
