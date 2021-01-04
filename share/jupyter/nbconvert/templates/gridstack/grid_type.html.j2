@@ -98,11 +98,12 @@
         const items = document.querySelectorAll('.grid-stack-item');
 
         items.forEach(item => {
+            console.log(item.getAttribute('gs-w'));
             cells.push({
-                width: parseInt(item.dataset.gsWidth),
-                height: parseInt(item.dataset.gsHeight),
-                col: parseInt(item.dataset.gsX),
-                row: parseInt(item.dataset.gsY),
+                width: parseInt(item.getAttribute('gs-w')),
+                height: parseInt(item.getAttribute('gs-h')),
+                col: parseInt(item.getAttribute('gs-x')),
+                row: parseInt(item.getAttribute('gs-y')),
             });
         });
 
