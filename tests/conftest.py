@@ -22,6 +22,11 @@ def voila_app(voila_args, voila_config):
 
 
 @pytest.fixture
+def base_url():
+    return "/"
+
+
+@pytest.fixture
 def app(voila_app):
     return voila_app.app
 

@@ -9,7 +9,6 @@ from jupyter_packaging import (
     combine_commands, skip_if_exists
 )
 import setuptools
-from setuptools.command.develop import develop
 
 try:
     import jupyter_core.paths as jupyter_core_paths
@@ -112,13 +111,12 @@ setup_args = dict(
     cmdclass=cmdclass,
     packages=setuptools.find_packages(),
     install_requires=[
-        "jupyterlab_widgets>=1.0.0rc1",
+        "jupyterlab_widgets~=1.0",
         "voila>=0.2.0,<0.3.0"
     ],
     extras_require={
         "test": [
             'ipykernel',
-            'jupyter_server~=1.0.1',
             'pytest',
             'pytest-tornasync',
             'lxml'
