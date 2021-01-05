@@ -10,12 +10,12 @@
 
 define(['jquery',
         'base/js/namespace',
-        'nbextensions/voila-gridstack/gridstack',
+        'nbextensions/voila-gridstack/gridstack-jq',
         'nbextensions/voila-gridstack/voila-gridstack'
        ],
        function($, Jupyter, gridstack, voila_gridstack) {
 
-    var GRIDSTACK_STYLES = 'https://cdn.jsdelivr.net/npm/gridstack@2.0.0/dist/gridstack.min.css';
+    var GRIDSTACK_STYLES = 'https://cdn.jsdelivr.net/npm/gridstack@3.1.3/dist/gridstack.min.css';
     var grid;
 
     function load_ipython_extension() {
@@ -54,7 +54,7 @@ define(['jquery',
                 $('.grid-stack-item-content').siblings().remove();
                 $('.grid-stack-item-content').unwrap();
                 $('.grid-stack-item-content').contents().unwrap();
-                $('style[data-gs-style-id]').remove();
+                $('style[gs-style-id]').remove();
 
                 // Remove CSS files
                 $("head").children("#voila-gridstack-styles").remove();
@@ -138,8 +138,8 @@ define(['jquery',
                         }
 
                         position = (!gridstack_meta.hasOwnProperty('col')) ?
-                                        "data-gs-auto-position='true'" :
-                                        "data-gs-x='" + gridstack_meta.col + "' data-gs-y='" + gridstack_meta.row + "'";
+                                        "gs-auto-position='true'" :
+                                        "gs-x='" + gridstack_meta.col + "' gs-y='" + gridstack_meta.row + "'";
 
                         width = (!gridstack_meta.hasOwnProperty('width')) ? "12" : gridstack_meta.width;
 
@@ -147,8 +147,8 @@ define(['jquery',
 
                         return `<div class='grid-stack-item'
                                  ${position}
-                                 data-gs-width='${width}'
-                                 data-gs-height='${height}'></div>`;
+                                 gs-w='${width}'
+                                 gs-h='${height}'></div>`;
                     });
 
                     // wrap all grid-stack-item divs in a grid-stack div

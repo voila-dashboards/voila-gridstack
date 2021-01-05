@@ -49,7 +49,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/gridstack@2.0.0/dist/gridstack.all.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gridstack@3.1.3/dist/gridstack-jq.js"></script>
 <script type="text/javascript">
     // bqplot doesn't resize when resizing the tile, fix: fake a resize event
     var resize_workaround = _.debounce(() => {
@@ -58,6 +58,7 @@
     $(function () {
         GridStack.init({
             alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+            float: true,
             {% if resources.gridstack.show_handles %}
             resizable: {
                 handles: 'e, se, s, sw, w'
@@ -98,10 +99,10 @@
 
         items.forEach(item => {
             cells.push({
-                width: parseInt(item.dataset.gsWidth),
-                height: parseInt(item.dataset.gsHeight),
-                col: parseInt(item.dataset.gsX),
-                row: parseInt(item.dataset.gsY),
+                width: parseInt(item.getAttribute('gs-w')),
+                height: parseInt(item.getAttribute('gs-h')),
+                col: parseInt(item.getAttribute('gs-x')),
+                row: parseInt(item.getAttribute('gs-y')),
             });
         });
 
@@ -142,13 +143,13 @@
     {% set auto_position = ('row' not in view_data or 'col' not in view_data) %}
     {%- if not hidden and cell.cell_type in ['markdown', 'code'] %}
     <div class="grid-stack-item"
-         data-gs-width="{{ view_data.width | default(12) }}"
-         data-gs-height="{{ view_data.height | default(2) }}"
+         gs-w="{{ view_data.width | default(12) }}"
+         gs-h="{{ view_data.height | default(2) }}"
          {% if auto_position %}
-         data-gs-auto-position=true
+         gs-auto-position=true
          {% else %}
-         data-gs-y="{{ view_data.row }}"
-         data-gs-x="{{ view_data.col }}"
+         gs-y="{{ view_data.row }}"
+         gs-x="{{ view_data.col }}"
          {% endif %}
          >
         <div class="grid-stack-item-content">
@@ -167,7 +168,7 @@
 {{ super() }}
 <section id="demo" class="voila-gridstack">
     <div class="container">
-        <div class="grid-stack" data-gs-animate="yes">
+        <div class="grid-stack" gs-animate="yes">
 {% endblock body_header %}
 
 {% block body_footer %}
