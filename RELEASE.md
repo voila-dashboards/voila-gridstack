@@ -5,7 +5,7 @@
 Creating a new environment can help avoid pushing local changes and any extra tag.
 
 ```bash
-mamba create -q -y -n voila-gridstack-release -c conda-forge twine nodejs keyring pip matplotlib
+mamba create -q -y -n voila-gridstack-release -c conda-forge twine nodejs keyring pip matplotlib jupyter-packaging jupyterlab
 conda activate voila-gridstack-release
 ```
 
