@@ -101,7 +101,7 @@ with open("README.md", "r") as fh:
 
 setup_args = dict(
     name=name,
-    version="0.0.12",
+    version="0.1.0rc0",
     url="https://github.com/voila-dashboards/voila-gridstack",
     author="Voila Development Team",
     author_email="jupyter@googlegroups.com",
