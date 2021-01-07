@@ -8,3 +8,4 @@ dependencies:
 - pandas
 - voila
 - voila-gridstack
+- jupyterlab=3
