@@ -9,7 +9,7 @@ Notebook extension
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/voila-dashboards/voila-gridstack/stable?urlpath=/voila/tree/examples/scotch_dashboard.ipynb)
 
-JupyterLab-gridstack
+JupyterLab extension
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/voila-dashboards/voila-gridstack/stable?urlpath=lab/tree/examples)
 
