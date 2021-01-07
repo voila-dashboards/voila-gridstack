@@ -1,16 +1,42 @@
 # voila-gridstack
 
-[![Join the Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/QuantStack/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/voila-dashboards/voila-gridstack/stable?urlpath=/voila/tree/examples/scotch_dashboard.ipynb)
+A gridstack-based template for [![voila-gridstack](assets/voila.png)](https://github.com/voila-dashboards/voila).
 
-A gridstack-based template for [Voilà](https://github.com/voila-dashboards/voila).
+<table>
+<thead align="center" cellspacing="10">
+  <tr>
+    <th align="center" border="">Gitter channel</th>
+    <th align="center" border="">Notebook extension</th>
+    <th align="center" border="">JupyterLab extextension</th>
+  </tr>
+</thead>
+<tbody>
+  <tr background="#FFF">
+    <td align="center">
+      <a href="https://gitter.im/QuantStack/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge">
+        <img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the Gitter Chat"/>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://mybinder.org/v2/gh/voila-dashboards/voila-gridstack/stable?urlpath=/voila/tree/examples/scotch_dashboard.ipynb">
+        <img src="https://mybinder.org/badge_logo.svg" alt="Jupyter Notebook on Binder"/>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://mybinder.org/v2/gh/voila-dashboards/voila-gridstack/stable?urlpath=lab/tree/examples">
+        <img src="https://mybinder.org/badge_logo.svg" alt="JupyterLab on Binder"/>
+      </a>
+    </td>
+  </tr>
+</tbody>
+</table>
 
 ## Installation
 
-`voila-gridstack` can be installed with the conda package manager
+`voila-gridstack` can be installed with the mamba package manager
 
 ```
-conda install -c conda-forge voila-gridstack
+mamba install -c conda-forge voila-gridstack
 ```
 
 or from PyPI
@@ -39,7 +65,7 @@ the specs. However, there are a few differences compared to the original implmen
 
 To use the `gridstack` template, pass option `--template=gridstack` to the `voila` command line.
 
-![voila-gridstack](voila-gridstack.gif)
+![voila-gridstack](assets/voila-gridstack.gif)
 
 By default the position of cells in the dashboard will be fixed. If you want them to be draggable
 and resizable, you can launch voila with the `show_handles` resource set to `True`:
@@ -76,6 +102,8 @@ voila --template=gridstack
 
 ### Classic Notebook Extension
 
+![voila-gridstack](assets/classic-extension.gif)
+
 `voila-gridstack` provides an extension for the classic notebook to edit the gridstack layout from the notebook interface.
 
 To install this extension in development mode:
@@ -100,6 +128,8 @@ jupyter notebook
 Then edit the files in `voila-gridstack/static` and reload the page to see the changes.
 
 ### JupyterLab Extension
+
+![voila-gridstack](assets/jupyterlab-gridstack.gif)
 
 Note: You will need NodeJS to build the extension package.
 
