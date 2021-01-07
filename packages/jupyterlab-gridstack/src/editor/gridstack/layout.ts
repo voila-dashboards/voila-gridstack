@@ -15,6 +15,8 @@ import {
 
 import 'gridstack/dist/gridstack.css';
 
+import 'gridstack/dist/h5/gridstack-dd-native';
+
 import { GridStackItem } from './item';
 
 import { DashboardView, DashboardCellView } from '../format';
@@ -255,7 +257,12 @@ export class GridStackLayout extends Layout {
   updateGridItem(id: string, info: DashboardCellView): void {
     const items = this._grid.getGridItems();
     const item = items?.find(value => value.gridstackNode?.id === id);
-    this._grid.update(item!, info.col, info.row, info.width, info.height);
+    this._grid.update(item!, {
+      x: info.col,
+      y: info.row,
+      w: info.width,
+      h: info.height
+    });
   }
 
   /**
