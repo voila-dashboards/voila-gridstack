@@ -1,17 +1,35 @@
 # voila-gridstack
 
-A gridstack-based template for [Voilà](https://github.com/voila-dashboards/voila).
-![voila-gridstack](assets/voila.png)
+A gridstack-based template for [![voila-gridstack](assets/voila.png)](https://github.com/voila-dashboards/voila).
 
-[![Join the Gitter Chat](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/QuantStack/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-Notebook extension
-
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/voila-dashboards/voila-gridstack/stable?urlpath=/voila/tree/examples/scotch_dashboard.ipynb)
-
-JupyterLab-gridstack
-
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/voila-dashboards/voila-gridstack/stable?urlpath=lab/tree/examples)
+<table>
+<thead align="center" cellspacing="10">
+  <tr>
+    <th align="center" border="">Gitter channel</th>
+    <th align="center" border="">Notebook extension</th>
+    <th align="center" border="">JupyterLab extextension</th>
+  </tr>
+</thead>
+<tbody>
+  <tr background="#FFF">
+    <td align="center">
+      <a href="https://gitter.im/QuantStack/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge">
+        <img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the Gitter Chat"/>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://mybinder.org/v2/gh/voila-dashboards/voila-gridstack/stable?urlpath=/voila/tree/examples/scotch_dashboard.ipynb">
+        <img src="https://mybinder.org/badge_logo.svg" alt="Jupyter Notebook on Binder"/>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://mybinder.org/v2/gh/voila-dashboards/voila-gridstack/stable?urlpath=lab/tree/examples">
+        <img src="https://mybinder.org/badge_logo.svg" alt="JupyterLab on Binder"/>
+      </a>
+    </td>
+  </tr>
+</tbody>
+</table>
 
 ## Installation
 
