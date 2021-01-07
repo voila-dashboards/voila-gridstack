@@ -3,9 +3,12 @@ channels:
 - conda-forge
 dependencies:
 - bqplot
+- ipympl
+- seaborn
 - ipywidgets
 - numpy
 - pandas
+- scipy
 - voila
 - voila-gridstack=0.1.0
 - jupyterlab=3
