@@ -7,5 +7,5 @@ dependencies:
 - numpy
 - pandas
 - voila
-- voila-gridstack
+- voila-gridstack=0.1.0
 - jupyterlab=3

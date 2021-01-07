@@ -33,11 +33,11 @@ async def test_render_without_metadata(http_server_client, base_url):
 
     for elem in all_elements:
         attribs = elem.xpath("ancestor::div[@class='grid-stack-item']")[0].attrib
-        assert attribs['data-gs-auto-position'] == 'true'
-        assert 'data-gs-x' not in attribs
-        assert 'data-gs-y' not in attribs
-        assert attribs['data-gs-width'] == '12'
-        assert attribs['data-gs-height'] == '2'
+        assert attribs['gs-auto-position'] == 'true'
+        assert 'gs-x' not in attribs
+        assert 'gs-y' not in attribs
+        assert attribs['gs-w'] == '12'
+        assert attribs['gs-h'] == '2'
 
     # check if the document is properly ended
     assert "</html>" in html_body

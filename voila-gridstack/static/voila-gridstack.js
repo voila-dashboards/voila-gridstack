@@ -116,8 +116,8 @@ define(['jquery',
                 // modify cell's gridstack metadata
                 gridstack_meta.col = item.x;
                 gridstack_meta.row = item.y;
-                gridstack_meta.width = item.width;
-                gridstack_meta.height = item.height;
+                gridstack_meta.width = item.w;
+                gridstack_meta.height = item.h;
             });
 
             hide_elements(grid);

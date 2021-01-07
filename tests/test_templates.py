@@ -19,24 +19,24 @@ async def test_template_test(http_server_client, base_url):
 
     # test width/height params
     elem = tree.xpath("//pre[text()='Hi !\n']/ancestor::div[@class='grid-stack-item']")[0]
-    assert elem.attrib['data-gs-width'] == '6'
-    assert elem.attrib['data-gs-height'] == '5'
-    assert elem.attrib['data-gs-x'] == '0'
-    assert elem.attrib['data-gs-y'] == '0'
+    assert elem.attrib['gs-w'] == '6'
+    assert elem.attrib['gs-h'] == '5'
+    assert elem.attrib['gs-x'] == '0'
+    assert elem.attrib['gs-y'] == '0'
 
     # test cell "2"
     elem = tree.xpath("//pre[text()='2']/ancestor::div[@class='grid-stack-item']")[0]
-    assert elem.attrib['data-gs-width'] == '4'
-    assert elem.attrib['data-gs-height'] == '4'
-    assert elem.attrib['data-gs-x'] == '6'
-    assert elem.attrib['data-gs-y'] == '0'
+    assert elem.attrib['gs-w'] == '4'
+    assert elem.attrib['gs-h'] == '4'
+    assert elem.attrib['gs-x'] == '6'
+    assert elem.attrib['gs-y'] == '0'
 
     # markdown cell
     elem = tree.xpath("//h1[text()='This is markdown']/ancestor::div[@class='grid-stack-item']")[0]
-    assert elem.attrib['data-gs-width'] == '10'
-    assert elem.attrib['data-gs-height'] == '2'
-    assert elem.attrib['data-gs-x'] == '0'
-    assert elem.attrib['data-gs-y'] == '5'
+    assert elem.attrib['gs-w'] == '10'
+    assert elem.attrib['gs-h'] == '2'
+    assert elem.attrib['gs-x'] == '0'
+    assert elem.attrib['gs-y'] == '5'
 
     # test hidden cell
     elem = tree.xpath("//*[text()='This is a hidden cell.']")
