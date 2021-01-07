@@ -7,7 +7,7 @@ A gridstack-based template for [![voila-gridstack](assets/voila.png)](https://gi
   <tr>
     <th align="center" border="">Gitter channel</th>
     <th align="center" border="">Notebook extension</th>
-    <th align="center" border="">JupyterLab extextension</th>
+    <th align="center" border="">JupyterLab extension</th>
   </tr>
 </thead>
 <tbody>
