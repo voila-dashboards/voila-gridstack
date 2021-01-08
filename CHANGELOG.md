@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.0](https://github.com/voila-dashboards/voila-gridstack/tree/0.1.0) (2021-01-07)
+
+[Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/0.1.0rc0...0.1.0)
+
+**Merged pull requests:**
+
+- Add CHANGELOG.md [\#76](https://github.com/voila-dashboards/voila-gridstack/pull/76) ([jtpio](https://github.com/jtpio))
+
 ## [0.1.0rc0](https://github.com/voila-dashboards/voila-gridstack/tree/0.1.0rc0) (2021-01-06)
 
 [Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/0.0.12...0.1.0rc0)
