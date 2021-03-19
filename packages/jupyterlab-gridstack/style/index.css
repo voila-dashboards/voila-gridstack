@@ -13,6 +13,9 @@
 }
 
 .grid-item-toolbar {
+  position: sticky;
+  top: 0px;
+  z-index: 1;
   height: fit-content;
   margin: 2px;
   display: flex;
