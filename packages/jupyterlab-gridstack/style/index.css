@@ -7,6 +7,17 @@
   background-color: var(--jp-layout-color2);
 }
 
+.grid-stack {
+  background-image: linear-gradient(
+      var(--jp-layout-color3) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, var(--jp-layout-color3) 1px, transparent 0px),
+    linear-gradient(var(--jp-layout-color2) 5px, transparent 100px),
+    linear-gradient(90deg, var(--jp-layout-color2) 5px, transparent 100px);
+  background-position: -1px -1px, -1px -1px, -1px -1px, -1px -1px;
+}
+
 .grid-stack-item-content {
   color: var(--jp-content-font-color1);
   background-color: var(--jp-layout-color1);
