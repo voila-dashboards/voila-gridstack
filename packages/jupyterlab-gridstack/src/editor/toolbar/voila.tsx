@@ -28,7 +28,7 @@ export default class Voila extends ReactWidget {
       <ToolbarButtonComponent
         iconClass="jp-MaterialIcon jp-VoilaIcon"
         onClick={onClick}
-        tooltip={'Open voila'}
+        tooltip={'Open with Voilà in a New Browser Tab'}
       />
     );
   }
