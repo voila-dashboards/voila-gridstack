@@ -67,7 +67,7 @@ export class GridStackModel {
       name: 'grid',
       type: 'grid',
       maxColumns: 12,
-      cellMargin: 10,
+      cellMargin: 2,
       defaultCellHeight: 60
     };
 

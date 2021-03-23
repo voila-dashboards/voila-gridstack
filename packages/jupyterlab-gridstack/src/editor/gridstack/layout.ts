@@ -36,10 +36,6 @@ export class GridStackLayout extends Layout {
     this._cellHeight = info.defaultCellHeight;
     this._columns = info.maxColumns;
 
-    this._margin = info.cellMargin;
-    this._cellHeight = info.defaultCellHeight;
-    this._columns = info.maxColumns;
-
     this._gridHost = document.createElement('div');
     this._gridHost.className = 'grid-stack';
 
@@ -59,6 +55,8 @@ export class GridStackLayout extends Layout {
       },
       this._gridHost
     );
+
+    this._updateBackgroundSize();
 
     this._grid.on(
       'change',
@@ -182,6 +180,7 @@ export class GridStackLayout extends Layout {
     if (this._cellHeight !== height) {
       this._cellHeight = height;
       this._grid.cellHeight(this._cellHeight);
+      this._updateBackgroundSize();
       this.parent!.update();
     }
   }
@@ -202,6 +201,7 @@ export class GridStackLayout extends Layout {
     if (this._columns !== columns) {
       this._columns = columns;
       this._grid.column(columns);
+      this._updateBackgroundSize();
       this.parent!.update();
     }
   }
@@ -294,6 +294,13 @@ export class GridStackLayout extends Layout {
     items.forEach(el => {
       //this._model.hideCell(el.id as string);
     });
+  }
+
+  /**
+   * Update background size style to fit new grid parameters
+   */
+  private _updateBackgroundSize(): void {
+    this._gridHost.style.backgroundSize = `100px ${this.cellHeight}px, calc(100% / ${this.columns} + 0px) 100px, 20px 20px, 20px 20px`;
   }
 
   private _margin: number;
