@@ -59,7 +59,7 @@ export class VoilaButton
   createNew(panel: NotebookPanel): IDisposable {
     const button = new ToolbarButton({
       className: 'voila',
-      tooltip: 'Render with Voilà',
+      tooltip: 'Open with Voilà in a New Browser Tab',
       iconClass: VOILA_ICON_CLASS,
       onClick: () => {
         const baseUrl = PageConfig.getBaseUrl();
