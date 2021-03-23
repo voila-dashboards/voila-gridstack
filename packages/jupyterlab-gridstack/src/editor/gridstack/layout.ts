@@ -41,8 +41,6 @@ export class GridStackLayout extends Layout {
 
     this._grid = GridStack.init(
       {
-        // acceptWidgets: true,
-        dragIn: '#tab-key-0',
         float: true,
         column: this._columns,
         margin: this._margin,
@@ -217,6 +215,9 @@ export class GridStackLayout extends Layout {
     }
   }
 
+  /**
+   * Helper to get access to underlying GridStack object
+   */
   get grid(): GridStack {
     return this._grid;
   }
