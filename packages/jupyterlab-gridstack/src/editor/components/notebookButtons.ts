@@ -37,7 +37,11 @@ export class EditorButton
       onClick: () => {
         this._commands.execute('docmanager:open', {
           path: panel.context.path,
-          factory: 'Voila GridStack'
+          factory: 'Voila GridStack',
+          options: {
+            mode: 'split-right',
+            ref: panel.id
+          }
         });
       }
     });
