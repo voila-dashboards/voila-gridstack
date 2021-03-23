@@ -6,11 +6,11 @@ import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 
 import { PageConfig } from '@jupyterlab/coreutils';
 
-import { editIcon } from '@jupyterlab/ui-components';
-
 import { CommandRegistry } from '@lumino/commands';
 
 import { IDisposable } from '@lumino/disposable';
+
+import { dashboardIcon } from '../../icons';
 
 const VOILA_ICON_CLASS = 'jp-MaterialIcon jp-VoilaIcon';
 
@@ -33,7 +33,7 @@ export class EditorButton
   createNew(panel: NotebookPanel): IDisposable {
     const button = new ToolbarButton({
       tooltip: 'Open with Voilà GridStack',
-      icon: editIcon,
+      icon: dashboardIcon,
       onClick: () => {
         this._commands.execute('docmanager:open', {
           path: panel.context.path,
