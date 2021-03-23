@@ -36,6 +36,7 @@ export class GridStackWidget extends Widget {
     this.addClass('grid-editor');
     this._model = model;
     this._shadowWidget = document.createElement('div');
+    this._shadowWidget.className = 'jp-grid-placeholder';
     this._shadowWidget.style.display = 'none';
 
     this.layout = new GridStackLayout(this._model.info);
@@ -46,6 +47,13 @@ export class GridStackWidget extends Widget {
       this._model.cellRemoved.connect(this._removeCell, this);
       this._model.contentChanged.connect(this._updateGridItems, this);
     });
+  }
+
+  /**
+   * Update the layout to reclaim any empty space
+   */
+  compact(): void {
+    this.layout.grid.compact();
   }
 
   /**
@@ -324,8 +332,7 @@ export class GridStackWidget extends Widget {
     // if (!widget) {
     //   return;
     // }
-    // widget.removeClass('jp-gridstack-cell-in-motion');v
-    this.layout.grid.compact();
+    // widget.removeClass('jp-gridstack-cell-in-motion');
     event.preventDefault();
     event.stopPropagation();
   }
@@ -434,7 +441,6 @@ export class GridStackWidget extends Widget {
       }
     }
 
-    this.layout.grid.compact();
     this.removeClass('pr-DropTarget');
   }
 
