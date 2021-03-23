@@ -32,7 +32,6 @@ export class VoilaGridStackWidget extends DocumentWidget<
     content: VoilaGridStackPanel
   ) {
     super({ context, content });
-    this.id = '@voila-dashboards/jupyterlab-gridstack:widget';
     this.title.label = context.localPath;
     this.title.closable = true;
     this.title.iconClass = 'jp-MaterialIcon jp-VoilaIcon';
