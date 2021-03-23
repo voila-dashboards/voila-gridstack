@@ -6,12 +6,7 @@ import { Signal, ISignal } from '@lumino/signaling';
 
 import { Message, MessageLoop } from '@lumino/messaging';
 
-import {
-  GridStack,
-  GridHTMLElement,
-  GridStackNode,
-  GridItemHTMLElement
-} from 'gridstack';
+import { GridStack, GridStackNode, GridItemHTMLElement } from 'gridstack';
 
 import 'gridstack/dist/gridstack.css';
 
@@ -41,6 +36,8 @@ export class GridStackLayout extends Layout {
 
     this._grid = GridStack.init(
       {
+        // acceptWidgets: true,
+        dragIn: '#tab-key-0',
         float: true,
         column: this._columns,
         margin: this._margin,
@@ -60,14 +57,20 @@ export class GridStackLayout extends Layout {
 
     this._grid.on(
       'change',
-      (event: Event, items: GridHTMLElement | GridStackNode[] | undefined) => {
+      (
+        event: Event,
+        items?: GridItemHTMLElement | GridStackNode | GridStackNode[]
+      ) => {
         this._onChange(event, items as GridStackNode[]);
       }
     );
 
     this._grid.on(
       'removed',
-      (event: Event, items: GridHTMLElement | GridStackNode[] | undefined) => {
+      (
+        event: Event,
+        items?: GridItemHTMLElement | GridStackNode | GridStackNode[]
+      ) => {
         if ((items as GridStackNode[]).length <= 1) {
           this._onRemoved(event, items as GridStackNode[]);
         }
@@ -204,6 +207,10 @@ export class GridStackLayout extends Layout {
       this._updateBackgroundSize();
       this.parent!.update();
     }
+  }
+
+  get grid(): GridStack {
+    return this._grid;
   }
 
   /**

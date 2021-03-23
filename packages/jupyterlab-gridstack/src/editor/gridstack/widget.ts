@@ -35,6 +35,8 @@ export class GridStackWidget extends Widget {
     this.removeClass('p-Widget');
     this.addClass('grid-editor');
     this._model = model;
+    this._shadowWidget = document.createElement('div');
+    this._shadowWidget.style.display = 'none';
 
     this.layout = new GridStackLayout(this._model.info);
     this.layout.gridItemChanged.connect(this._onGridItemChange, this);
@@ -274,6 +276,40 @@ export class GridStackWidget extends Widget {
   private _evtDragEnter(event: IDragEvent): void {
     event.preventDefault();
     event.stopPropagation();
+
+    if (event.proposedAction !== 'copy') {
+      return;
+    }
+
+    if (event.source.activeCell instanceof Cell) {
+      const widget = (event.source.parent as NotebookPanel).content.activeCell;
+      if (!widget) {
+        return;
+      }
+
+      const y = Math.floor(event.offsetY / this.layout.cellHeight);
+      const x = Math.floor(
+        (this.layout.columns * event.offsetX) / this.node.offsetWidth
+      );
+      this._shadowWidget.style.width = '200px';
+      this._shadowWidget.style.height = '100px';
+      this._shadowWidget.style.border = '2px dash red';
+      this._shadowWidget.style.display = 'block';
+      const w =
+        Math.ceil(
+          (this.layout.columns / this.node.scrollWidth) *
+            this._shadowWidget.scrollWidth
+        ) + 1;
+      const h =
+        Math.ceil(this._shadowWidget.scrollHeight / this.layout.cellHeight) + 1;
+      console.log(`enter x ${x} y ${y} w ${w} h ${h}`);
+      this.layout.grid.addWidget(this._shadowWidget, {
+        x,
+        y,
+        w,
+        h
+      });
+    }
   }
 
   /**
@@ -281,6 +317,15 @@ export class GridStackWidget extends Widget {
    */
   private _evtDragLeave(event: IDragEvent): void {
     this.removeClass('pr-DropTarget');
+    console.log('leave');
+    this.layout.grid.removeWidget(this._shadowWidget, false, false);
+    this._shadowWidget.style.display = 'none';
+    // const widget = (event.source.parent as NotebookPanel).content.activeCell;
+    // if (!widget) {
+    //   return;
+    // }
+    // widget.removeClass('jp-gridstack-cell-in-motion');v
+    this.layout.grid.compact();
     event.preventDefault();
     event.stopPropagation();
   }
@@ -291,6 +336,12 @@ export class GridStackWidget extends Widget {
   private _evtDragOver(event: IDragEvent): void {
     this.addClass('pr-DropTarget');
     event.dropAction = 'copy';
+    const y = Math.floor(event.offsetY / this.layout.cellHeight);
+    const x = Math.floor(
+      (this.layout.columns * event.offsetX) / this.node.offsetWidth
+    );
+    console.log(`dragover x ${x} y ${y}`);
+    this.layout.grid.update(this._shadowWidget, { x, y });
     event.preventDefault();
     event.stopPropagation();
   }
@@ -307,10 +358,15 @@ export class GridStackWidget extends Widget {
     }
 
     if (event.source.activeCell instanceof Cell) {
+      this.layout.grid.removeWidget(this._shadowWidget, false, false);
+      this._shadowWidget.style.display = 'none';
       const row = Math.floor(event.offsetY / this.layout.cellHeight);
       const col = Math.floor(
         (this.layout.columns * event.offsetX) / this.node.offsetWidth
       );
+      const w = this.layout.columns;
+      const h =
+        Math.ceil(this._shadowWidget.scrollHeight / this.layout.cellHeight) + 1;
 
       const widget = (event.source.parent as NotebookPanel).content.activeCell;
       if (!widget) {
@@ -342,6 +398,8 @@ export class GridStackWidget extends Widget {
           info.hidden = false;
           info.col = col;
           info.row = row;
+          info.width = w;
+          info.height = h;
           this._model.setCellInfo(widget.model.id, info);
           const item = this._model.createCell(widget.model);
           this.layout.addGridItem(widget.model.id, item, info);
@@ -352,6 +410,8 @@ export class GridStackWidget extends Widget {
           info.hidden = false;
           info.col = col;
           info.row = row;
+          info.width = w;
+          info.height = h;
           this._model.setCellInfo(widget.model.id, info);
           const item = this._model.createCell(widget.model);
           this.layout.addGridItem(widget.model.id, item, info);
@@ -362,6 +422,8 @@ export class GridStackWidget extends Widget {
         info.hidden = false;
         info.col = col;
         info.row = row;
+        info.width = w;
+        info.height = h;
         this._model.setCellInfo(widget.model.id, info);
         this.layout.updateGridItem(widget.model.id, info);
       } else if (!info) {
@@ -372,9 +434,11 @@ export class GridStackWidget extends Widget {
       }
     }
 
+    this.layout.grid.compact();
     this.removeClass('pr-DropTarget');
   }
 
+  private _shadowWidget: HTMLDivElement;
   private _model: GridStackModel;
   public layout: GridStackLayout;
 }
