@@ -8,12 +8,13 @@ import { Token } from '@lumino/coreutils';
 
 import { VoilaGridStackPanel } from './panel';
 
+import Compact from './toolbar/compact';
+
 import Save from './toolbar/save';
 
 import Edit from './toolbar/edit';
 
 import Voila from './toolbar/voila';
-import Compact from './toolbar/compact';
 
 /**
  * A `DocumentWidget` for Voila GridStack to host the toolbar and content area.

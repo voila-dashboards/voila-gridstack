@@ -9,7 +9,7 @@ import { GridStackWidget } from '../gridstack/widget';
 import { VoilaGridStackPanel } from '../panel';
 
 /**
- * A toolbar widget to open the dashboard metadata editor dialog.
+ * A toolbar widget to compact the dashboard on the top left corner.
  */
 export default class Compact extends ReactWidget {
   constructor(panel: VoilaGridStackPanel) {

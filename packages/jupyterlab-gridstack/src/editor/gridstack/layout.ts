@@ -265,6 +265,7 @@ export class GridStackLayout extends Layout {
     MessageLoop.sendMessage(item, Widget.Msg.BeforeAttach);
     this._grid.addWidget(item.node, options);
     MessageLoop.sendMessage(item, Widget.Msg.AfterAttach);
+    this.updateGridItem(id, info);
   }
 
   /**
