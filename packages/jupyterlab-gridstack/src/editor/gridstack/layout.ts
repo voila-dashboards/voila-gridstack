@@ -6,12 +6,7 @@ import { Signal, ISignal } from '@lumino/signaling';
 
 import { Message, MessageLoop } from '@lumino/messaging';
 
-import {
-  GridStack,
-  GridHTMLElement,
-  GridStackNode,
-  GridItemHTMLElement
-} from 'gridstack';
+import { GridStack, GridStackNode, GridItemHTMLElement } from 'gridstack';
 
 import 'gridstack/dist/gridstack.css';
 
@@ -35,6 +30,11 @@ export class GridStackLayout extends Layout {
     this._margin = info.cellMargin;
     this._cellHeight = info.defaultCellHeight;
     this._columns = info.maxColumns;
+
+    this._helperMessage = document.createElement('div');
+    this._helperMessage.appendChild(document.createElement('p')).textContent =
+      'Drag and drop cells here to start building the dashboard.';
+    this._helperMessage.className = 'jp-grid-helper';
 
     this._gridHost = document.createElement('div');
     this._gridHost.className = 'grid-stack';
@@ -60,14 +60,20 @@ export class GridStackLayout extends Layout {
 
     this._grid.on(
       'change',
-      (event: Event, items: GridHTMLElement | GridStackNode[] | undefined) => {
+      (
+        event: Event,
+        items?: GridItemHTMLElement | GridStackNode | GridStackNode[]
+      ) => {
         this._onChange(event, items as GridStackNode[]);
       }
     );
 
     this._grid.on(
       'removed',
-      (event: Event, items: GridHTMLElement | GridStackNode[] | undefined) => {
+      (
+        event: Event,
+        items?: GridItemHTMLElement | GridStackNode | GridStackNode[]
+      ) => {
         if ((items as GridStackNode[]).length <= 1) {
           this._onRemoved(event, items as GridStackNode[]);
         }
@@ -97,6 +103,9 @@ export class GridStackLayout extends Layout {
   init(): void {
     super.init();
     this.parent!.node.appendChild(this._gridHost);
+    if (this._gridItems.length === 0) {
+      this._gridHost.insertAdjacentElement('beforebegin', this._helperMessage);
+    }
     // fake window resize event to resize bqplot
     window.dispatchEvent(new Event('resize'));
   }
@@ -207,6 +216,13 @@ export class GridStackLayout extends Layout {
   }
 
   /**
+   * Helper to get access to underlying GridStack object
+   */
+  get grid(): GridStack {
+    return this._grid;
+  }
+
+  /**
    * Get the list of `GridStackItem` (Lumino widgets).
    */
   get gridWidgets(): Array<GridStackItem> {
@@ -243,9 +259,14 @@ export class GridStackLayout extends Layout {
 
     this._gridItems.push(item);
 
+    if (this._gridItems.length === 1) {
+      this.parent!.node.removeChild(this._helperMessage);
+    }
+
     MessageLoop.sendMessage(item, Widget.Msg.BeforeAttach);
     this._grid.addWidget(item.node, options);
     MessageLoop.sendMessage(item, Widget.Msg.AfterAttach);
+    this.updateGridItem(id, info);
   }
 
   /**
@@ -277,6 +298,10 @@ export class GridStackLayout extends Layout {
     if (item) {
       this._gridItems = this._gridItems.filter(obj => obj.cellId !== id);
       this._grid.removeWidget(item, true, false);
+    }
+
+    if (this._gridItems.length === 0) {
+      this._gridHost.insertAdjacentElement('beforebegin', this._helperMessage);
     }
   }
 
@@ -310,4 +335,5 @@ export class GridStackLayout extends Layout {
   private _grid: GridStack;
   private _gridItems: GridStackItem[] = [];
   private _gridItemChanged = new Signal<this, GridStackNode[]>(this);
+  private _helperMessage: HTMLElement;
 }

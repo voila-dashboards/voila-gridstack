@@ -47,6 +47,13 @@ export class GridStackWidget extends Widget {
   }
 
   /**
+   * Update the layout to reclaim any empty space
+   */
+  compact(): void {
+    this.layout.grid.compact();
+  }
+
+  /**
    * Dispose of the resources held by the widget.
    */
   dispose(): void {
@@ -272,8 +279,10 @@ export class GridStackWidget extends Widget {
    * Handle the `'lm-dragenter'` event for the widget.
    */
   private _evtDragEnter(event: IDragEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
+    if (this._isDroppable(event)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
   }
 
   /**
@@ -316,6 +325,17 @@ export class GridStackWidget extends Widget {
       if (!widget) {
         return;
       }
+      const width = this.layout.columns;
+      let height = 1;
+      if (widget!.model.type === 'code') {
+        height = Math.ceil(
+          (widget!.node.scrollHeight - widget!.inputArea.node.scrollHeight) /
+            this.layout.cellHeight
+        );
+      } else {
+        height = Math.ceil(widget!.node.scrollHeight / this.layout.cellHeight);
+      }
+
       const items = this.layout.gridItems;
       const item = items?.find(
         value => value.gridstackNode?.id === widget?.model.id
@@ -342,6 +362,8 @@ export class GridStackWidget extends Widget {
           info.hidden = false;
           info.col = col;
           info.row = row;
+          info.width = width;
+          info.height = height;
           this._model.setCellInfo(widget.model.id, info);
           const item = this._model.createCell(widget.model);
           this.layout.addGridItem(widget.model.id, item, info);
@@ -352,6 +374,8 @@ export class GridStackWidget extends Widget {
           info.hidden = false;
           info.col = col;
           info.row = row;
+          info.width = width;
+          info.height = height;
           this._model.setCellInfo(widget.model.id, info);
           const item = this._model.createCell(widget.model);
           this.layout.addGridItem(widget.model.id, item, info);
@@ -373,6 +397,53 @@ export class GridStackWidget extends Widget {
     }
 
     this.removeClass('pr-DropTarget');
+  }
+
+  private _isDroppable(event: IDragEvent): boolean {
+    if (event.proposedAction !== 'copy') {
+      return false;
+    }
+
+    if (event.source.activeCell instanceof Cell) {
+      const widget = (event.source.parent as NotebookPanel).content.activeCell;
+      if (!widget) {
+        return false;
+      }
+      const items = this.layout.gridItems;
+      const item = items?.find(
+        value => value.gridstackNode?.id === widget?.model.id
+      );
+      const info = this._model.getCellInfo(widget.model.id);
+
+      if (!item && info?.hidden) {
+        if (
+          widget.model.type === 'code' &&
+          (widget.model as CodeCellModel).executionCount &&
+          (widget.model as CodeCellModel).outputs.length !== 0
+        ) {
+          const outputs = (widget.model as CodeCellModel).outputs;
+          for (let i = 0; i < outputs.length; i++) {
+            if (outputs.get(i).type === 'error') {
+              return false;
+            }
+          }
+          return true;
+        } else if (
+          widget.model.type !== 'code' &&
+          widget.model.value.text.length !== 0
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      } else if (item && info) {
+        return true;
+      } else if (!info) {
+        return false;
+      }
+    }
+
+    return false;
   }
 
   private _model: GridStackModel;

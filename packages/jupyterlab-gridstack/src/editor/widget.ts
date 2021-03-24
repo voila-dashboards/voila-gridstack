@@ -8,6 +8,8 @@ import { Token } from '@lumino/coreutils';
 
 import { VoilaGridStackPanel } from './panel';
 
+import Compact from './toolbar/compact';
+
 import Save from './toolbar/save';
 
 import Edit from './toolbar/edit';
@@ -39,6 +41,7 @@ export class VoilaGridStackWidget extends DocumentWidget<
     // Adding the buttons to the widget toolbar
     this.toolbar.addItem('save', new Save(this.content));
     this.toolbar.addItem('edit', new Edit(this.content));
+    this.toolbar.addItem('compact', new Compact(this.content));
     this.toolbar.addItem('voila', new Voila(this.context.path));
   }
 }

@@ -1157,10 +1157,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@jupyter-widgets/base@^4.0.0-alpha.2", "@jupyter-widgets/base@^4.0.0-rc.0":
-  version "4.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@jupyter-widgets/base/-/base-4.0.0-rc.0.tgz#84cc966ceb8c1241a72a7b0e37da92e04c0ce6e2"
-  integrity sha512-iqGFrHvPpMVNqyYx4X2F+1Fgu0fhsAp9kmB3yeD9V8HZRh1ksaQ7o9MZxCTOVXJClY59PJMOmiLefGHFhqDGKQ==
+"@jupyter-widgets/base@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@jupyter-widgets/base/-/base-4.0.0.tgz#6935461a3bd78df5523022e1c3d370ae24c9a454"
+  integrity sha512-lBQgLYzq6C+XjfVJTidk+rckKo/+xlTgIm1XUtACA3BUz8bgi2du2zmbYkcrplJMwGub4QWP6GnKgM5ZZRhzYg==
   dependencies:
     "@jupyterlab/services" "^6.0.0"
     "@lumino/coreutils" "^1.2.0"
@@ -1173,12 +1173,12 @@
     jquery "^3.1.1"
     lodash "^4.17.4"
 
-"@jupyter-widgets/controls@^3.0.0-rc.0":
-  version "3.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@jupyter-widgets/controls/-/controls-3.0.0-rc.0.tgz#a08b5816ae79a3e7e1cd8e38b20da72bdcbcafe4"
-  integrity sha512-VA1JXpyW4kwnuZ0n5EMYlemY1QYC1fo9iuEeR4ctxB32PV7mrLjXNdNodeqQTGAa3BhtU42FY72MHKK+RQ+6bg==
+"@jupyter-widgets/controls@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@jupyter-widgets/controls/-/controls-3.0.0.tgz#76e0c343627f0d300908e2dbdb524651f1be6315"
+  integrity sha512-VyoBxUp/8pf7IFlM4hriD/UvYpHzXFXrUAaT/NRAhMUFO4Ruh4ALcxeHdWFnqxMjiSyOnWdjzdIeQL0pYi83Gg==
   dependencies:
-    "@jupyter-widgets/base" "^4.0.0-rc.0"
+    "@jupyter-widgets/base" "^4.0.0"
     "@lumino/algorithm" "^1.1.0"
     "@lumino/domutils" "^1.1.0"
     "@lumino/messaging" "^1.2.1"
@@ -1189,14 +1189,14 @@
     jquery-ui "^1.12.1"
     underscore "^1.8.3"
 
-"@jupyter-widgets/jupyterlab-manager@^3.0.0-alpha.2":
-  version "3.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@jupyter-widgets/jupyterlab-manager/-/jupyterlab-manager-3.0.0-rc.0.tgz#582f0ca57c41dfaf4a48980dc716c4d665e50fb9"
-  integrity sha512-cih/sVN+CReoEvVGhw2njsdqEpWmlK8AbQizgtQKfw6u+i473awU0NsV4+2V22m2urFcCmyIXlqC5F6CaJOgcQ==
+"@jupyter-widgets/jupyterlab-manager@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@jupyter-widgets/jupyterlab-manager/-/jupyterlab-manager-3.0.0.tgz#fa47d03e2e72399ce3af4b86cc29aba2166d5781"
+  integrity sha512-9diAvsHHiK/kY7bT8f2cNBkMN+6a3o18EDd9GBd7ER6zsOjZCBiASPl7ZfslWz7VNYLQdiRyxcKQSYU/tiXxdQ==
   dependencies:
-    "@jupyter-widgets/base" "^4.0.0-rc.0"
-    "@jupyter-widgets/controls" "^3.0.0-rc.0"
-    "@jupyter-widgets/output" "^4.0.0-rc.0"
+    "@jupyter-widgets/base" "^4.0.0"
+    "@jupyter-widgets/controls" "^3.0.0"
+    "@jupyter-widgets/output" "^4.0.0"
     "@jupyterlab/application" "^3.0.0"
     "@jupyterlab/docregistry" "^3.0.0"
     "@jupyterlab/logconsole" "^3.0.0"
@@ -1219,12 +1219,12 @@
     jquery "^3.1.1"
     semver "^6.1.1"
 
-"@jupyter-widgets/output@^4.0.0-rc.0":
-  version "4.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@jupyter-widgets/output/-/output-4.0.0-rc.0.tgz#b4a5ce0b9e517e2344be1b6a42e2218d63d08340"
-  integrity sha512-UudG5eQ7Qper8MmjT4pDnYF9DN8LnKoicMO3BgzW/Fbxs63sGWAwCXvmh7pH5pCnDbswGVYfOQA3Xw9SakBIlw==
+"@jupyter-widgets/output@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@jupyter-widgets/output/-/output-4.0.0.tgz#1dd759b1bfb699f707cc7fd0235a0e8d0c012c52"
+  integrity sha512-v9vyGhp6IFKKTSxlaa19Z9qo50ofGfvOwqlIyek6PzCAulE+8/UTGz4sw876Yts0cbCSQIwh1zF9HCQ8XfqH2A==
   dependencies:
-    "@jupyter-widgets/base" "^4.0.0-rc.0"
+    "@jupyter-widgets/base" "^4.0.0"
 
 "@jupyterlab/application@^3.0.0":
   version "3.0.0"
@@ -6037,9 +6037,9 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   integrity sha512-WjKPNJF79dtJAVniUlGGWHYGz2jWxT6VhN/4m1NdkbZ2nOsEF+cI1Edgql5zCRhs/VsQYRvrXctxktVXZUkixw==
 
 gridstack@^3.1.3:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/gridstack/-/gridstack-3.1.3.tgz#982572b5d7b3608ab0463821a9798cab3766acaf"
-  integrity sha512-FNmuz5d1qRFXxK/tWj8PsAECyiFOX6Pnj4aaW+zd9BcTI9yY1hT7gq8y5CTBZ3vIy7VE+99jDwvb9WWchs0xlw==
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/gridstack/-/gridstack-3.3.0.tgz#e324de1acbe59b812293117783c398ca83e2d1ca"
+  integrity sha512-xF8EF/CvUYRSaq0KRHA6ROHRuAxObqAVByBLyZfOPWOJBJTbg5GvPUj8HABEBYZWKxQeFkONcZwNflZLhHEi4g==
 
 growly@^1.3.0:
   version "1.3.0"
