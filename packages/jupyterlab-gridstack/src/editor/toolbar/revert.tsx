@@ -1,15 +1,15 @@
 import { ReactWidget, ToolbarButtonComponent } from '@jupyterlab/apputils';
 
-import * as React from 'react';
+import { undoIcon } from '@jupyterlab/ui-components';
 
-import { compactIcon } from '../../icons';
+import * as React from 'react';
 
 import { VoilaGridStackPanel } from '../panel';
 
 /**
- * A toolbar widget to compact the dashboard on the top left corner.
+ * A toolbar widget to reload the dashboard positions from disk.
  */
-export default class Compact extends ReactWidget {
+export default class Revert extends ReactWidget {
   constructor(panel: VoilaGridStackPanel) {
     super();
     this._panel = panel;
@@ -17,14 +17,14 @@ export default class Compact extends ReactWidget {
 
   render(): JSX.Element {
     const onClick = (): void => {
-      this._panel.compact();
+      this._panel.revert();
     };
 
     return (
       <ToolbarButtonComponent
-        icon={compactIcon}
+        icon={undoIcon}
         onClick={onClick}
-        tooltip={'Compact the grid towards the top left corner'}
+        tooltip={'Reload Notebook from Disk'}
       />
     );
   }
