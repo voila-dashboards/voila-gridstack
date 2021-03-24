@@ -313,6 +313,7 @@ export class GridStackWidget extends Widget {
 
       // Reset the shadow widget as the enter event is triggered when coming from a child
       this._resetShadowWidget();
+      // Stop event on gridstack during drag and drop action
       this.layout.grid.el.style.pointerEvents = 'none';
       if (item) {
         // If the cell is already in the grid, so we need to move it.
@@ -324,7 +325,6 @@ export class GridStackWidget extends Widget {
           h
         });
       } else {
-        // Stop event on gridstack during drag and drop action
         this._shadowWidget = this.layout.grid.addWidget(
           '<div class="grid-stack-item grid-stack-placeholder"><div class="grid-stack-item-content placeholder-content"></div></div>',
           {
@@ -343,6 +343,7 @@ export class GridStackWidget extends Widget {
    */
   private _evtDragLeave(event: IDragEvent): void {
     this.removeClass('pr-DropTarget');
+    // Reset only if the user move out of the editor - not when entering children
     if (!this._isPointerOnWidget(event)) {
       this._resetShadowWidget();
     }
