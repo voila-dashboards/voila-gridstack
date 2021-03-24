@@ -4,8 +4,6 @@ import * as React from 'react';
 
 import { compactIcon } from '../../icons';
 
-import { GridStackWidget } from '../gridstack/widget';
-
 import { VoilaGridStackPanel } from '../panel';
 
 /**
@@ -19,7 +17,7 @@ export default class Compact extends ReactWidget {
 
   render(): JSX.Element {
     const onClick = (): void => {
-      (this._panel?.widgets[0] as GridStackWidget)?.compact();
+      this._panel.compact();
     };
 
     return (

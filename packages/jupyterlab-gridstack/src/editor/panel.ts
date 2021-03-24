@@ -120,6 +120,13 @@ export class VoilaGridStackPanel extends Panel {
   }
 
   /**
+   * Compact the dashboard on the top left corner.
+   */
+  compact(): void {
+    this._gridstackWidget?.compact();
+  }
+
+  /**
    * Open a dialog to edit the gridstack metadata information.
    */
   info(): void {
