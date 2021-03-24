@@ -3,11 +3,119 @@
 {% set gridstack_conf = jupyter_dashboards.get('views', {}).get(active_view, {}) %}
 {% set dashboard_type = gridstack_conf.get("type", "grid") %}
 
-{% if dashboard_type == 'grid' %}
-    {% include 'grid_type.html.j2' %}
-{% elif dashboard_type == 'report' %}
-    {% include 'report_type.html.j2' %}
-{% else %}
-    {% include 'grid_type.html.j2' %}
-{% endif %}
+{%- extends 'gridstack_base.html.j2' -%}
+
+{% block html_head_css %}
+{{ super() }}
+
+<style>
+.config {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.config .openConfig {
+    text-align: right;
+}
+
+.config .openConfig i {
+    margin: 4px;
+    cursor: pointer;
+}
+
+#gsConfig {
+    background-color: white;
+    font-size: 11px;
+    border: 1px solid black;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+#gsConfig .output {
+    background-color: #EDEDED;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding: 8px;
+}
+
+.config pre {
+    font-size: 11px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+</style>
+{% endblock html_head_css %}
+
+{% block html_head_js scoped %}
+  {% if dashboard_type == 'grid' %}
+    {% include "gridstack.js.j2" %}
+  {% endif %}
+  {{ super() }}
+{% endblock html_head_js %}
+
+
+{% block any_cell scoped %}
+    {% set cell_jupyter_dashboards = cell.metadata.get('extensions', {}).get('jupyter_dashboards', {}) %}
+    {% set view_data = cell_jupyter_dashboards.get('views', {}).get(active_view, {}) %}
+    {% set hidden = view_data.get('hidden') %}
+    {%- if not hidden %}
+      {% if dashboard_type == 'grid' %}
+        {% set auto_position = ('row' not in view_data or 'col' not in view_data) %}
+        {% if cell.cell_type in ['markdown', 'code'] %}
+          <div class="grid-stack-item"
+            gs-w="{{ view_data.width | default(12) }}"
+            gs-h="{{ view_data.height | default(2) }}"
+            {% if auto_position %}
+            gs-auto-position=true
+            {% else %}
+            gs-y="{{ view_data.row }}"
+            gs-x="{{ view_data.col }}"
+            {% endif %}
+            >
+            <div class="grid-stack-item-content">
+              {% if resources.gridstack.show_handles %}
+              <div class="gridhandle">
+                  <i class="fa"></i>
+              </div>
+              {% endif %}
+              {{ super() }}
+            </div>
+          </div>
+        {% endif %}
+      {% else %}
+        {{ super() }}
+      {% endif %}
+    {%- endif %}
+{% endblock any_cell %}
+
+{% block body_header %}
+  {{ super() }}
+  <section id="demo" class="voila-gridstack">
+      {% if dashboard_type == 'grid' %}
+      <div class="container">
+          <div class="grid-stack" gs-animate="yes">
+      {%- endif %}
+{% endblock body_header %}
+
+{% block body_footer %}
+      {% if dashboard_type == 'grid' %}
+          </div>
+      </div>
+      {%- endif %}
+  </section>
+
+  {{ super() }}
+  
+  {% if resources.gridstack.show_handles %}
+    <div class="config">
+        <div class="openConfig">
+            <i class="fa fa-cog"  onclick="showConfig()"></i>
+        </div>
+        <div id="gsConfig" style="display: none">
+        </div>
+    </div>
+  {% endif %}
+{% endblock body_footer %}
 
