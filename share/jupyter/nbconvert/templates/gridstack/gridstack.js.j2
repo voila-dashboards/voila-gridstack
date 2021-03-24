@@ -1,0 +1,88 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/gridstack@3.1.3/dist/gridstack-jq.js"></script>
+<script type="text/javascript">
+    // bqplot doesn't resize when resizing the tile, fix: fake a resize event
+    var resize_workaround = _.debounce(() => {
+        window.dispatchEvent(new Event('resize'));
+    }, 100)
+    $(function () {
+        GridStack.init({
+            alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+            float: true,
+            {% if resources.gridstack.show_handles %}
+            resizable: {
+                handles: 'e, se, s, sw, w'
+            },
+            {% else %}
+            resizable: {
+                handles: 'none'
+            },
+            {% endif %}
+            {% if gridstack_conf.defaultCellHeight %}
+            cellHeight: {{gridstack_conf.defaultCellHeight}},
+            {% endif %}
+            {% if gridstack_conf.maxColumns %}
+            column: {{gridstack_conf.maxColumns}},
+            {% endif %}
+            {% if gridstack_conf.cellMargin is defined %}
+            margin: {{gridstack_conf.cellMargin}},
+            {% endif %}
+            draggable: {
+                handle: '.gridhandle',
+            }
+        }).on('resizestop', function(event, elem) {
+            resize_workaround()
+        })
+        {% if resources.gridstack.show_handles %}
+        .on('change', updateConfig);
+        updateConfig();
+        {% endif %}
+
+        setCellNrs();
+    });
+</script>
+<script type="text/javascript">
+  function updateConfig() {
+    const gsConfig = document.getElementById('gsConfig');
+    const cells = []
+    const items = document.querySelectorAll('.grid-stack-item');
+
+    items.forEach(item => {
+      cells.push({
+        width: parseInt(item.getAttribute('gs-w')),
+        height: parseInt(item.getAttribute('gs-h')),
+        col: parseInt(item.getAttribute('gs-x')),
+        row: parseInt(item.getAttribute('gs-y')),
+      });
+    });
+
+    gsConfig.innerHTML = cells.map((cell, index) =>
+      `<div class="output">
+        Output ${index + 1}
+        <pre>${JSON.stringify(cell, null, 2)}</pre>
+      </div>`
+    ).join('');
+  }
+
+  let open = false;
+
+  function showConfig() {
+    open = !open
+
+    const gsConfig = document.getElementById('gsConfig');
+    gsConfig.style.display = open ? '' : 'none';
+  }
+
+  function setCellNrs() {
+    let count = 1;
+    const items = document.querySelectorAll('.cell_output');
+    items.forEach(item => {
+      item.innerHTML = 'Output ' + count;
+      count++;
+    });
+  }
+</script>
