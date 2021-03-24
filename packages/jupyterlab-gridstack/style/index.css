@@ -41,6 +41,8 @@
   display: flex;
   justify-content: flex-end;
   background-color: var(--jp-layout-color2);
+  /* JupyterLab uses move cursor although `grab` would be more appropriate */
+  cursor: move;
 }
 
 .grid-item-widget {
