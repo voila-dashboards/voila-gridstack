@@ -1,15 +1,19 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/gridstack@3.1.3/dist/gridstack-jq.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gridstack@4.0.1/dist/gridstack-h5.js"></script>
 <script type="text/javascript">
+    const debounce = (callback, wait) => {
+        let timeoutId = null;
+        return (...args) => {
+            window.clearTimeout(timeoutId);
+            timeoutId = window.setTimeout(() => {
+            callback.apply(null, args);
+            }, wait);
+        };
+    }
     // bqplot doesn't resize when resizing the tile, fix: fake a resize event
-    var resize_workaround = _.debounce(() => {
+    const resize_workaround = debounce(() => {
         window.dispatchEvent(new Event('resize'));
     }, 100)
-    $(function () {
+    window.onload = function () {
         GridStack.init({
             alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
             float: true,
@@ -43,7 +47,7 @@
         {% endif %}
 
         setCellNrs();
-    });
+    }
 </script>
 <script type="text/javascript">
   function updateConfig() {
