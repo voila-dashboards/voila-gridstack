@@ -4,6 +4,8 @@ import {
   StaticNotebook
 } from '@jupyterlab/notebook';
 
+import { Dialog, showDialog } from '@jupyterlab/apputils';
+
 import { IEditorMimeTypeService } from '@jupyterlab/codeeditor';
 
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
@@ -122,6 +124,27 @@ export class VoilaGridStackPanel extends Panel {
    */
   info(): void {
     this._gridstackWidget?.infoEditor();
+  }
+
+  /**
+   * Reload the notebook from the disk
+   */
+  revert(): void {
+    if (this._context.model.dirty) {
+      showDialog({
+        title: 'Reload Notebook from Disk',
+        body: 'Are you sure you want to reload the Notebook from the disk?',
+        buttons: [Dialog.cancelButton(), Dialog.warnButton({ label: 'Reload' })]
+      }).then(result => {
+        if (result.button.accept && !this._context.isDisposed) {
+          this._context.revert();
+        }
+      });
+    } else {
+      if (!this._context.isDisposed) {
+        this._context.revert();
+      }
+    }
   }
 
   /**
