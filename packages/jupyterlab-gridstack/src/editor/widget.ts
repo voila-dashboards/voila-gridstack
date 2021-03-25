@@ -8,9 +8,13 @@ import { Token } from '@lumino/coreutils';
 
 import { VoilaGridStackPanel } from './panel';
 
+import Compact from './toolbar/compact';
+
 import Save from './toolbar/save';
 
 import Edit from './toolbar/edit';
+
+import Revert from './toolbar/revert';
 
 import Voila from './toolbar/voila';
 
@@ -32,14 +36,15 @@ export class VoilaGridStackWidget extends DocumentWidget<
     content: VoilaGridStackPanel
   ) {
     super({ context, content });
-    this.id = '@voila-dashboards/jupyterlab-gridstack:widget';
     this.title.label = context.localPath;
     this.title.closable = true;
     this.title.iconClass = 'jp-MaterialIcon jp-VoilaIcon';
 
     // Adding the buttons to the widget toolbar
     this.toolbar.addItem('save', new Save(this.content));
+    this.toolbar.addItem('revert', new Revert(this.content));
     this.toolbar.addItem('edit', new Edit(this.content));
+    this.toolbar.addItem('compact', new Compact(this.content));
     this.toolbar.addItem('voila', new Voila(this.context.path));
   }
 }
