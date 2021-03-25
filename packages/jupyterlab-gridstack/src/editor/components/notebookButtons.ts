@@ -4,6 +4,8 @@ import { DocumentRegistry } from '@jupyterlab/docregistry';
 
 import { NotebookPanel, INotebookModel } from '@jupyterlab/notebook';
 
+import { launcherIcon } from '@jupyterlab/ui-components';
+
 import { PageConfig } from '@jupyterlab/coreutils';
 
 import { CommandRegistry } from '@lumino/commands';
@@ -11,8 +13,6 @@ import { CommandRegistry } from '@lumino/commands';
 import { IDisposable } from '@lumino/disposable';
 
 import { dashboardIcon } from '../../icons';
-
-const VOILA_ICON_CLASS = 'jp-MaterialIcon jp-VoilaIcon';
 
 /**
  * A WidgetExtension for Notebook's toolbar to open a `VoilaGridstack` widget.
@@ -32,7 +32,7 @@ export class EditorButton
    */
   createNew(panel: NotebookPanel): IDisposable {
     const button = new ToolbarButton({
-      tooltip: 'Open with Voilà GridStack',
+      tooltip: 'Open with Voilà GridStack editor',
       icon: dashboardIcon,
       onClick: () => {
         this._commands.execute('docmanager:open', {
@@ -58,13 +58,12 @@ export class VoilaButton
    */
   createNew(panel: NotebookPanel): IDisposable {
     const button = new ToolbarButton({
-      className: 'voila',
-      tooltip: 'Open with Voilà in a New Browser Tab',
-      iconClass: VOILA_ICON_CLASS,
+      tooltip: 'Open with Voilà Gridstack in a New Browser Tab',
+      icon: launcherIcon,
       onClick: () => {
         const baseUrl = PageConfig.getBaseUrl();
         const win = window.open(
-          `${baseUrl}voila/render/${panel.context.path}`,
+          `${baseUrl}voila/render/${panel.context.path}?voila-template=gridstack`,
           '_blank'
         );
         win?.focus();

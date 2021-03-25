@@ -1,5 +1,7 @@
 import { ReactWidget, ToolbarButtonComponent } from '@jupyterlab/apputils';
 
+import { launcherIcon } from '@jupyterlab/ui-components';
+
 import { PageConfig } from '@jupyterlab/coreutils';
 
 import * as React from 'react';
@@ -26,9 +28,9 @@ export default class Voila extends ReactWidget {
 
     return (
       <ToolbarButtonComponent
-        iconClass="jp-MaterialIcon jp-VoilaIcon"
+        icon={launcherIcon}
         onClick={onClick}
-        tooltip={'Open with Voilà in a New Browser Tab'}
+        tooltip={'Open with Voilà Gridstack in a New Browser Tab'}
       />
     );
   }
