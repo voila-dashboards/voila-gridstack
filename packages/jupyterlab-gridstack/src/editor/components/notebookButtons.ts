@@ -11,6 +11,7 @@ import { editIcon } from '@jupyterlab/ui-components';
 import { CommandRegistry } from '@lumino/commands';
 
 import { IDisposable } from '@lumino/disposable';
+
 import { Widget } from '@lumino/widgets';
 
 const VOILA_ICON_CLASS = 'jp-MaterialIcon jp-VoilaIcon';
