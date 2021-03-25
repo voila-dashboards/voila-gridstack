@@ -15,7 +15,7 @@ define(['jquery',
        ],
        function($, Jupyter, gridstack, voila_gridstack) {
 
-    var GRIDSTACK_STYLES = 'https://cdn.jsdelivr.net/npm/gridstack@3.1.3/dist/gridstack.min.css';
+    var GRIDSTACK_STYLES = 'https://cdn.jsdelivr.net/npm/gridstack@4.0.1/dist/gridstack.min.css';
     var grid;
 
     function load_ipython_extension() {

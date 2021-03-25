@@ -8,8 +8,6 @@ import { Message, MessageLoop } from '@lumino/messaging';
 
 import { GridStack, GridStackNode, GridItemHTMLElement } from 'gridstack';
 
-import 'gridstack/dist/gridstack.css';
-
 import 'gridstack/dist/h5/gridstack-dd-native';
 
 import { GridStackItem } from './item';
