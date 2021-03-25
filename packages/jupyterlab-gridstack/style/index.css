@@ -63,6 +63,10 @@
   overflow: visible;
 }
 
+.grid-item-widget .jp-OutputArea-output {
+  overflow: visible;
+}
+
 .grid-item-widget .jupyter-widgets {
   overflow: visible;
 }
