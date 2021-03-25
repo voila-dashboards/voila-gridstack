@@ -10,6 +10,8 @@ import { CommandRegistry } from '@lumino/commands';
 
 import { IDisposable } from '@lumino/disposable';
 
+import { Widget } from '@lumino/widgets';
+
 import { dashboardIcon } from '../../icons';
 
 const VOILA_ICON_CLASS = 'jp-MaterialIcon jp-VoilaIcon';
@@ -35,10 +37,23 @@ export class EditorButton
       tooltip: 'Open with Voilà GridStack',
       icon: dashboardIcon,
       onClick: () => {
-        this._commands.execute('docmanager:open', {
-          path: panel.context.path,
-          factory: 'Voila GridStack'
-        });
+        this._commands
+          .execute('docmanager:open', {
+            path: panel.context.path,
+            factory: 'Voila GridStack',
+            options: {
+              mode: 'split-right',
+              ref: panel.id
+            }
+          })
+          .then(widget => {
+            if (widget instanceof Widget) {
+              // Remove the editor if the associated notebook is closed.
+              panel.content.disposed.connect(() => {
+                widget.dispose();
+              });
+            }
+          });
       }
     });
     panel.toolbar.insertAfter('voila', 'jupyterlab-gridstack', button);
