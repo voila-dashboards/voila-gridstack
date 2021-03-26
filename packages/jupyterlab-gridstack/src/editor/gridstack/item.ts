@@ -4,7 +4,12 @@ import { Widget } from '@lumino/widgets';
  * A Lumino widget for gridstack items.
  */
 export class GridStackItem extends Widget {
-  constructor(cellId: string, item: Widget, close: HTMLElement) {
+  constructor(
+    cellId: string,
+    item: Widget,
+    close: HTMLElement,
+    pin: HTMLElement
+  ) {
     super();
     this.removeClass('lm-Widget');
     this.removeClass('p-Widget');
@@ -23,6 +28,7 @@ export class GridStackItem extends Widget {
     this._item = item;
     this._cellId = cellId;
 
+    toolbar.appendChild(pin);
     toolbar.appendChild(close);
     content.appendChild(toolbar);
     content.appendChild(cell);

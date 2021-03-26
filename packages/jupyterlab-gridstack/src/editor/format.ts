@@ -80,6 +80,10 @@ export type DashboardCellView = {
    * Logical height.
    */
   height: number;
+  /**
+   * Lock item.
+   */
+  locked?: boolean;
 };
 
 /**

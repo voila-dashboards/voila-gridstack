@@ -20,6 +20,8 @@ import { GridStackModel } from './model';
 
 import { DashboardMetadataEditor } from '../components/metadata';
 
+import { DashboardCellView } from '../format';
+
 interface IDroppable {
   /**
    * Whether the content can be dropped
@@ -53,6 +55,7 @@ export class GridStackWidget extends Widget {
     this._model.ready.connect(() => {
       this._initGridItems();
       this._model.cellRemoved.connect(this._removeCell, this);
+      this._model.cellPinned.connect(this._pinCell, this);
       this._model.contentChanged.connect(this._updateGridItems, this);
     });
   }
@@ -191,8 +194,22 @@ export class GridStackWidget extends Widget {
    * @param id - The Cell id.
    */
   private _removeCell(model: GridStackModel, id: string): void {
-    this._model.hideCell(id);
+    //this._model.hideCell(id);
     this.layout.removeGridItem(id);
+  }
+
+  /**
+   * A handler invoked when a grid item has to be removed.
+   *
+   * @param model - The `GridstackModel` that sends the signal.
+   * @param id - The Cell id.
+   */
+  private _pinCell(model: GridStackModel, id: string): void {
+    //this._model.hideCell(id);
+    //this.layout.removeGridItem(id);
+    const info = this._model.getCellInfo(id);
+    info!.locked = info?.locked ? !info.locked : true;
+    this.layout.updateGridItem(id, info as DashboardCellView);
   }
 
   /**

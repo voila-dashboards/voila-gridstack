@@ -28,7 +28,7 @@ import { Widget } from '@lumino/widgets';
 
 import { Signal, ISignal } from '@lumino/signaling';
 
-import { deleteIcon } from '../icons';
+import { deleteIcon, pinIcon } from '../icons';
 
 import { GridStackItem } from './item';
 
@@ -60,6 +60,7 @@ export class GridStackModel {
 
     this._ready = new Signal<this, null>(this);
     this._cellRemoved = new Signal<this, string>(this);
+    this._cellPinned = new Signal<this, string>(this);
     this._stateChanged = new Signal<this, null>(this);
     this._contentChanged = new Signal<this, null>(this);
 
@@ -94,6 +95,13 @@ export class GridStackModel {
    */
   get cellRemoved(): ISignal<this, string> {
     return this._cellRemoved;
+  }
+
+  /**
+   * A signal emitted when a cell pinned.
+   */
+  get cellPinned(): ISignal<this, string> {
+    return this._cellPinned;
   }
 
   /**
@@ -305,16 +313,23 @@ export class GridStackModel {
     const close = document.createElement('div');
     close.className = 'trash-can';
     deleteIcon.element({ container: close, height: '16px', width: '16px' });
+    const pin = document.createElement('div');
+    pin.className = 'pin';
+    pinIcon.element({ container: pin, height: '16px', width: '16px' });
 
     close.onclick = (): void => {
-      const data = cellModel.metadata.get('extensions') as Record<string, any>;
-      data.jupyter_dashboards.views[VIEW].hidden = true;
-      cellModel.metadata.set('extensions', data);
-      this._context.model.dirty = true;
+      //const data = cellModel.metadata.get('extensions') as Record<string, any>;
+      //data.jupyter_dashboards.views[VIEW].hidden = true;
+      //cellModel.metadata.set('extensions', data);
+      //this._context.model.dirty = true;
+      this.hideCell(cellModel.id);
       this._cellRemoved.emit(cellModel.id);
     };
+    pin.onclick = (): void => {
+      this._cellPinned.emit(cellModel.id);
+    };
 
-    return new GridStackItem(cellModel.id, item, close);
+    return new GridStackItem(cellModel.id, item, close, pin);
   }
 
   /**
@@ -455,6 +470,7 @@ export class GridStackModel {
 
   private _ready: Signal<this, null>;
   private _cellRemoved: Signal<this, string>;
+  private _cellPinned: Signal<this, string>;
   private _stateChanged: Signal<this, null>;
   private _contentChanged: Signal<this, null>;
 }
