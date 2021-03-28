@@ -194,7 +194,6 @@ export class GridStackWidget extends Widget {
    * @param id - The Cell id.
    */
   private _removeCell(model: GridStackModel, id: string): void {
-    //this._model.hideCell(id);
     this.layout.removeGridItem(id);
   }
 
@@ -205,10 +204,8 @@ export class GridStackWidget extends Widget {
    * @param id - The Cell id.
    */
   private _pinCell(model: GridStackModel, evt: PinSignal): void {
-    //this._model.hideCell(id);
-    //this.layout.removeGridItem(id);
     const info = this._model.getCellInfo(evt.cellId);
-    info!.locked = info?.locked ? evt.pinned : true;
+    info!.locked = evt.pinned;
     this.layout.updateGridItem(evt.cellId, info as DashboardCellView);
   }
 
@@ -311,7 +308,8 @@ export class GridStackWidget extends Widget {
         col: el.x ?? 0,
         row: el.y ?? 0,
         width: el.w ?? 2,
-        height: el.h ?? 2
+        height: el.h ?? 2,
+        locked: el.locked ?? false
       });
     });
   }
@@ -481,6 +479,7 @@ export class GridStackWidget extends Widget {
           info.row = row;
           info.width = width;
           info.height = height;
+          info.locked = info.locked ? true : false;
           this._model.setCellInfo(widget.model.id, info);
           const item = this._model.createCell(widget.model);
           this.layout.addGridItem(widget.model.id, item, info);
@@ -493,6 +492,7 @@ export class GridStackWidget extends Widget {
           info.row = row;
           info.width = width;
           info.height = height;
+          info.locked = info.locked ? true : false;
           this._model.setCellInfo(widget.model.id, info);
           const item = this._model.createCell(widget.model);
           this.layout.addGridItem(widget.model.id, item, info);
@@ -507,6 +507,7 @@ export class GridStackWidget extends Widget {
         info.col = col;
         info.row = row;
         info.width = Math.min(width, info.width);
+        info.locked = info.locked ? true : false;
         this._model.setCellInfo(widget.model.id, info);
         this.layout.updateGridItem(widget.model.id, info);
       } else if (!info) {

@@ -248,7 +248,7 @@ export class GridStackLayout extends Layout {
       y: info.row,
       width: info.width,
       height: info.height,
-      locked: info.locked ? info.locked : false,
+      locked: info.locked,
       autoPosition: false
     };
 
@@ -282,7 +282,7 @@ export class GridStackLayout extends Layout {
       y: info.row,
       w: info.width,
       h: info.height,
-      locked: info.locked ? info.locked : false
+      locked: info.locked
     });
   }
 

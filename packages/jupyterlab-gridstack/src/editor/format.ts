@@ -83,7 +83,7 @@ export type DashboardCellView = {
   /**
    * Lock item.
    */
-  locked?: boolean;
+  locked: boolean;
 };
 
 /**
@@ -134,7 +134,8 @@ export function validateDashboardCellView(
     'row' in view &&
     'col' in view &&
     'width' in view &&
-    'height' in view
+    'height' in view &&
+    'locked' in view
   ) {
     return true;
   } else {

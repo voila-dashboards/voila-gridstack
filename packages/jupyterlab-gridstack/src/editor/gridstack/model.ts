@@ -254,6 +254,24 @@ export class GridStackModel {
   }
 
   /**
+   * Lock/unlock a cell.
+   *
+   * @param id - Cell id.
+   */
+  public lockCell(id: string, lock: boolean): void {
+    for (let i = 0; i < this._context.model.cells?.length; i++) {
+      const cell = this._context.model.cells.get(i);
+
+      if (cell.id === id) {
+        const data = cell.metadata.get('extensions') as Record<string, any>;
+        data.jupyter_dashboards.views[VIEW].locked = lock;
+        cell.metadata.set('extensions', data);
+        this._context.model.dirty = true;
+      }
+    }
+  }
+
+  /**
    * Create a new cell widget from a `CellModel`.
    *
    * @param cellModel - `ICellModel`.
@@ -318,12 +336,12 @@ export class GridStackModel {
         this._cellRemoved.emit(cellModel.id);
       },
       pinFn: (): void => {
+        this.lockCell(cellModel.id, true);
         this._cellPinned.emit({ cellId: cellModel.id, pinned: true });
-        console.debug('pinned', cellModel.id);
       },
       unPinFn: (): void => {
+        this.lockCell(cellModel.id, false);
         this._cellPinned.emit({ cellId: cellModel.id, pinned: false });
-        console.debug('unpinned', cellModel.id);
       }
     };
 
@@ -427,7 +445,8 @@ export class GridStackModel {
               row: null,
               col: null,
               width: 2,
-              height: 2
+              height: 2,
+              locked: false
             }
           }
         }
@@ -442,7 +461,8 @@ export class GridStackModel {
             row: null,
             col: null,
             width: 2,
-            height: 2
+            height: 2,
+            locked: false
           }
         }
       };
@@ -455,7 +475,8 @@ export class GridStackModel {
         row: null,
         col: null,
         width: 2,
-        height: 2
+        height: 2,
+        locked: false
       };
       cell.metadata.set('extensions', data);
     }
