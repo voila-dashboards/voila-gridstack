@@ -28,15 +28,14 @@ import { Widget } from '@lumino/widgets';
 
 import { Signal, ISignal } from '@lumino/signaling';
 
-import { deleteIcon, pinIcon } from '../icons';
-
 import { GridStackItem } from './item';
 
 import {
   DashboardView,
   DashboardCellView,
   validateDashboardView,
-  validateDashboardCellView
+  validateDashboardCellView,
+  PinSignal
 } from '../format';
 
 export const VIEW = 'grid_default';
@@ -60,7 +59,7 @@ export class GridStackModel {
 
     this._ready = new Signal<this, null>(this);
     this._cellRemoved = new Signal<this, string>(this);
-    this._cellPinned = new Signal<this, string>(this);
+    this._cellPinned = new Signal<this, PinSignal>(this);
     this._stateChanged = new Signal<this, null>(this);
     this._contentChanged = new Signal<this, null>(this);
 
@@ -100,7 +99,7 @@ export class GridStackModel {
   /**
    * A signal emitted when a cell pinned.
    */
-  get cellPinned(): ISignal<this, string> {
+  get cellPinned(): ISignal<this, PinSignal> {
     return this._cellPinned;
   }
 
@@ -310,26 +309,25 @@ export class GridStackModel {
       }
     }
 
-    const close = document.createElement('div');
-    close.className = 'trash-can';
-    deleteIcon.element({ container: close, height: '16px', width: '16px' });
-    const pin = document.createElement('div');
-    pin.className = 'pin';
-    pinIcon.element({ container: pin, height: '16px', width: '16px' });
-
-    close.onclick = (): void => {
-      //const data = cellModel.metadata.get('extensions') as Record<string, any>;
-      //data.jupyter_dashboards.views[VIEW].hidden = true;
-      //cellModel.metadata.set('extensions', data);
-      //this._context.model.dirty = true;
-      this.hideCell(cellModel.id);
-      this._cellRemoved.emit(cellModel.id);
+    const options = {
+      cellId: cellModel.id,
+      cellWidget: item,
+      isPinned: false,
+      closeFn: (): void => {
+        this.hideCell(cellModel.id);
+        this._cellRemoved.emit(cellModel.id);
+      },
+      pinFn: (): void => {
+        this._cellPinned.emit({ cellId: cellModel.id, pinned: true });
+        console.debug('pinned', cellModel.id);
+      },
+      unPinFn: (): void => {
+        this._cellPinned.emit({ cellId: cellModel.id, pinned: false });
+        console.debug('unpinned', cellModel.id);
+      }
     };
-    pin.onclick = (): void => {
-      this._cellPinned.emit(cellModel.id);
-    };
 
-    return new GridStackItem(cellModel.id, item, close, pin);
+    return new GridStackItem(options);
   }
 
   /**
@@ -470,7 +468,7 @@ export class GridStackModel {
 
   private _ready: Signal<this, null>;
   private _cellRemoved: Signal<this, string>;
-  private _cellPinned: Signal<this, string>;
+  private _cellPinned: Signal<this, PinSignal>;
   private _stateChanged: Signal<this, null>;
   private _contentChanged: Signal<this, null>;
 }

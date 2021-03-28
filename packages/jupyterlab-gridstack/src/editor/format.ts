@@ -87,6 +87,20 @@ export type DashboardCellView = {
 };
 
 /**
+ * Signal argumment when GridstackItem is pinned/unpinned.
+ */
+export type PinSignal = {
+  /**
+   * Cell id.
+   */
+  cellId: string;
+  /**
+   * Action.
+   */
+  pinned: boolean;
+};
+
+/**
  * Validate that the DashboardView Notebook's metadata is correct.
  *
  * @param view - The json schema.
