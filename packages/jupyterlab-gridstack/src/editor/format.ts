@@ -87,9 +87,9 @@ export type DashboardCellView = {
 };
 
 /**
- * Signal argumment when GridstackItem is pinned/unpinned.
+ * Signal argument to lock/unlock a GridstackItem.
  */
-export type PinSignal = {
+export type LockSignal = {
   /**
    * Cell id.
    */
@@ -97,7 +97,7 @@ export type PinSignal = {
   /**
    * Action.
    */
-  pinned: boolean;
+  lock: boolean;
 };
 
 /**

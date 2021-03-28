@@ -35,7 +35,7 @@ import {
   DashboardCellView,
   validateDashboardView,
   validateDashboardCellView,
-  PinSignal
+  LockSignal
 } from '../format';
 
 export const VIEW = 'grid_default';
@@ -59,7 +59,7 @@ export class GridStackModel {
 
     this._ready = new Signal<this, null>(this);
     this._cellRemoved = new Signal<this, string>(this);
-    this._cellPinned = new Signal<this, PinSignal>(this);
+    this._cellPinned = new Signal<this, LockSignal>(this);
     this._stateChanged = new Signal<this, null>(this);
     this._contentChanged = new Signal<this, null>(this);
 
@@ -99,7 +99,7 @@ export class GridStackModel {
   /**
    * A signal emitted when a cell pinned.
    */
-  get cellPinned(): ISignal<this, PinSignal> {
+  get cellPinned(): ISignal<this, LockSignal> {
     return this._cellPinned;
   }
 
@@ -330,18 +330,18 @@ export class GridStackModel {
     const options = {
       cellId: cellModel.id,
       cellWidget: item,
-      isPinned: false,
+      isLocked: false,
       closeFn: (): void => {
         this.hideCell(cellModel.id);
         this._cellRemoved.emit(cellModel.id);
       },
-      pinFn: (): void => {
+      lockFn: (): void => {
         this.lockCell(cellModel.id, true);
-        this._cellPinned.emit({ cellId: cellModel.id, pinned: true });
+        this._cellPinned.emit({ cellId: cellModel.id, lock: true });
       },
-      unPinFn: (): void => {
+      unlockFn: (): void => {
         this.lockCell(cellModel.id, false);
-        this._cellPinned.emit({ cellId: cellModel.id, pinned: false });
+        this._cellPinned.emit({ cellId: cellModel.id, lock: false });
       }
     };
 
@@ -489,7 +489,7 @@ export class GridStackModel {
 
   private _ready: Signal<this, null>;
   private _cellRemoved: Signal<this, string>;
-  private _cellPinned: Signal<this, PinSignal>;
+  private _cellPinned: Signal<this, LockSignal>;
   private _stateChanged: Signal<this, null>;
   private _contentChanged: Signal<this, null>;
 }

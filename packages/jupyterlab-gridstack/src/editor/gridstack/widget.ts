@@ -20,7 +20,7 @@ import { GridStackModel } from './model';
 
 import { DashboardMetadataEditor } from '../components/metadata';
 
-import { DashboardCellView, PinSignal } from '../format';
+import { DashboardCellView, LockSignal } from '../format';
 
 interface IDroppable {
   /**
@@ -55,7 +55,7 @@ export class GridStackWidget extends Widget {
     this._model.ready.connect(() => {
       this._initGridItems();
       this._model.cellRemoved.connect(this._removeCell, this);
-      this._model.cellPinned.connect(this._pinCell, this);
+      this._model.cellPinned.connect(this._lockCell, this);
       this._model.contentChanged.connect(this._updateGridItems, this);
     });
   }
@@ -203,9 +203,9 @@ export class GridStackWidget extends Widget {
    * @param model - The `GridstackModel` that sends the signal.
    * @param id - The Cell id.
    */
-  private _pinCell(model: GridStackModel, evt: PinSignal): void {
+  private _lockCell(model: GridStackModel, evt: LockSignal): void {
     const info = this._model.getCellInfo(evt.cellId);
-    info!.locked = evt.pinned;
+    info!.locked = evt.lock;
     this.layout.updateGridItem(evt.cellId, info as DashboardCellView);
   }
 

@@ -20,10 +20,10 @@ export class GridStackItem extends Widget {
     this._item = options.cellWidget;
 
     this._toolbar = new GridStackItemToolbar(
-      options.isPinned,
+      options.isLocked,
       options.closeFn,
-      options.pinFn,
-      options.unPinFn
+      options.lockFn,
+      options.unlockFn
     );
 
     this._cell = document.createElement('div');
@@ -56,36 +56,36 @@ export class GridStackItem extends Widget {
  * A React widget for items toolbar.
  */
 class GridStackItemToolbar extends ReactWidget {
-  constructor(isPinned: boolean, closeFn: any, pinFn: any, unPinFn?: any) {
+  constructor(_isLocked: boolean, closeFn: any, lockFn: any, unlockFn?: any) {
     super();
     this.addClass('grid-item-toolbar');
-    this._isPinned = isPinned;
+    this._isLocked = _isLocked;
     this._closeFn = closeFn;
-    this._pinFn = pinFn;
-    this._unPinFn = unPinFn;
+    this._lockFn = lockFn;
+    this._unlockFn = unlockFn;
   }
 
   render(): JSX.Element {
-    const pin = () => {
-      this._pinFn();
-      this._isPinned = true;
+    const lock = () => {
+      this._lockFn();
+      this._isLocked = true;
       this.update();
     };
 
-    const unPin = () => {
-      this._unPinFn();
-      this._isPinned = false;
+    const unlock = () => {
+      this._unlockFn();
+      this._isLocked = false;
       this.update();
     };
 
     return (
       <>
-        {this._isPinned ? (
-          <div className="pin" onClick={unPin}>
+        {this._isLocked ? (
+          <div className="pin" onClick={unlock}>
             <unPinIcon.react height="16px" width="16px" />
           </div>
         ) : (
-          <div className="pin" onClick={pin}>
+          <div className="pin" onClick={lock}>
             <pinIcon.react height="16px" width="16px" />
           </div>
         )}
@@ -97,10 +97,10 @@ class GridStackItemToolbar extends ReactWidget {
     );
   }
 
-  private _isPinned: boolean;
+  private _isLocked: boolean;
   private _closeFn: () => any;
-  private _pinFn: () => any;
-  private _unPinFn: () => any;
+  private _lockFn: () => any;
+  private _unlockFn: () => any;
 }
 
 /**
@@ -122,18 +122,18 @@ export namespace GridStackItem {
     /**
      * If the cell is pinned or not.
      */
-    isPinned: boolean;
+    isLocked: boolean;
     /**
      * Close callback.
      */
     closeFn: () => any;
     /**
-     * Pin callback.
+     * lock callback.
      */
-    pinFn: () => any;
+    lockFn: () => any;
     /**
-     * Unpin callback.
+     * Unlock callback.
      */
-    unPinFn: () => any;
+    unlockFn: () => any;
   }
 }
