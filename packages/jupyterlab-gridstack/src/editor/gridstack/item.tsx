@@ -89,7 +89,7 @@ class GridStackItemToolbar extends ReactWidget {
             <pinIcon.react height="16px" width="16px" />
           </div>
         )}
-
+        <div className="grid-item-toolbar-spacer" />
         <div className="trash-can" onClick={this._closeFn}>
           <deleteIcon.react height="16px" width="16px" />
         </div>

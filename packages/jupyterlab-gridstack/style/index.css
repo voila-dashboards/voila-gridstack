@@ -62,6 +62,11 @@
   cursor: move;
 }
 
+.grid-item-toolbar-spacer {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
 .grid-item-widget {
   margin-bottom: 4px;
 }
