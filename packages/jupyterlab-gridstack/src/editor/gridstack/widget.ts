@@ -35,7 +35,6 @@ export class GridStackWidget extends Widget {
     this.removeClass('p-Widget');
     this.addClass('grid-editor');
     this._model = model;
-    this._shadowWidget = null;
 
     this.layout = new GridStackLayout(this._model.info);
     this.layout.gridItemChanged.connect(this._onGridItemChange, this);
@@ -58,6 +57,13 @@ export class GridStackWidget extends Widget {
    * Dispose of the resources held by the widget.
    */
   dispose(): void {
+    if (this.isDisposed) {
+      return;
+    }
+
+    if (this._shadowWidget) {
+      this._resetShadowWidget();
+    }
     Signal.clearData(this);
     super.dispose();
   }
@@ -78,7 +84,7 @@ export class GridStackWidget extends Widget {
   }
 
   /**
-   * Handle `befor-detach` messages sent to the widget.
+   * Handle `before-detach` messages sent to the widget.
    *
    * ### Note
    * Remove event listeners for the drag and drop event.
@@ -89,6 +95,7 @@ export class GridStackWidget extends Widget {
     this.node.removeEventListener('lm-dragleave', this, true);
     this.node.removeEventListener('lm-dragover', this, true);
     this.node.removeEventListener('lm-drop', this, true);
+    this.node.removeEventListener('lm-dragend', this, true);
   }
 
   /**
@@ -285,7 +292,12 @@ export class GridStackWidget extends Widget {
    * Handle the `'lm-dragenter'` event for the widget.
    */
   private _evtDragEnter(event: IDragEvent): void {
-    if (this._isDroppable(event)) {
+    const reason = this._isNotDroppable(event);
+    if (reason) {
+      if (typeof reason === 'string') {
+        this._setErrorMessage(reason);
+      }
+    } else {
       event.preventDefault();
       event.stopPropagation();
 
@@ -431,7 +443,7 @@ export class GridStackWidget extends Widget {
             if (outputs.get(i).type === 'error') {
               showErrorMessage(
                 'Cell error',
-                'Is not possible to add cells with execution errors'
+                'It is not possible to add cells with execution errors.'
               );
               return;
             }
@@ -458,7 +470,10 @@ export class GridStackWidget extends Widget {
           const item = this._model.createCell(widget.model);
           this.layout.addGridItem(widget.model.id, item, info);
         } else {
-          showErrorMessage('Empty cell', 'Is not possible to add empty cells.');
+          showErrorMessage(
+            'Empty cell',
+            'It is not possible to add empty cells.'
+          );
         }
       } else if (item && info) {
         info.hidden = false;
@@ -470,7 +485,7 @@ export class GridStackWidget extends Widget {
       } else if (!info) {
         showErrorMessage(
           'Wrong notebook',
-          'Is not possible to add cells from another notebook.'
+          'It is not possible to add cells from another notebook.'
         );
       }
     }
@@ -482,17 +497,17 @@ export class GridStackWidget extends Widget {
    * Whether the dragged element is droppable or not
    *
    * @param event Event object
-   * @returns Whether the element can be dropped
+   * @returns Whether the element can be dropped or the reason why it can't
    */
-  private _isDroppable(event: IDragEvent): boolean {
+  private _isNotDroppable(event: IDragEvent): boolean | string {
     if (event.proposedAction !== 'copy') {
-      return false;
+      return true;
     }
 
     if (event.source.activeCell instanceof Cell) {
       const widget = (event.source.parent as NotebookPanel).content.activeCell;
       if (!widget) {
-        return false;
+        return true;
       }
       const items = this.layout.gridItems;
       const item = items?.find(
@@ -509,26 +524,26 @@ export class GridStackWidget extends Widget {
           const outputs = (widget.model as CodeCellModel).outputs;
           for (let i = 0; i < outputs.length; i++) {
             if (outputs.get(i).type === 'error') {
-              return false;
+              return 'GridStack Error: cells with execution errors.';
             }
           }
-          return true;
+          return false;
         } else if (
           widget.model.type !== 'code' &&
           widget.model.value.text.length !== 0
         ) {
-          return true;
-        } else {
           return false;
+        } else {
+          return 'GridStack Error: empty cells.';
         }
       } else if (item && info) {
-        return true;
-      } else if (!info) {
         return false;
+      } else if (!info) {
+        return 'GridStack Error: cells from another notebook.';
       }
     }
 
-    return false;
+    return true;
   }
 
   /**
@@ -568,7 +583,21 @@ export class GridStackWidget extends Widget {
     }
   }
 
-  private _shadowWidget: GridItemHTMLElement | null;
+  private _setErrorMessage(reason: string) {
+    // Find the drag-and-drop floating image from notebook cells
+    const floatingElement = document.body.querySelector('.lm-mod-drag-image');
+    if (floatingElement) {
+      let error = floatingElement.querySelector('.grid-stack-error');
+      if (!error) {
+        error = floatingElement.appendChild(document.createElement('div'));
+        error.className = 'grid-stack-error';
+      }
+      error.innerHTML = `<p>${reason}</p>`;
+    }
+  }
+
+  layout: GridStackLayout;
+
   private _model: GridStackModel;
-  public layout: GridStackLayout;
+  private _shadowWidget: GridItemHTMLElement | null = null;
 }
