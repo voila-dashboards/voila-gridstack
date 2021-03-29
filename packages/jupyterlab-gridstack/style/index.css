@@ -33,21 +33,42 @@
   background-color: var(--jp-layout-color1);
 }
 
+.grid-stack .grid-stack-item .grid-stack-item-content {
+  padding: 4px;
+  overflow: auto;
+  border-radius: 5px;
+}
+
 .grid-item-toolbar {
   position: sticky;
   top: 0px;
+  left: 0px;
+  right: 0px;
   z-index: 1;
   height: fit-content;
-  margin: 2px;
+  margin-bottom: 4px;
   display: flex;
   justify-content: flex-end;
   background-color: var(--jp-layout-color2);
+  border-radius: 5px;
   /* JupyterLab uses move cursor although `grab` would be more appropriate */
   cursor: move;
 }
 
 .grid-item-widget {
-  margin: 2px;
+  margin-bottom: 4px;
+}
+
+.grid-item-widget .jp-OutputArea {
+  overflow: visible;
+}
+
+.grid-item-widget .jp-OutputArea-output {
+  overflow: visible;
+}
+
+.grid-item-widget .jupyter-widgets {
+  overflow: visible;
 }
 
 .trash-can {
