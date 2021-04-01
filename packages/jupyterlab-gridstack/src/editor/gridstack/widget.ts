@@ -20,6 +20,17 @@ import { GridStackModel } from './model';
 
 import { DashboardMetadataEditor } from '../components/metadata';
 
+interface IDroppable {
+  /**
+   * Whether the content can be dropped
+   */
+  droppable: boolean;
+  /**
+   * Reason why the content cannot be dropped
+   */
+  reason?: string;
+}
+
 /**
  * A gridstack widget to host the visible Notebook's Cells.
  */
@@ -292,12 +303,8 @@ export class GridStackWidget extends Widget {
    * Handle the `'lm-dragenter'` event for the widget.
    */
   private _evtDragEnter(event: IDragEvent): void {
-    const reason = this._isNotDroppable(event);
-    if (reason) {
-      if (typeof reason === 'string') {
-        this._setErrorMessage(reason);
-      }
-    } else {
+    const test = this._isDroppable(event);
+    if (test.droppable) {
       event.preventDefault();
       event.stopPropagation();
 
@@ -306,7 +313,6 @@ export class GridStackWidget extends Widget {
       const item = this.layout.gridItems.find(
         value => value.gridstackNode?.id === widget!.model.id
       );
-      // const info = this._model.getCellInfo(widget!.model.id);
 
       const y = Math.floor(event.offsetY / this.layout.cellHeight);
       const x = Math.floor(
@@ -346,6 +352,10 @@ export class GridStackWidget extends Widget {
             h
           }
         );
+      }
+    } else {
+      if (test.reason) {
+        this._setErrorMessage(test.reason);
       }
     }
   }
@@ -497,17 +507,17 @@ export class GridStackWidget extends Widget {
    * Whether the dragged element is droppable or not
    *
    * @param event Event object
-   * @returns Whether the element can be dropped or the reason why it can't
+   * @returns Whether the element can be dropped and the reason why it can't
    */
-  private _isNotDroppable(event: IDragEvent): boolean | string {
+  private _isDroppable(event: IDragEvent): IDroppable {
     if (event.proposedAction !== 'copy') {
-      return true;
+      return { droppable: false };
     }
 
     if (event.source.activeCell instanceof Cell) {
       const widget = (event.source.parent as NotebookPanel).content.activeCell;
       if (!widget) {
-        return true;
+        return { droppable: false };
       }
       const items = this.layout.gridItems;
       const item = items?.find(
@@ -524,26 +534,32 @@ export class GridStackWidget extends Widget {
           const outputs = (widget.model as CodeCellModel).outputs;
           for (let i = 0; i < outputs.length; i++) {
             if (outputs.get(i).type === 'error') {
-              return 'GridStack Error: cells with execution errors.';
+              return {
+                droppable: false,
+                reason: 'GridStack Error: cells with execution errors.'
+              };
             }
           }
-          return false;
+          return { droppable: true };
         } else if (
           widget.model.type !== 'code' &&
           widget.model.value.text.length !== 0
         ) {
-          return false;
+          return { droppable: true };
         } else {
-          return 'GridStack Error: empty cells.';
+          return { droppable: false, reason: 'GridStack Error: empty cells.' };
         }
       } else if (item && info) {
-        return false;
+        return { droppable: true };
       } else if (!info) {
-        return 'GridStack Error: cells from another notebook.';
+        return {
+          droppable: false,
+          reason: 'GridStack Error: cells from another notebook.'
+        };
       }
     }
 
-    return true;
+    return { droppable: false };
   }
 
   /**
