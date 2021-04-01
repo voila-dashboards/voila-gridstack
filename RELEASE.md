@@ -19,12 +19,30 @@ git clean -fdx
 
 Make sure the `dist/` folder is empty.
 
-1. Update [setup.py](./setup.py) with the new version number
-2. `python setup.py sdist bdist_wheel`
-3. Double check the size of the bundles in the `dist/` folder
-4. Run the tests
-5. `export TWINE_USERNAME=mypypi_username`
-6. `twine upload dist/*`
+1. If the JupyterLab extension has changed, make sure to bump the version number in `./packages/jupyterlab-gridstack/package.json`
+2. Update [setup.py](./setup.py) and [binder/environment.yml](./binder/environment.yml) with the new version number
+3. `python setup.py sdist bdist_wheel`
+4. Double check the size of the bundles in the `dist/` folder
+5. Run the tests
+6. Make sure the JupyterLab extension is correctly bundled in source distribution
+7. `export TWINE_USERNAME=mypypi_username`
+8. `twine upload dist/*`
+
+# Making a new release of @voila-dashboards/jupyterlab-gridstack
+
+The prebuilt extension is already packaged in the main Python package.
+
+However we also publish it to `npm` to:
+
+- let other third-party extensions depend on `@voila-dashboards/jupyterlab-gridstack`
+- let users install from source if they would like to
+
+## Releasing on npm
+
+1. The version number in [packages/jupyterlab-gridstack/package.json](./packages/jupyterlab-gridstack/package.json) should have been updated during the release step of the Python package (see above)
+2. `cd ./packages/jupyterlab-preview`
+3. `npm login`
+4. `npm publish`
 
 ## Releasing on conda-forge
 
@@ -44,7 +62,7 @@ Commit the changes, create a new release tag, and update the `stable` branch (fo
 
 ```bash
 git checkout master
-git add setup.py
+git add setup.py binder/environment.yml packages/jupyterlab-gridstack/package.json
 git commit -m "Release x.y.z"
 git tag x.y.z
 git checkout stable
