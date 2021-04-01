@@ -1,6 +1,13 @@
 @import url('~gridstack/dist/gridstack.css');
 @import 'variables.css';
 
+.grid-stack-error {
+  padding: 10px;
+  color: var(--jp-error-color0);
+  background-color: var(--jp-error-color3);
+  border: var(--jp-border-width) solid var(--jp-error-color2);
+}
+
 .grid-editor {
   width: 100%;
   height: 100%;

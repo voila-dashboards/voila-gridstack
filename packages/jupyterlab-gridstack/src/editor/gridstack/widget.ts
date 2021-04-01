@@ -20,6 +20,17 @@ import { GridStackModel } from './model';
 
 import { DashboardMetadataEditor } from '../components/metadata';
 
+interface IDroppable {
+  /**
+   * Whether the content can be dropped
+   */
+  droppable: boolean;
+  /**
+   * Reason why the content cannot be dropped
+   */
+  reason?: string;
+}
+
 /**
  * A gridstack widget to host the visible Notebook's Cells.
  */
@@ -35,7 +46,6 @@ export class GridStackWidget extends Widget {
     this.removeClass('p-Widget');
     this.addClass('grid-editor');
     this._model = model;
-    this._shadowWidget = null;
 
     this.layout = new GridStackLayout(this._model.info);
     this.layout.gridItemChanged.connect(this._onGridItemChange, this);
@@ -58,6 +68,13 @@ export class GridStackWidget extends Widget {
    * Dispose of the resources held by the widget.
    */
   dispose(): void {
+    if (this.isDisposed) {
+      return;
+    }
+
+    if (this._shadowWidget) {
+      this._resetShadowWidget();
+    }
     Signal.clearData(this);
     super.dispose();
   }
@@ -78,7 +95,7 @@ export class GridStackWidget extends Widget {
   }
 
   /**
-   * Handle `befor-detach` messages sent to the widget.
+   * Handle `before-detach` messages sent to the widget.
    *
    * ### Note
    * Remove event listeners for the drag and drop event.
@@ -89,6 +106,7 @@ export class GridStackWidget extends Widget {
     this.node.removeEventListener('lm-dragleave', this, true);
     this.node.removeEventListener('lm-dragover', this, true);
     this.node.removeEventListener('lm-drop', this, true);
+    this.node.removeEventListener('lm-dragend', this, true);
   }
 
   /**
@@ -285,7 +303,8 @@ export class GridStackWidget extends Widget {
    * Handle the `'lm-dragenter'` event for the widget.
    */
   private _evtDragEnter(event: IDragEvent): void {
-    if (this._isDroppable(event)) {
+    const test = this._isDroppable(event);
+    if (test.droppable) {
       event.preventDefault();
       event.stopPropagation();
 
@@ -294,7 +313,6 @@ export class GridStackWidget extends Widget {
       const item = this.layout.gridItems.find(
         value => value.gridstackNode?.id === widget!.model.id
       );
-      // const info = this._model.getCellInfo(widget!.model.id);
 
       const y = Math.floor(event.offsetY / this.layout.cellHeight);
       const x = Math.floor(
@@ -334,6 +352,10 @@ export class GridStackWidget extends Widget {
             h
           }
         );
+      }
+    } else {
+      if (test.reason) {
+        this._setErrorMessage(test.reason);
       }
     }
   }
@@ -431,7 +453,7 @@ export class GridStackWidget extends Widget {
             if (outputs.get(i).type === 'error') {
               showErrorMessage(
                 'Cell error',
-                'Is not possible to add cells with execution errors'
+                'It is not possible to add cells with execution errors.'
               );
               return;
             }
@@ -458,7 +480,10 @@ export class GridStackWidget extends Widget {
           const item = this._model.createCell(widget.model);
           this.layout.addGridItem(widget.model.id, item, info);
         } else {
-          showErrorMessage('Empty cell', 'Is not possible to add empty cells.');
+          showErrorMessage(
+            'Empty cell',
+            'It is not possible to add empty cells.'
+          );
         }
       } else if (item && info) {
         info.hidden = false;
@@ -470,7 +495,7 @@ export class GridStackWidget extends Widget {
       } else if (!info) {
         showErrorMessage(
           'Wrong notebook',
-          'Is not possible to add cells from another notebook.'
+          'It is not possible to add cells from another notebook.'
         );
       }
     }
@@ -482,17 +507,17 @@ export class GridStackWidget extends Widget {
    * Whether the dragged element is droppable or not
    *
    * @param event Event object
-   * @returns Whether the element can be dropped
+   * @returns Whether the element can be dropped and the reason why it can't
    */
-  private _isDroppable(event: IDragEvent): boolean {
+  private _isDroppable(event: IDragEvent): IDroppable {
     if (event.proposedAction !== 'copy') {
-      return false;
+      return { droppable: false };
     }
 
     if (event.source.activeCell instanceof Cell) {
       const widget = (event.source.parent as NotebookPanel).content.activeCell;
       if (!widget) {
-        return false;
+        return { droppable: false };
       }
       const items = this.layout.gridItems;
       const item = items?.find(
@@ -509,26 +534,32 @@ export class GridStackWidget extends Widget {
           const outputs = (widget.model as CodeCellModel).outputs;
           for (let i = 0; i < outputs.length; i++) {
             if (outputs.get(i).type === 'error') {
-              return false;
+              return {
+                droppable: false,
+                reason: 'GridStack Error: cells with execution errors.'
+              };
             }
           }
-          return true;
+          return { droppable: true };
         } else if (
           widget.model.type !== 'code' &&
           widget.model.value.text.length !== 0
         ) {
-          return true;
+          return { droppable: true };
         } else {
-          return false;
+          return { droppable: false, reason: 'GridStack Error: empty cells.' };
         }
       } else if (item && info) {
-        return true;
+        return { droppable: true };
       } else if (!info) {
-        return false;
+        return {
+          droppable: false,
+          reason: 'GridStack Error: cells from another notebook.'
+        };
       }
     }
 
-    return false;
+    return { droppable: false };
   }
 
   /**
@@ -568,7 +599,21 @@ export class GridStackWidget extends Widget {
     }
   }
 
-  private _shadowWidget: GridItemHTMLElement | null;
+  private _setErrorMessage(reason: string) {
+    // Find the drag-and-drop floating image from notebook cells
+    const floatingElement = document.body.querySelector('.lm-mod-drag-image');
+    if (floatingElement) {
+      let error = floatingElement.querySelector('.grid-stack-error');
+      if (!error) {
+        error = floatingElement.appendChild(document.createElement('div'));
+        error.className = 'grid-stack-error';
+      }
+      error.innerHTML = `<p>${reason}</p>`;
+    }
+  }
+
+  layout: GridStackLayout;
+
   private _model: GridStackModel;
-  public layout: GridStackLayout;
+  private _shadowWidget: GridItemHTMLElement | null = null;
 }
