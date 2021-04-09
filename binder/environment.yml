@@ -10,5 +10,5 @@ dependencies:
 - pandas
 - scipy
 - voila
-- voila-gridstack=0.1.0
+- voila-gridstack=0.2.0
 - jupyterlab=3
