@@ -1,5 +1,53 @@
 # Changelog
 
+## [0.2.0](https://github.com/voila-dashboards/voila-gridstack/tree/0.2.0) (2021-04-09)
+
+[Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/0.1.0...0.2.0)
+
+**Closed issues:**
+
+- Drag and drop not working [\#122](https://github.com/voila-dashboards/voila-gridstack/issues/122)
+- Fix dependencies [\#111](https://github.com/voila-dashboards/voila-gridstack/issues/111)
+- Add tooltip when drag in is forbidden [\#108](https://github.com/voila-dashboards/voila-gridstack/issues/108)
+- Update open editor icon [\#98](https://github.com/voila-dashboards/voila-gridstack/issues/98)
+- Update Gridstack to v4.0.1 [\#97](https://github.com/voila-dashboards/voila-gridstack/issues/97)
+- Explicit open will occur in new window [\#95](https://github.com/voila-dashboards/voila-gridstack/issues/95)
+- Open editor with split-right [\#93](https://github.com/voila-dashboards/voila-gridstack/issues/93)
+- Use a closer approach to clone output view [\#92](https://github.com/voila-dashboards/voila-gridstack/issues/92)
+- Display the grid [\#89](https://github.com/voila-dashboards/voila-gridstack/issues/89)
+- Drag&Drop improvements [\#87](https://github.com/voila-dashboards/voila-gridstack/issues/87)
+- Cell toolbar is not sticky [\#86](https://github.com/voila-dashboards/voila-gridstack/issues/86)
+- Similar notebook toolbar buttons for Voila [\#84](https://github.com/voila-dashboards/voila-gridstack/issues/84)
+- JupyterLab 3 on Binder [\#79](https://github.com/voila-dashboards/voila-gridstack/issues/79)
+- When opening a second editor focuses the first one [\#77](https://github.com/voila-dashboards/voila-gridstack/issues/77)
+- Release @voila-dashboards/jupyterlab-gridstack [\#72](https://github.com/voila-dashboards/voila-gridstack/issues/72)
+
+**Merged pull requests:**
+
+- Update release instructions [\#121](https://github.com/voila-dashboards/voila-gridstack/pull/121) ([jtpio](https://github.com/jtpio))
+- Use a version range for gridstack [\#120](https://github.com/voila-dashboards/voila-gridstack/pull/120) ([fcollonval](https://github.com/fcollonval))
+- Add tooltip when drag in is forbidden [\#118](https://github.com/voila-dashboards/voila-gridstack/pull/118) ([fcollonval](https://github.com/fcollonval))
+- Style improvements [\#115](https://github.com/voila-dashboards/voila-gridstack/pull/115) ([hbcarlos](https://github.com/hbcarlos))
+- Change launch button [\#114](https://github.com/voila-dashboards/voila-gridstack/pull/114) ([hbcarlos](https://github.com/hbcarlos))
+- Update minimal version of dependencies [\#112](https://github.com/voila-dashboards/voila-gridstack/pull/112) ([fcollonval](https://github.com/fcollonval))
+- Bump to gridstack 4.0.1 and drop jq [\#107](https://github.com/voila-dashboards/voila-gridstack/pull/107) ([fcollonval](https://github.com/fcollonval))
+- Add revert button [\#106](https://github.com/voila-dashboards/voila-gridstack/pull/106) ([fcollonval](https://github.com/fcollonval))
+- Display shadow element when dragging from notebook [\#105](https://github.com/voila-dashboards/voila-gridstack/pull/105) ([fcollonval](https://github.com/fcollonval))
+- Update cursor on grid widget toolbar [\#104](https://github.com/voila-dashboards/voila-gridstack/pull/104) ([fcollonval](https://github.com/fcollonval))
+- Improve template for inheritance [\#103](https://github.com/voila-dashboards/voila-gridstack/pull/103) ([fcollonval](https://github.com/fcollonval))
+- Improve drag & drop from notebook [\#100](https://github.com/voila-dashboards/voila-gridstack/pull/100) ([fcollonval](https://github.com/fcollonval))
+- Add dashboard icon [\#99](https://github.com/voila-dashboards/voila-gridstack/pull/99) ([fcollonval](https://github.com/fcollonval))
+- Use same wording as voila preview for button tooltip [\#96](https://github.com/voila-dashboards/voila-gridstack/pull/96) ([fcollonval](https://github.com/fcollonval))
+- Open editor in split right panel [\#94](https://github.com/voila-dashboards/voila-gridstack/pull/94) ([fcollonval](https://github.com/fcollonval))
+- Display background grid [\#91](https://github.com/voila-dashboards/voila-gridstack/pull/91) ([fcollonval](https://github.com/fcollonval))
+- Fix focus on wrong editor [\#90](https://github.com/voila-dashboards/voila-gridstack/pull/90) ([fcollonval](https://github.com/fcollonval))
+- Make cell toolbar sticky [\#88](https://github.com/voila-dashboards/voila-gridstack/pull/88) ([fcollonval](https://github.com/fcollonval))
+- Update CHANGELOG.md [\#83](https://github.com/voila-dashboards/voila-gridstack/pull/83) ([jtpio](https://github.com/jtpio))
+- Update table header in README.md [\#82](https://github.com/voila-dashboards/voila-gridstack/pull/82) ([jtpio](https://github.com/jtpio))
+- Update environment.yml [\#81](https://github.com/voila-dashboards/voila-gridstack/pull/81) ([hbcarlos](https://github.com/hbcarlos))
+- Fix typo in README.md [\#80](https://github.com/voila-dashboards/voila-gridstack/pull/80) ([jtpio](https://github.com/jtpio))
+- Update Readme [\#78](https://github.com/voila-dashboards/voila-gridstack/pull/78) ([hbcarlos](https://github.com/hbcarlos))
+
 ## [0.1.0](https://github.com/voila-dashboards/voila-gridstack/tree/0.1.0) (2021-01-07)
 
 [Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/0.1.0rc0...0.1.0)
