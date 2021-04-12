@@ -18,8 +18,8 @@ A gridstack-based template for [![voila-gridstack](assets/voila.png)](https://gi
       </a>
     </td>
     <td align="center">
-      <a href="https://mybinder.org/v2/gh/voila-dashboards/voila-gridstack/stable?urlpath=/voila/tree/examples/scotch_dashboard.ipynb">
-        <img src="https://mybinder.org/badge_logo.svg" alt="Jupyter Notebook on Binder"/>
+      <a href="https://mybinder.org/v2/gh/voila-dashboards/voila-gridstack/stable?urlpath=voila/tree/examples/scotch_dashboard.ipynb">
+        <img src="https://mybinder.org/badge_logo.svg" alt="Voila GridStack on Binder"/>
       </a>
     </td>
     <td align="center">
