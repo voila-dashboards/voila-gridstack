@@ -40,7 +40,7 @@ However we also publish it to `npm` to:
 ## Releasing on npm
 
 1. The version number in [packages/jupyterlab-gridstack/package.json](./packages/jupyterlab-gridstack/package.json) should have been updated during the release step of the Python package (see above)
-2. `cd ./packages/jupyterlab-preview`
+2. `cd ./packages/jupyterlab-gridstack`
 3. `npm login`
 4. `npm publish`
 
