@@ -52,7 +52,7 @@
   left: 0px;
   right: 0px;
   z-index: 1;
-  height: fit-content;
+  height: 20px;
   margin-bottom: 4px;
   display: flex;
   justify-content: flex-end;

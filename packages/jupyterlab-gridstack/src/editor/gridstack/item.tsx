@@ -1,6 +1,6 @@
 import { ReactWidget } from '@jupyterlab/apputils';
 
-import { Widget } from '@lumino/widgets';
+import { Widget, Panel } from '@lumino/widgets';
 
 import * as React from 'react';
 
@@ -9,7 +9,7 @@ import { deleteIcon, pinIcon, unPinIcon } from '../icons';
 /**
  * A Lumino widget for gridstack items.
  */
-export class GridStackItem extends Widget {
+export class GridStackItem extends Panel {
   constructor(options: GridStackItem.IOptions) {
     super();
     this.removeClass('lm-Widget');
@@ -17,49 +17,40 @@ export class GridStackItem extends Widget {
     this.addClass('grid-stack-item');
 
     this._cellId = options.cellId;
-    this._item = options.cellWidget;
 
-    this._toolbar = new GridStackItemToolbar(
+    const content = new Panel();
+    content.addClass('grid-stack-item-content');
+
+    const toolbar = new GridStackItemToolbar(
       options.isLocked,
       options.closeFn,
       options.lockFn,
       options.unlockFn
     );
+    content.addWidget(toolbar);
 
-    this._cell = document.createElement('div');
-    this._cell.className = 'grid-item-widget';
+    const cell = options.cellWidget;
+    cell.addClass('grid-item-widget');
+    content.addWidget(cell);
 
-    this._content = document.createElement('div');
-    this._content.className = 'grid-stack-item-content';
-
-    this.node.appendChild(this._content);
+    this.addWidget(content);
   }
 
   get cellId(): string {
     return this._cellId;
   }
 
-  onAfterAttach(): void {
-    Widget.attach(this._toolbar, this._content);
-    this._content.appendChild(this._cell);
-    Widget.attach(this._item, this._cell);
-  }
-
   private _cellId = '';
-  private _item: Widget;
-  private _toolbar: GridStackItemToolbar;
-  private _cell: HTMLElement;
-  private _content: HTMLElement;
 }
 
 /**
  * A React widget for items toolbar.
  */
 class GridStackItemToolbar extends ReactWidget {
-  constructor(_isLocked: boolean, closeFn: any, lockFn: any, unlockFn?: any) {
+  constructor(isLocked: boolean, closeFn: any, lockFn: any, unlockFn?: any) {
     super();
     this.addClass('grid-item-toolbar');
-    this._isLocked = _isLocked;
+    this._isLocked = isLocked;
     this._closeFn = closeFn;
     this._lockFn = lockFn;
     this._unlockFn = unlockFn;
