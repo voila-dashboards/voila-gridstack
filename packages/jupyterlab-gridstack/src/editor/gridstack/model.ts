@@ -28,7 +28,7 @@ import { Widget } from '@lumino/widgets';
 
 import { Signal, ISignal } from '@lumino/signaling';
 
-import { GridStackItem } from './item';
+import { GridStackItemWidget, GridStackItemModel, ItemState } from '../item';
 
 import {
   DashboardView,
@@ -276,7 +276,7 @@ export class GridStackModel {
    *
    * @param cellModel - `ICellModel`.
    */
-  public createCell(cellModel: ICellModel): GridStackItem {
+  public createCell(cellModel: ICellModel): GridStackItemWidget {
     let item: Widget;
 
     switch (cellModel.type) {
@@ -330,22 +330,12 @@ export class GridStackModel {
     const options = {
       cellId: cellModel.id,
       cellWidget: item,
-      isLocked: false,
-      closeFn: (): void => {
-        this.hideCell(cellModel.id);
-        this._cellRemoved.emit(cellModel.id);
-      },
-      lockFn: (): void => {
-        this.lockCell(cellModel.id, true);
-        this._cellPinned.emit({ cellId: cellModel.id, lock: true });
-      },
-      unlockFn: (): void => {
-        this.lockCell(cellModel.id, false);
-        this._cellPinned.emit({ cellId: cellModel.id, lock: false });
-      }
+      isLocked: false
     };
 
-    return new GridStackItem(options);
+    const model = new GridStackItemModel(options);
+    model.stateChanged.connect(this._itemChanged);
+    return new GridStackItemWidget(item, model);
   }
 
   /**
@@ -426,6 +416,29 @@ export class GridStackModel {
       this._checkCellMetadata(cell);
     }
   }
+
+  private _itemChanged = (item: GridStackItemModel, change: ItemState) => {
+    switch (change) {
+      case ItemState.CLOSED:
+        this.hideCell(item.cellId);
+        this._cellRemoved.emit(item.cellId);
+        item.stateChanged.disconnect(this._itemChanged);
+        break;
+
+      case ItemState.LOCKED:
+        this.lockCell(item.cellId, true);
+        this._cellPinned.emit({ cellId: item.cellId, lock: true });
+        break;
+
+      case ItemState.UNLOCKED:
+        this.lockCell(item.cellId, false);
+        this._cellPinned.emit({ cellId: item.cellId, lock: false });
+        break;
+
+      default:
+        break;
+    }
+  };
 
   /**
    * Check the dashboard cell metadata.

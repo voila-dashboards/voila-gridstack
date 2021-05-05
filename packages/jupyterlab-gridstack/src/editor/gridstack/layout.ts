@@ -10,7 +10,7 @@ import { GridStack, GridStackNode, GridItemHTMLElement } from 'gridstack';
 
 import 'gridstack/dist/h5/gridstack-dd-native';
 
-import { GridStackItem } from './item';
+import { GridStackItemWidget } from '../item';
 
 import { DashboardView, DashboardCellView } from '../format';
 
@@ -223,7 +223,7 @@ export class GridStackLayout extends Layout {
   /**
    * Get the list of `GridStackItem` (Lumino widgets).
    */
-  get gridWidgets(): Array<GridStackItem> {
+  get gridWidgets(): Array<GridStackItemWidget> {
     return this._gridItems;
   }
 
@@ -241,7 +241,11 @@ export class GridStackLayout extends Layout {
    * @param item - The cell widget.
    * @param info - The dashboard cell metadata parameters.
    */
-  addGridItem(id: string, item: GridStackItem, info: DashboardCellView): void {
+  addGridItem(
+    id: string,
+    item: GridStackItemWidget,
+    info: DashboardCellView
+  ): void {
     const options = {
       id,
       x: info.col,
@@ -333,7 +337,7 @@ export class GridStackLayout extends Layout {
   private _columns: number;
   private _gridHost: HTMLElement;
   private _grid: GridStack;
-  private _gridItems: GridStackItem[] = [];
+  private _gridItems: GridStackItemWidget[] = [];
   private _gridItemChanged = new Signal<this, GridStackNode[]>(this);
   private _helperMessage: HTMLElement;
 }
