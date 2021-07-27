@@ -2,7 +2,7 @@ import { ReactWidget } from '@jupyterlab/apputils';
 
 import * as React from 'react';
 
-import { GridStackItemModel } from './model';
+import { GridStackItemModel, ItemState } from './model';
 
 import { deleteIcon, pinIcon, unPinIcon } from '../icons';
 
@@ -14,16 +14,20 @@ export class GridStackItemToolbar extends ReactWidget {
     super();
     this.addClass('grid-item-toolbar');
     this._model = model;
-    this._model.stateChanged.connect(() => {
-      this.update();
-      console.debug('update toolbar');
-    });
+    this._model.stateChanged.connect(this._stateChanged);
   }
 
   dispose() {
-    this._model.stateChanged.disconnect(this.update);
+    this._model.stateChanged.disconnect(this._stateChanged);
     super.dispose();
   }
+
+  private _stateChanged = (
+    item: GridStackItemModel,
+    state: ItemState
+  ): void => {
+    this.update();
+  };
 
   render(): JSX.Element {
     return (
