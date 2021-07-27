@@ -14,37 +14,31 @@ export class GridStackItemToolbar extends ReactWidget {
     super();
     this.addClass('grid-item-toolbar');
     this._model = model;
+    this._model.stateChanged.connect(() => {
+      this.update();
+      console.debug('update toolbar');
+    });
+  }
+
+  dispose() {
+    this._model.stateChanged.disconnect(this.update);
+    super.dispose();
   }
 
   render(): JSX.Element {
-    const close = () => {
-      this._model.close();
-      this.update();
-    };
-
-    const lock = () => {
-      this._model.lock();
-      this.update();
-    };
-
-    const unlock = () => {
-      this._model.unlock();
-      this.update();
-    };
-
     return (
       <>
         {this._model.isLocked ? (
-          <div className="pin" onClick={unlock}>
+          <div className="pin" onClick={() => this._model.unlock()}>
             <unPinIcon.react height="16px" width="16px" />
           </div>
         ) : (
-          <div className="pin" onClick={lock}>
+          <div className="pin" onClick={() => this._model.lock()}>
             <pinIcon.react height="16px" width="16px" />
           </div>
         )}
         <div className="grid-item-toolbar-spacer" />
-        <div className="trash-can" onClick={close}>
+        <div className="trash-can" onClick={() => this._model.close()}>
           <deleteIcon.react height="16px" width="16px" />
         </div>
       </>

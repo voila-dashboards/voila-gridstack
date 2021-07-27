@@ -231,6 +231,7 @@ export class GridStackModel {
         data.jupyter_dashboards.views[VIEW] = info;
         cell.metadata.set('extensions', data);
         this._context.model.dirty = true;
+        break;
       }
     }
   }
@@ -249,6 +250,7 @@ export class GridStackModel {
         data.jupyter_dashboards.views[VIEW].hidden = true;
         cell.metadata.set('extensions', data);
         this._context.model.dirty = true;
+        break;
       }
     }
   }
@@ -267,6 +269,7 @@ export class GridStackModel {
         data.jupyter_dashboards.views[VIEW].locked = lock;
         cell.metadata.set('extensions', data);
         this._context.model.dirty = true;
+        break;
       }
     }
   }
@@ -276,7 +279,10 @@ export class GridStackModel {
    *
    * @param cellModel - `ICellModel`.
    */
-  public createCell(cellModel: ICellModel): GridStackItemWidget {
+  public createCell(
+    cellModel: ICellModel,
+    locked: boolean
+  ): GridStackItemWidget {
     let item: Widget;
 
     switch (cellModel.type) {
@@ -330,12 +336,12 @@ export class GridStackModel {
     const options = {
       cellId: cellModel.id,
       cellWidget: item,
-      isLocked: false
+      isLocked: locked
     };
 
-    const model = new GridStackItemModel(options);
-    model.stateChanged.connect(this._itemChanged);
-    return new GridStackItemWidget(item, model);
+    const widget = new GridStackItemWidget(item, options);
+    widget.stateChanged.connect(this._itemChanged);
+    return widget;
   }
 
   /**
@@ -423,6 +429,7 @@ export class GridStackModel {
         this.hideCell(item.cellId);
         this._cellRemoved.emit(item.cellId);
         item.stateChanged.disconnect(this._itemChanged);
+        item.dispose();
         break;
 
       case ItemState.LOCKED:

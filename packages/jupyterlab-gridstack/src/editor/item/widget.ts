@@ -10,23 +10,30 @@ import { GridStackItemToolbar } from './toolbar';
  * A Lumino widget for gridstack items.
  */
 export class GridStackItemWidget extends Panel {
-  constructor(cell: Widget, model: GridStackItemModel) {
+  constructor(cell: Widget, options: GridStackItemModel.IOptions) {
     super();
     this.removeClass('lm-Widget');
     this.removeClass('p-Widget');
     this.addClass('grid-stack-item');
 
-    this._model = model;
+    this._model = new GridStackItemModel(options);
 
     const content = new Panel();
     content.addClass('grid-stack-item-content');
 
-    content.addWidget(new GridStackItemToolbar(this._model));
+    this._toolbar = new GridStackItemToolbar(this._model);
+    content.addWidget(this._toolbar);
 
     cell.addClass('grid-item-widget');
     content.addWidget(cell);
 
     this.addWidget(content);
+  }
+
+  dispose() {
+    this._toolbar.dispose();
+    this._model.dispose();
+    super.dispose();
   }
 
   get cellId(): string {
@@ -42,4 +49,5 @@ export class GridStackItemWidget extends Panel {
   }
 
   private _model: GridStackItemModel;
+  private _toolbar: GridStackItemToolbar;
 }

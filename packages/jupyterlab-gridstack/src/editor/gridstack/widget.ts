@@ -181,7 +181,7 @@ export class GridStackWidget extends Widget {
       const info = this._model.getCellInfo(model.id);
 
       if (info && !info.hidden && model.value.text.length !== 0) {
-        const item = this._model.createCell(model);
+        const item = this._model.createCell(model, info.locked);
         this.layout.addGridItem(model.id, item, info);
       }
     }
@@ -255,13 +255,13 @@ export class GridStackWidget extends Widget {
           if (error) {
             continue;
           }
-          const item = this._model.createCell(model);
+          const item = this._model.createCell(model, info.locked);
           this.layout.addGridItem(model.id, item, info);
           continue;
         }
 
         if (model.type !== 'code') {
-          const item = this._model.createCell(model);
+          const item = this._model.createCell(model, info.locked);
           this.layout.addGridItem(model.id, item, info);
           continue;
         }
@@ -481,7 +481,7 @@ export class GridStackWidget extends Widget {
           info.height = height;
           info.locked = info.locked ? true : false;
           this._model.setCellInfo(widget.model.id, info);
-          const item = this._model.createCell(widget.model);
+          const item = this._model.createCell(widget.model, info.locked);
           this.layout.addGridItem(widget.model.id, item, info);
         } else if (
           widget.model.type !== 'code' &&
@@ -494,7 +494,7 @@ export class GridStackWidget extends Widget {
           info.height = height;
           info.locked = info.locked ? true : false;
           this._model.setCellInfo(widget.model.id, info);
-          const item = this._model.createCell(widget.model);
+          const item = this._model.createCell(widget.model, info.locked);
           this.layout.addGridItem(widget.model.id, item, info);
         } else {
           showErrorMessage(

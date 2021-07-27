@@ -28,6 +28,10 @@ export class GridStackItemModel {
     return this._stateChanged;
   }
 
+  dispose() {
+    Signal.clearData(this);
+  }
+
   close(): void {
     this._stateChanged.emit(ItemState.CLOSED);
   }
