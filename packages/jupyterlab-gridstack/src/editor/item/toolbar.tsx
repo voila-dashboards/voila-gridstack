@@ -33,18 +33,27 @@ export class GridStackItemToolbar extends ReactWidget {
     return (
       <>
         {this._model.isLocked ? (
-          <div className="pin" onClick={() => this._model.unlock()}>
-            <unPinIcon.react height="16px" width="16px" />
-          </div>
+          <button
+            className="bp3-button bp3-minimal jp-toolbar-button pin"
+            onClick={() => this._model.unlock()}
+          >
+            <unPinIcon.react className="jp-react-button" />
+          </button>
         ) : (
-          <div className="pin" onClick={() => this._model.lock()}>
-            <pinIcon.react height="16px" width="16px" />
-          </div>
+          <button
+            className="bp3-button bp3-minimal jp-toolbar-button pin"
+            onClick={() => this._model.lock()}
+          >
+            <pinIcon.react className="jp-react-button" />
+          </button>
         )}
         <div className="grid-item-toolbar-spacer" />
-        <div className="trash-can" onClick={() => this._model.close()}>
-          <deleteIcon.react height="16px" width="16px" />
-        </div>
+        <button
+          className="bp3-button bp3-minimal jp-toolbar-button trash-can"
+          onClick={() => this._model.close()}
+        >
+          <deleteIcon.react className="jp-react-button" />
+        </button>
       </>
     );
   }

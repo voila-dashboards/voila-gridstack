@@ -132,3 +132,16 @@
 .jp-VoilaPreview-renderOnSave {
   align-items: center;
 }
+
+.jp-react-button {
+  width: 16px;
+  height: 16px;
+}
+
+.jp-toolbar-button {
+  min-width: auto;
+  min-height: auto;
+  padding: 4px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}

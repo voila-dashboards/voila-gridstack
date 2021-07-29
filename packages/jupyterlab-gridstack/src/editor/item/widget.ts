@@ -31,6 +31,9 @@ export class GridStackItemWidget extends Panel {
   }
 
   dispose() {
+    if (this.isDisposed) {
+      return;
+    }
     this._toolbar.dispose();
     this._model.dispose();
     super.dispose();
