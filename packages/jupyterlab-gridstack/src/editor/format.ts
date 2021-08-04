@@ -80,6 +80,24 @@ export type DashboardCellView = {
    * Logical height.
    */
   height: number;
+  /**
+   * Lock item.
+   */
+  locked: boolean;
+};
+
+/**
+ * Signal argument to lock/unlock a GridstackItem.
+ */
+export type LockSignal = {
+  /**
+   * Cell id.
+   */
+  cellId: string;
+  /**
+   * Action.
+   */
+  lock: boolean;
 };
 
 /**
@@ -116,7 +134,8 @@ export function validateDashboardCellView(
     'row' in view &&
     'col' in view &&
     'width' in view &&
-    'height' in view
+    'height' in view &&
+    'locked' in view
   ) {
     return true;
   } else {

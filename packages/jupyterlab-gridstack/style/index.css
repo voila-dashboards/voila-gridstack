@@ -52,7 +52,7 @@
   left: 0px;
   right: 0px;
   z-index: 1;
-  height: fit-content;
+  height: 20px;
   margin-bottom: 4px;
   display: flex;
   justify-content: flex-end;
@@ -60,6 +60,11 @@
   border-radius: 5px;
   /* JupyterLab uses move cursor although `grab` would be more appropriate */
   cursor: move;
+}
+
+.grid-item-toolbar-spacer {
+  flex-grow: 1;
+  flex-shrink: 1;
 }
 
 .grid-item-widget {
@@ -91,6 +96,19 @@
   box-shadow: inset 0 0px 1px rgba(0, 0, 0, 0.5);
 }
 
+.pin {
+  width: 16px;
+  height: 16px;
+  margin: 2px;
+}
+
+.pin:hover {
+  cursor: pointer;
+  color: var(--jp-ui-font-color0);
+  background-color: var(--jp-layout-color2);
+  box-shadow: inset 0 0px 1px rgba(0, 0, 0, 0.5);
+}
+
 .col-25 {
   float: left;
   width: 40%;
@@ -113,4 +131,17 @@
 
 .jp-VoilaPreview-renderOnSave {
   align-items: center;
+}
+
+.jp-react-button {
+  width: 16px;
+  height: 16px;
+}
+
+.jp-toolbar-button {
+  min-width: auto;
+  min-height: auto;
+  padding: 4px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }

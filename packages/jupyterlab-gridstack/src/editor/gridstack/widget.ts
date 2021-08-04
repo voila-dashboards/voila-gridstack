@@ -20,6 +20,8 @@ import { GridStackModel } from './model';
 
 import { DashboardMetadataEditor } from '../components/metadata';
 
+import { DashboardCellView, LockSignal } from '../format';
+
 interface IDroppable {
   /**
    * Whether the content can be dropped
@@ -53,6 +55,7 @@ export class GridStackWidget extends Widget {
     this._model.ready.connect(() => {
       this._initGridItems();
       this._model.cellRemoved.connect(this._removeCell, this);
+      this._model.cellPinned.connect(this._lockCell, this);
       this._model.contentChanged.connect(this._updateGridItems, this);
     });
   }
@@ -178,7 +181,7 @@ export class GridStackWidget extends Widget {
       const info = this._model.getCellInfo(model.id);
 
       if (info && !info.hidden && model.value.text.length !== 0) {
-        const item = this._model.createCell(model);
+        const item = this._model.createCell(model, info.locked);
         this.layout.addGridItem(model.id, item, info);
       }
     }
@@ -191,8 +194,19 @@ export class GridStackWidget extends Widget {
    * @param id - The Cell id.
    */
   private _removeCell(model: GridStackModel, id: string): void {
-    this._model.hideCell(id);
     this.layout.removeGridItem(id);
+  }
+
+  /**
+   * A handler invoked when a grid item has to be removed.
+   *
+   * @param model - The `GridstackModel` that sends the signal.
+   * @param id - The Cell id.
+   */
+  private _lockCell(model: GridStackModel, evt: LockSignal): void {
+    const info = this._model.getCellInfo(evt.cellId);
+    info!.locked = evt.lock;
+    this.layout.updateGridItem(evt.cellId, info as DashboardCellView);
   }
 
   /**
@@ -241,13 +255,13 @@ export class GridStackWidget extends Widget {
           if (error) {
             continue;
           }
-          const item = this._model.createCell(model);
+          const item = this._model.createCell(model, info.locked);
           this.layout.addGridItem(model.id, item, info);
           continue;
         }
 
         if (model.type !== 'code') {
-          const item = this._model.createCell(model);
+          const item = this._model.createCell(model, info.locked);
           this.layout.addGridItem(model.id, item, info);
           continue;
         }
@@ -294,7 +308,8 @@ export class GridStackWidget extends Widget {
         col: el.x ?? 0,
         row: el.y ?? 0,
         width: el.w ?? 2,
-        height: el.h ?? 2
+        height: el.h ?? 2,
+        locked: el.locked ?? false
       });
     });
   }
@@ -464,8 +479,9 @@ export class GridStackWidget extends Widget {
           info.row = row;
           info.width = width;
           info.height = height;
+          info.locked = info.locked ? true : false;
           this._model.setCellInfo(widget.model.id, info);
-          const item = this._model.createCell(widget.model);
+          const item = this._model.createCell(widget.model, info.locked);
           this.layout.addGridItem(widget.model.id, item, info);
         } else if (
           widget.model.type !== 'code' &&
@@ -476,8 +492,9 @@ export class GridStackWidget extends Widget {
           info.row = row;
           info.width = width;
           info.height = height;
+          info.locked = info.locked ? true : false;
           this._model.setCellInfo(widget.model.id, info);
-          const item = this._model.createCell(widget.model);
+          const item = this._model.createCell(widget.model, info.locked);
           this.layout.addGridItem(widget.model.id, item, info);
         } else {
           showErrorMessage(
@@ -490,6 +507,7 @@ export class GridStackWidget extends Widget {
         info.col = col;
         info.row = row;
         info.width = Math.min(width, info.width);
+        info.locked = info.locked ? true : false;
         this._model.setCellInfo(widget.model.id, info);
         this.layout.updateGridItem(widget.model.id, info);
       } else if (!info) {
