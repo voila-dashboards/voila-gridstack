@@ -24,6 +24,8 @@ import { SimplifiedOutputArea } from '@jupyterlab/outputarea';
 
 import { IObservableUndoableList } from '@jupyterlab/observables';
 
+import { createMutex } from '@jupyterlab/shared-models';
+
 import { Widget } from '@lumino/widgets';
 
 import { Signal, ISignal } from '@lumino/signaling';
@@ -79,7 +81,18 @@ export class GridStackModel {
       });
     });
 
-    this._context.model.contentChanged.connect(this._updateCells, this);
+    this._context.model.contentChanged.connect(() => {
+      console.debug('Content changed');
+      this._updateCells();
+    }, this);
+    this._context.model.stateChanged.connect(() => {
+      console.debug('State changed');
+      this._updateCells();
+    }, this);
+    this._context.model.sharedModel.changed.connect(() => {
+      console.debug('Shared model changed');
+      this._updateCells();
+    }, this);
   }
 
   /**
@@ -174,14 +187,20 @@ export class GridStackModel {
    */
   set info(info: DashboardView) {
     this._info = info;
-    const data = this._context.model.metadata.get('extensions') as Record<
+    /* const data = this._context.model.metadata.get('extensions') as Record<
       string,
       any
-    >;
+    >; */
+    this._mutex(() => {
+      const data = this._context.model.sharedModel.getMetadata();
 
-    data.jupyter_dashboards.views[VIEW] = this._info;
-    this._context.model.metadata.set('extensions', data);
-    this._context.model.dirty = true;
+      (data as Record<string, any>).extensions.jupyter_dashboards.views[
+        VIEW
+      ] = this._info;
+      //this._context.model.metadata.set('extensions', data);
+      this._context.model.sharedModel.setMetadata(data);
+      this._context.model.dirty = true;
+    });
   }
 
   /**
@@ -208,7 +227,11 @@ export class GridStackModel {
       const cell = this._context.model.cells.get(i);
 
       if (cell.id === id) {
-        const data = cell.metadata.get('extensions') as Record<string, any>;
+        //const data = cell.metadata.get('extensions') as Record<string, any>;
+        const data = cell.sharedModel.getMetadata().extensions as Record<
+          string,
+          any
+        >;
         return data.jupyter_dashboards.views[VIEW];
       }
     }
@@ -227,10 +250,17 @@ export class GridStackModel {
       const cell = this._context.model.cells.get(i);
 
       if (cell.id === id) {
-        const data = cell.metadata.get('extensions') as Record<string, any>;
-        data.jupyter_dashboards.views[VIEW] = info;
-        cell.metadata.set('extensions', data);
-        this._context.model.dirty = true;
+        this._mutex(() => {
+          //const data = cell.metadata.get('extensions') as Record<string, any>;
+          const data = cell.sharedModel.getMetadata().extensions as Record<
+            string,
+            any
+          >;
+          data.jupyter_dashboards.views[VIEW] = info;
+          //cell.metadata.set('extensions', data);
+          cell.sharedModel.setMetadata({ extensions: data });
+          this._context.model.dirty = true;
+        });
         break;
       }
     }
@@ -246,10 +276,17 @@ export class GridStackModel {
       const cell = this._context.model.cells.get(i);
 
       if (cell.id === id) {
-        const data = cell.metadata.get('extensions') as Record<string, any>;
-        data.jupyter_dashboards.views[VIEW].hidden = true;
-        cell.metadata.set('extensions', data);
-        this._context.model.dirty = true;
+        this._mutex(() => {
+          //const data = cell.metadata.get('extensions') as Record<string, any>;
+          const data = cell.sharedModel.getMetadata().extensions as Record<
+            string,
+            any
+          >;
+          data.jupyter_dashboards.views[VIEW].hidden = true;
+          //cell.metadata.set('extensions', data);
+          cell.sharedModel.setMetadata({ extensions: data });
+          this._context.model.dirty = true;
+        });
         break;
       }
     }
@@ -265,10 +302,17 @@ export class GridStackModel {
       const cell = this._context.model.cells.get(i);
 
       if (cell.id === id) {
-        const data = cell.metadata.get('extensions') as Record<string, any>;
-        data.jupyter_dashboards.views[VIEW].locked = lock;
-        cell.metadata.set('extensions', data);
-        this._context.model.dirty = true;
+        this._mutex(() => {
+          //const data = cell.metadata.get('extensions') as Record<string, any>;
+          const data = cell.sharedModel.getMetadata().extensions as Record<
+            string,
+            any
+          >;
+          data.jupyter_dashboards.views[VIEW].locked = lock;
+          //cell.metadata.set('extensions', data);
+          cell.sharedModel.setMetadata({ extensions: data });
+          this._context.model.dirty = true;
+        });
         break;
       }
     }
@@ -369,22 +413,29 @@ export class GridStackModel {
     ).catch(reason => console.error(reason));
   }
 
+  private readonly _mutex = createMutex();
+
   /**
    * Update cells.
    */
   private _updateCells(): void {
-    this._checkCellsMetadata();
-    this._contentChanged.emit(null);
+    this._mutex(() => {
+      this._checkCellsMetadata();
+      this._contentChanged.emit(null);
+    });
   }
 
   /**
    * Check the dashboard notebook's metadata.
    */
   private _checkMetadata(): void {
-    let data = this._context.model.metadata.get('extensions') as Record<
+    /* let data = this._context.model.metadata.get('extensions') as Record<
       string,
       any
-    >;
+    >; */
+
+    let data = this._context.model.sharedModel.getMetadata()
+      .extensions as Record<string, any>;
 
     if (!data) {
       data = {
@@ -410,7 +461,11 @@ export class GridStackModel {
       this._info = data.jupyter_dashboards?.views[VIEW] as DashboardView;
     }
 
-    this._context.model.metadata.set('extensions', data);
+    //this._context.model.metadata.set('extensions', data);
+    console.debug('Metadata:', data);
+    this._mutex(() => {
+      this._context.model.sharedModel.updateMetadata({ extensions: data });
+    });
   }
 
   /**
@@ -453,7 +508,8 @@ export class GridStackModel {
    * @param cell - `ICellModel`.
    */
   private _checkCellMetadata(cell: ICellModel): void {
-    let data = cell.metadata.get('extensions') as Record<string, any>;
+    //let data = cell.metadata.get('extensions') as Record<string, any>;
+    let data = cell.sharedModel.getMetadata().extensions as Record<string, any>;
 
     if (!data) {
       data = {
@@ -471,7 +527,10 @@ export class GridStackModel {
           }
         }
       };
-      cell.metadata.set('extensions', data);
+      //cell.metadata.set('extensions', data);
+      this._mutex(() => {
+        cell.sharedModel.setMetadata({ extensions: data });
+      });
     } else if (!data.jupyter_dashboards) {
       data['jupyter_dashboards'] = {
         activeView: VIEW,
@@ -486,7 +545,10 @@ export class GridStackModel {
           }
         }
       };
-      cell.metadata.set('extensions', data);
+      //cell.metadata.set('extensions', data);
+      this._mutex(() => {
+        cell.sharedModel.setMetadata({ extensions: data });
+      });
     } else if (
       !validateDashboardCellView(data.jupyter_dashboards.views[VIEW])
     ) {
@@ -498,8 +560,12 @@ export class GridStackModel {
         height: 2,
         locked: false
       };
-      cell.metadata.set('extensions', data);
+      //cell.metadata.set('extensions', data);
+      this._mutex(() => {
+        cell.sharedModel.setMetadata({ extensions: data });
+      });
     }
+    console.debug('Cell Medatada:', data);
   }
 
   private _context: DocumentRegistry.IContext<INotebookModel>;
