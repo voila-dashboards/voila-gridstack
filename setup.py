@@ -122,6 +122,7 @@ setup_args = dict(
             'lxml'
         ]
     },
+    #entry_points={"console_scripts": ["voila-gridstack = voila_gridstack.app.main:main"]},
     zip_safe=False,
     include_package_data=True,
     python_requires=">=3.6",

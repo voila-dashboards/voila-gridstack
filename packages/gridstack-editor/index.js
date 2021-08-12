@@ -70,6 +70,7 @@ async function main() {
     require('@jupyterlab/apputils-extension').default.filter(({ id }) =>
       ['@jupyterlab/apputils-extension:settings'].includes(id)
     ),
+    require('@jupyterlab/theme-light-extension'),
     require('@jupyterlab/rendermime-extension'),
     require('@jupyterlab/notebook-extension').default.filter(({ id }) =>
       [
