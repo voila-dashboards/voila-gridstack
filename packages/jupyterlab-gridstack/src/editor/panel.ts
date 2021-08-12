@@ -127,7 +127,13 @@ export class VoilaGridStackPanel extends Panel {
    * Compact the dashboard on the top left corner.
    */
   compact(): void {
-    this._gridstackWidget?.compact();
+    showDialog({
+      title: 'Compact the grid layout',
+      body: 'Only unlocked cell will move.',
+      buttons: [Dialog.okButton()]
+    }).then(result => {
+      this._gridstackWidget?.compact();
+    });
   }
 
   /**

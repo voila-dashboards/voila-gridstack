@@ -48,10 +48,10 @@ export class VoilaGridStackWidget extends DocumentWidget<
 
     // Adding the buttons to the widget toolbar
     this.toolbar.addItem('save', new Save(this.content));
+    this.toolbar.addItem('edit', new Edit(this.content));
     this.toolbar.addItem('undo', new Undo(this.context.model));
     this.toolbar.addItem('redo', new Redo(this.context.model));
     //this.toolbar.addItem('revert', new Revert(this.content));
-    this.toolbar.addItem('edit', new Edit(this.content));
     this.toolbar.addItem('compact', new Compact(this.content));
     this.toolbar.addItem('voila', new Voila(this.context.path));
   }
