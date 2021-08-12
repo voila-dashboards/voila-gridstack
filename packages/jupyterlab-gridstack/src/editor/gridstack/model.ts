@@ -94,9 +94,7 @@ export class GridStackModel {
       });
     });
 
-    this._context.model.contentChanged.connect(() => {
-      this._updateCells();
-    }, this);
+    this._context.model.contentChanged.connect(this._updateCells, this);
   }
 
   /**
