@@ -20,7 +20,7 @@ import { GridStackModel } from './model';
 
 import { DashboardMetadataEditor } from '../components/metadata';
 
-import { DashboardCellView, LockSignal } from '../format';
+import { CellChange } from '../format';
 
 interface IDroppable {
   /**
@@ -185,6 +185,8 @@ export class GridStackWidget extends Widget {
         this.layout.addGridItem(model.id, item, info);
       }
     }
+
+    this._model.executed = true;
   }
 
   /**
@@ -193,8 +195,8 @@ export class GridStackWidget extends Widget {
    * @param model - The `GridstackModel` that sends the signal.
    * @param id - The Cell id.
    */
-  private _removeCell(model: GridStackModel, id: string): void {
-    this.layout.removeGridItem(id);
+  private _removeCell(model: GridStackModel, cell: CellChange): void {
+    this.layout.removeGridItem(cell.id);
   }
 
   /**
@@ -203,10 +205,8 @@ export class GridStackWidget extends Widget {
    * @param model - The `GridstackModel` that sends the signal.
    * @param id - The Cell id.
    */
-  private _lockCell(model: GridStackModel, evt: LockSignal): void {
-    const info = this._model.getCellInfo(evt.cellId);
-    info!.locked = evt.lock;
-    this.layout.updateGridItem(evt.cellId, info as DashboardCellView);
+  private _lockCell(model: GridStackModel, cell: CellChange): void {
+    this.layout.updateGridItem(cell.id, cell.info);
   }
 
   /**
@@ -309,7 +309,7 @@ export class GridStackWidget extends Widget {
         row: el.y ?? 0,
         width: el.w ?? 2,
         height: el.h ?? 2,
-        locked: el.locked ?? false
+        locked: el.locked ?? true
       });
     });
   }
@@ -479,7 +479,7 @@ export class GridStackWidget extends Widget {
           info.row = row;
           info.width = width;
           info.height = height;
-          info.locked = info.locked ? true : false;
+          info.locked = info.locked === false ? false : true;
           this._model.setCellInfo(widget.model.id, info);
           const item = this._model.createCell(widget.model, info.locked);
           this.layout.addGridItem(widget.model.id, item, info);
@@ -492,7 +492,7 @@ export class GridStackWidget extends Widget {
           info.row = row;
           info.width = width;
           info.height = height;
-          info.locked = info.locked ? true : false;
+          info.locked = info.locked === false ? false : true;
           this._model.setCellInfo(widget.model.id, info);
           const item = this._model.createCell(widget.model, info.locked);
           this.layout.addGridItem(widget.model.id, item, info);
@@ -507,7 +507,7 @@ export class GridStackWidget extends Widget {
         info.col = col;
         info.row = row;
         info.width = Math.min(width, info.width);
-        info.locked = info.locked ? true : false;
+        info.locked = info.locked === false ? false : true;
         this._model.setCellInfo(widget.model.id, info);
         this.layout.updateGridItem(widget.model.id, info);
       } else if (!info) {
