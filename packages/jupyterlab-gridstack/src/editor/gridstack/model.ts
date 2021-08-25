@@ -80,8 +80,6 @@ export class GridStackModel {
       this._checkCellsMetadata();
 
       const ymodel = this._context.model.sharedModel as YNotebook;
-      // TODO: Remove @ts-ignore
-      // @ts-ignore
       this._ystate = ymodel.ystate;
       if (this._ystate.get('executed') !== true) {
         ymodel.transact(() => {

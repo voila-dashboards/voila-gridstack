@@ -74,9 +74,12 @@
   "devDependencies": {
     "@babel/core": "^7.10.2",
     "@babel/preset-env": "^7.10.2",
-    "@jupyterlab/builder": "^3.1.6",
-    "@jupyterlab/testutils": "^3.1.5",
+    "@jupyterlab/builder": "^3.1.8",
+    "@jupyterlab/testutils": "3.1.6",
     "@types/codemirror": "^0.0.97"
+  },
+  "resolutions": {
+    "@jupyterlab/testutils": "3.1.6"
   },
   "sideEffects": [
     "style/*.css"
