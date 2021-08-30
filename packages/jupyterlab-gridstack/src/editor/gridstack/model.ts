@@ -24,9 +24,13 @@ import { SimplifiedOutputArea } from '@jupyterlab/outputarea';
 
 import { IObservableUndoableList } from '@jupyterlab/observables';
 
+import { YNotebook, createMutex } from '@jupyterlab/shared-models';
+
 import { Widget } from '@lumino/widgets';
 
 import { Signal, ISignal } from '@lumino/signaling';
+
+import * as Y from 'yjs';
 
 import { GridStackItemWidget, GridStackItemModel, ItemState } from '../item';
 
@@ -35,7 +39,7 @@ import {
   DashboardCellView,
   validateDashboardView,
   validateDashboardCellView,
-  LockSignal
+  CellChange
 } from '../format';
 
 export const VIEW = 'grid_default';
@@ -58,8 +62,8 @@ export class GridStackModel {
     this._notebookConfig = options.notebookConfig;
 
     this._ready = new Signal<this, null>(this);
-    this._cellRemoved = new Signal<this, string>(this);
-    this._cellPinned = new Signal<this, LockSignal>(this);
+    this._cellRemoved = new Signal<this, CellChange>(this);
+    this._cellPinned = new Signal<this, CellChange>(this);
     this._stateChanged = new Signal<this, null>(this);
     this._contentChanged = new Signal<this, null>(this);
 
@@ -68,12 +72,21 @@ export class GridStackModel {
       type: 'grid',
       maxColumns: 12,
       cellMargin: 2,
-      defaultCellHeight: 60
+      defaultCellHeight: 40
     };
 
     this._context.sessionContext.ready.then(() => {
       this._checkMetadata();
       this._checkCellsMetadata();
+
+      const ymodel = this._context.model.sharedModel as YNotebook;
+      this._ystate = ymodel.ystate;
+      if (this._ystate.get('executed') !== true) {
+        ymodel.transact(() => {
+          this._ystate.set('executed', false);
+        }, false);
+      }
+
       this._context.save().then(v => {
         this._ready.emit(null);
       });
@@ -92,14 +105,14 @@ export class GridStackModel {
   /**
    * A signal emitted when a cell is removed.
    */
-  get cellRemoved(): ISignal<this, string> {
+  get cellRemoved(): ISignal<this, CellChange> {
     return this._cellRemoved;
   }
 
   /**
    * A signal emitted when a cell pinned.
    */
-  get cellPinned(): ISignal<this, LockSignal> {
+  get cellPinned(): ISignal<this, CellChange> {
     return this._cellPinned;
   }
 
@@ -160,6 +173,10 @@ export class GridStackModel {
     this._notebookConfig = value;
   }
 
+  set executed(value: boolean) {
+    this._ystate.set('executed', value);
+  }
+
   /**
    * Getter for the dashboard metadata info.
    */
@@ -174,14 +191,20 @@ export class GridStackModel {
    */
   set info(info: DashboardView) {
     this._info = info;
-    const data = this._context.model.metadata.get('extensions') as Record<
+    /* const data = this._context.model.metadata.get('extensions') as Record<
       string,
       any
-    >;
+    >; */
+    this._mutex(() => {
+      const data = this._context.model.sharedModel.getMetadata();
 
-    data.jupyter_dashboards.views[VIEW] = this._info;
-    this._context.model.metadata.set('extensions', data);
-    this._context.model.dirty = true;
+      (data as Record<string, any>).extensions.jupyter_dashboards.views[
+        VIEW
+      ] = this._info;
+      //this._context.model.metadata.set('extensions', data.extensions);
+      this._context.model.sharedModel.setMetadata(data);
+      this._context.model.dirty = true;
+    });
   }
 
   /**
@@ -208,7 +231,10 @@ export class GridStackModel {
       const cell = this._context.model.cells.get(i);
 
       if (cell.id === id) {
-        const data = cell.metadata.get('extensions') as Record<string, any>;
+        const data = cell.sharedModel.getMetadata().extensions as Record<
+          string,
+          any
+        >;
         return data.jupyter_dashboards.views[VIEW];
       }
     }
@@ -227,10 +253,15 @@ export class GridStackModel {
       const cell = this._context.model.cells.get(i);
 
       if (cell.id === id) {
-        const data = cell.metadata.get('extensions') as Record<string, any>;
-        data.jupyter_dashboards.views[VIEW] = info;
-        cell.metadata.set('extensions', data);
-        this._context.model.dirty = true;
+        this._mutex(() => {
+          const data = cell.sharedModel.getMetadata().extensions as Record<
+            string,
+            any
+          >;
+          data.jupyter_dashboards.views[VIEW] = info;
+          cell.sharedModel.setMetadata({ extensions: data });
+          this._context.model.dirty = true;
+        });
         break;
       }
     }
@@ -246,10 +277,19 @@ export class GridStackModel {
       const cell = this._context.model.cells.get(i);
 
       if (cell.id === id) {
-        const data = cell.metadata.get('extensions') as Record<string, any>;
-        data.jupyter_dashboards.views[VIEW].hidden = true;
-        cell.metadata.set('extensions', data);
-        this._context.model.dirty = true;
+        this._mutex(() => {
+          const data = cell.sharedModel.getMetadata().extensions as Record<
+            string,
+            any
+          >;
+          data.jupyter_dashboards.views[VIEW].hidden = true;
+          cell.sharedModel.setMetadata({ extensions: data });
+          this._context.model.dirty = true;
+          this._cellRemoved.emit({
+            id,
+            info: data.jupyter_dashboards.views[VIEW]
+          });
+        });
         break;
       }
     }
@@ -265,10 +305,19 @@ export class GridStackModel {
       const cell = this._context.model.cells.get(i);
 
       if (cell.id === id) {
-        const data = cell.metadata.get('extensions') as Record<string, any>;
-        data.jupyter_dashboards.views[VIEW].locked = lock;
-        cell.metadata.set('extensions', data);
-        this._context.model.dirty = true;
+        this._mutex(() => {
+          const data = cell.sharedModel.getMetadata().extensions as Record<
+            string,
+            any
+          >;
+          data.jupyter_dashboards.views[VIEW].locked = lock;
+          cell.sharedModel.setMetadata({ extensions: data });
+          this._context.model.dirty = true;
+          this._cellPinned.emit({
+            id,
+            info: data.jupyter_dashboards.views[VIEW]
+          });
+        });
         break;
       }
     }
@@ -350,7 +399,7 @@ export class GridStackModel {
    * @param cell - `ICellModel`.
    */
   public execute(cell: ICellModel): void {
-    if (cell.type !== 'code') {
+    if (cell.type !== 'code' || this._ystate.get('executed')) {
       return;
     }
 
@@ -366,25 +415,36 @@ export class GridStackModel {
       cell.value.text,
       codeCell.outputArea,
       this._context.sessionContext
-    ).catch(reason => console.error(reason));
+    )
+      .then(resp => {
+        if (
+          resp?.header.msg_type === 'execute_reply' &&
+          resp.content.status === 'ok'
+        ) {
+          (cell as CodeCellModel).executionCount = resp.content.execution_count;
+        }
+      })
+      .catch(reason => console.error(reason));
   }
+
+  private readonly _mutex = createMutex();
 
   /**
    * Update cells.
    */
   private _updateCells(): void {
-    this._checkCellsMetadata();
-    this._contentChanged.emit(null);
+    this._mutex(() => {
+      this._checkCellsMetadata();
+      this._contentChanged.emit(null);
+    });
   }
 
   /**
    * Check the dashboard notebook's metadata.
    */
   private _checkMetadata(): void {
-    let data = this._context.model.metadata.get('extensions') as Record<
-      string,
-      any
-    >;
+    let data = this._context.model.sharedModel.getMetadata()
+      .extensions as Record<string, any>;
 
     if (!data) {
       data = {
@@ -410,7 +470,9 @@ export class GridStackModel {
       this._info = data.jupyter_dashboards?.views[VIEW] as DashboardView;
     }
 
-    this._context.model.metadata.set('extensions', data);
+    this._mutex(() => {
+      this._context.model.sharedModel.updateMetadata({ extensions: data });
+    });
   }
 
   /**
@@ -427,19 +489,16 @@ export class GridStackModel {
     switch (change) {
       case ItemState.CLOSED:
         this.hideCell(item.cellId);
-        this._cellRemoved.emit(item.cellId);
         item.stateChanged.disconnect(this._itemChanged);
         item.dispose();
         break;
 
       case ItemState.LOCKED:
         this.lockCell(item.cellId, true);
-        this._cellPinned.emit({ cellId: item.cellId, lock: true });
         break;
 
       case ItemState.UNLOCKED:
         this.lockCell(item.cellId, false);
-        this._cellPinned.emit({ cellId: item.cellId, lock: false });
         break;
 
       default:
@@ -453,7 +512,7 @@ export class GridStackModel {
    * @param cell - `ICellModel`.
    */
   private _checkCellMetadata(cell: ICellModel): void {
-    let data = cell.metadata.get('extensions') as Record<string, any>;
+    let data = cell.sharedModel.getMetadata().extensions as Record<string, any>;
 
     if (!data) {
       data = {
@@ -466,12 +525,14 @@ export class GridStackModel {
               col: null,
               width: 2,
               height: 2,
-              locked: false
+              locked: true
             }
           }
         }
       };
-      cell.metadata.set('extensions', data);
+      this._mutex(() => {
+        cell.sharedModel.setMetadata({ extensions: data });
+      });
     } else if (!data.jupyter_dashboards) {
       data['jupyter_dashboards'] = {
         activeView: VIEW,
@@ -482,11 +543,13 @@ export class GridStackModel {
             col: null,
             width: 2,
             height: 2,
-            locked: false
+            locked: true
           }
         }
       };
-      cell.metadata.set('extensions', data);
+      this._mutex(() => {
+        cell.sharedModel.setMetadata({ extensions: data });
+      });
     } else if (
       !validateDashboardCellView(data.jupyter_dashboards.views[VIEW])
     ) {
@@ -496,9 +559,11 @@ export class GridStackModel {
         col: null,
         width: 2,
         height: 2,
-        locked: false
+        locked: true
       };
-      cell.metadata.set('extensions', data);
+      this._mutex(() => {
+        cell.sharedModel.setMetadata({ extensions: data });
+      });
     }
   }
 
@@ -506,10 +571,11 @@ export class GridStackModel {
   private _editorConfig: StaticNotebook.IEditorConfig;
   private _notebookConfig: StaticNotebook.INotebookConfig;
   private _info: DashboardView;
+  private _ystate: Y.Map<any> = new Y.Map();
 
   private _ready: Signal<this, null>;
-  private _cellRemoved: Signal<this, string>;
-  private _cellPinned: Signal<this, LockSignal>;
+  private _cellRemoved: Signal<this, CellChange>;
+  private _cellPinned: Signal<this, CellChange>;
   private _stateChanged: Signal<this, null>;
   private _contentChanged: Signal<this, null>;
 }

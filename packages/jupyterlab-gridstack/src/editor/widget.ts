@@ -14,9 +14,13 @@ import Save from './toolbar/save';
 
 import Edit from './toolbar/edit';
 
-import Revert from './toolbar/revert';
+//import Revert from './toolbar/revert';
 
 import Voila from './toolbar/voila';
+
+import Undo from './toolbar/undo';
+
+import Redo from './toolbar/redo';
 
 /**
  * A `DocumentWidget` for Voila GridStack to host the toolbar and content area.
@@ -40,12 +44,24 @@ export class VoilaGridStackWidget extends DocumentWidget<
     this.title.closable = true;
     this.title.iconClass = 'jp-MaterialIcon jp-VoilaIcon';
 
+    this.addClass('jp-NotebookPanel');
+
     // Adding the buttons to the widget toolbar
     this.toolbar.addItem('save', new Save(this.content));
-    this.toolbar.addItem('revert', new Revert(this.content));
     this.toolbar.addItem('edit', new Edit(this.content));
+    this.toolbar.addItem('undo', new Undo(this.context.model));
+    this.toolbar.addItem('redo', new Redo(this.context.model));
+    //this.toolbar.addItem('revert', new Revert(this.content));
     this.toolbar.addItem('compact', new Compact(this.content));
     this.toolbar.addItem('voila', new Voila(this.context.path));
+  }
+
+  undo(): void {
+    this.context.model.sharedModel.undo();
+  }
+
+  redo(): void {
+    this.context.model.sharedModel.redo();
   }
 }
 

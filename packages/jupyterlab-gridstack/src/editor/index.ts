@@ -12,6 +12,8 @@ import { IEditorServices } from '@jupyterlab/codeeditor';
 
 import { WidgetTracker } from '@jupyterlab/apputils';
 
+import { IMainMenu } from '@jupyterlab/mainmenu';
+
 import { VoilaGridStackWidgetFactory } from './factory';
 
 import { IVoilaGridStackTracker, VoilaGridStackWidget } from './widget';
@@ -27,6 +29,7 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridStackTracker> = {
   provides: IVoilaGridStackTracker,
   requires: [
     NotebookPanel.IContentFactory,
+    IMainMenu,
     IEditorServices,
     IRenderMimeRegistry
   ],
@@ -34,6 +37,7 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridStackTracker> = {
   activate: (
     app: JupyterFrontEnd,
     contentFactory: NotebookPanel.IContentFactory,
+    mainMenu: IMainMenu,
     editorServices: IEditorServices,
     rendermime: IRenderMimeRegistry,
     restorer: ILayoutRestorer | null
@@ -75,6 +79,13 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridStackTracker> = {
       void tracker.add(widget);
       widget.update();
       app.commands.notifyCommandChanged();
+    });
+
+    // Add undo/redo hooks to the edit menu.
+    mainMenu.editMenu.undoers.add({
+      tracker,
+      undo: (widget: any) => widget.undo(),
+      redo: (widget: any) => widget.redo()
     });
 
     app.docRegistry.addWidgetFactory(factory);

@@ -24,6 +24,10 @@
   top: 0px;
 }
 
+.grid-panel {
+  padding: 0px;
+}
+
 .grid-stack {
   background-image: linear-gradient(
       var(--jp-layout-color3) 1px,

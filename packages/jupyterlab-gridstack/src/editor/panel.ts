@@ -33,7 +33,11 @@ export class VoilaGridStackPanel extends Panel {
    */
   constructor(options: VoilaGridStackPanel.IOptions) {
     super();
+    this.addClass('jp-Notebook');
+    this.addClass('jp-NotebookPanel-notebook');
     this.addClass('grid-panel');
+
+    this.node.dataset['jpUndoer'] = 'true';
 
     this._context = options.context;
     this.rendermime = options.rendermime;
@@ -123,7 +127,13 @@ export class VoilaGridStackPanel extends Panel {
    * Compact the dashboard on the top left corner.
    */
   compact(): void {
-    this._gridstackWidget?.compact();
+    showDialog({
+      title: 'Compact the grid layout',
+      body: 'Only unlocked cell will move.',
+      buttons: [Dialog.okButton()]
+    }).then(result => {
+      this._gridstackWidget?.compact();
+    });
   }
 
   /**

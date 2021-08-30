@@ -87,17 +87,17 @@ export type DashboardCellView = {
 };
 
 /**
- * Signal argument to lock/unlock a GridstackItem.
+ * Signal argument for cell change.
  */
-export type LockSignal = {
+export type CellChange = {
   /**
    * Cell id.
    */
-  cellId: string;
+  id: string;
   /**
-   * Action.
+   * Cell view info.
    */
-  lock: boolean;
+  info: DashboardCellView;
 };
 
 /**
