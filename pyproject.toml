@@ -14,4 +14,4 @@ build_cmd = "build:prod"
 npm = ["jlpm"]
 
 [tool.check-manifest]
-ignore = ["voila-gridstack/labextension/**", "binder/**", "yarn.lock", ".*", "package-lock.json"]
+ignore = ["binder/**", "packages/**", "voila-gridstack/labextension/**", "yarn.lock", ".*", "package-lock.json"]

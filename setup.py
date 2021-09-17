@@ -85,7 +85,7 @@ try:
         get_data_files
     )
 
-    post_develop = npm_builder(build_cmd="build:prod", npm='jlpm', force=True)
+    post_develop = npm_builder(build_cmd="install:dev", npm='jlpm', force=True)
     setup_args['cmdclass'] = wrap_installers(post_develop=post_develop, ensured_targets=ensured_targets)
     setup_args['data_files'] = get_data_files(data_files_spec)
 except ImportError as e:
