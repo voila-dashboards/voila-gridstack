@@ -37,7 +37,7 @@ try:
         get_data_files
     )
 
-    post_develop = npm_builder(build_cmd="install:dev", npm='jlpm', force=True)
+    post_develop = npm_builder(build_cmd='install:dev', npm='jlpm', force=True)
     cmdclass = wrap_installers(post_develop=post_develop, ensured_targets=ensured_targets)
     data_files = get_data_files(data_files_spec)
     setup_args = dict(cmdclass=cmdclass, data_files=get_data_files(data_files_spec))
