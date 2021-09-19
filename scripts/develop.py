@@ -30,6 +30,12 @@ def link():
         clean_dir(SYS_TEMPLATE_DIR)
         shutil.rmtree(SYS_TEMPLATE_DIR)
     
+    local_path = os.path.relpath(LOCAL_TEMPLATE_DIR)
+    sys_path = os.path.relpath(SYS_TEMPLATE_DIR)
+    print(f"""
+    Ori:  {local_path}
+    Dest: {sys_path}
+    """)
     os.symlink(LOCAL_TEMPLATE_DIR, SYS_TEMPLATE_DIR)
     print(f"""Symlink created:
     Ori:  {LOCAL_TEMPLATE_DIR}

@@ -10,7 +10,7 @@ ensured-targets = ["voila-gridstack/labextension/static/style.js", "voila-gridst
 factory = "jupyter_packaging.npm_builder"
 
 [tool.jupyter-packaging.build-args]
-build_cmd = "install:dev"
+build_cmd = "build:prod"
 npm = ["jlpm"]
 
 [tool.check-manifest]
