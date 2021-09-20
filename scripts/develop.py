@@ -16,7 +16,7 @@ LOCAL_TEMPLATE_DIR  = ( HERE / "share/jupyter/nbconvert/templates/gridstack" )
 SYS_TEMPLATE_DIR = Path(sys.prefix, "share/jupyter/nbconvert/templates/gridstack")
 
 def link():
-    """Intall template"""
+    """Install template"""
 
     assert LOCAL_TEMPLATE_DIR.exists()
 
@@ -67,7 +67,7 @@ def clean_dir(dir_path):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--link', action='store_true', default=None, help='Intall template')
+    parser.add_argument('--link', action='store_true', default=None, help='Install template')
     parser.add_argument('--unlink', action='store_true', default=None, help='Uninstall template')
     args = parser.parse_args()
 
