@@ -1,19 +1,23 @@
 include LICENSE
 include README.md
+include CHANGELOG.md
 include pyproject.toml
-include jupyter-config/voila-gridstack.json
 
-include package.json
-include install.json
 include ts*.json
+include install.json
+include package.json
 
+graft etc
+graft share
+graft voila-gridstack/static
 graft voila-gridstack/labextension
 
 # Javascript files
 graft src
 graft style
-prune **/node_modules
+
 prune lib
+prune **/node_modules
 
 # Patterns to exclude from any directory
 global-exclude *~
