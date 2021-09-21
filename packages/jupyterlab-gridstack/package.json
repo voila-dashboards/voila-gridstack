@@ -34,7 +34,7 @@
     "build:test": "tsc --build tsconfig.test.json",
     "clean": "jlpm run clean:lib",
     "clean:all": "jlpm run clean:lib && jlpm run clean:labextension",
-    "clean:labextension": "rimraf ../../voila-gridstack/labextension",
+    "clean:labextension": "rimraf ../../voila_gridstack/labextension",
     "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
     "prepare": "jlpm run clean && jlpm run build:prod",
     "test": "jest",
@@ -83,7 +83,7 @@
   ],
   "jupyterlab": {
     "extension": true,
-    "outputDir": "../../voila-gridstack/labextension",
+    "outputDir": "../../voila_gridstack/labextension",
     "sharedPackages": {
       "@jupyter-widgets/base": {
         "bundled": false,

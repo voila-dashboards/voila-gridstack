@@ -9,9 +9,10 @@ HERE = Path(__file__).parent.resolve()
 
 # The name of the project
 NAME = "voila-gridstack"
+PACKAGE = NAME.replace('-', '_')
 
 labext_name = "@voila-dashboards/jupyterlab-gridstack"
-lab_extension_dest = (HERE / NAME / "labextension")
+lab_extension_dest = (HERE / PACKAGE / "labextension")
 
 # Representative files that should exist after a successful build
 ensured_targets = [
@@ -24,7 +25,7 @@ data_files_spec = [
     ("etc/jupyter/jupyter_server_config.d", "etc/jupyter/jupyter_server_config.d", "voila-gridstack.json"),
     ("etc/jupyter/jupyter_notebook_config.d", "etc/jupyter/jupyter_notebook_config.d", "voila-gridstack.json"),
     ("etc/jupyter/nbconfig/notebook.d", "etc/jupyter/nbconfig/notebook.d", "voila-gridstack.json"),
-    ("share/jupyter/nbextensions/voila-gridstack", "voila-gridstack/static", "**"),
+    ("share/jupyter/nbextensions/voila-gridstack", f"{PACKAGE}/static", "**"),
     ("share/jupyter/labextensions/%s" % labext_name, str(lab_extension_dest), "**"),
     ("share/jupyter/labextensions/%s" % labext_name, HERE, "install.json"),
     ("share/jupyter/nbconvert/templates/gridstack", "share/jupyter/nbconvert/templates/gridstack", "**")

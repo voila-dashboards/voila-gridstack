@@ -1,6 +1,5 @@
 include LICENSE
-include README.md
-include CHANGELOG.md
+include *.md
 include pyproject.toml
 
 include ts*.json
@@ -9,8 +8,9 @@ include package.json
 
 graft etc
 graft share
-graft voila-gridstack/static
-graft voila-gridstack/labextension
+graft voila_gridstack/static
+graft voila_gridstack/labextension
+graft tests
 
 # Javascript files
 graft src
