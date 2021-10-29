@@ -123,6 +123,8 @@ export class GridStackLayout extends Layout {
    * Handle `resize-request` messages sent to the widget.
    */
   protected onResize(msg: Message): void {
+    const rect = this.parent!.node.getBoundingClientRect();
+    this._gridHost.style.minHeight = `${rect.height}px`;
     this._grid.onParentResize();
   }
 
@@ -130,6 +132,8 @@ export class GridStackLayout extends Layout {
    * Handle `fit-request` messages sent to the widget.
    */
   protected onFitRequest(msg: Message): void {
+    const rect = this.parent!.node.getBoundingClientRect();
+    this._gridHost.style.minHeight = `${rect.height}px`;
     this._grid.onParentResize();
   }
 
