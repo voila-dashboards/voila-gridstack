@@ -1,6 +1,6 @@
 import { NotebookPanel } from '@jupyterlab/notebook';
 
-import { Cell, CodeCellModel } from '@jupyterlab/cells';
+import { Cell, CodeCell, CodeCellModel } from '@jupyterlab/cells';
 
 import { showDialog, showErrorMessage } from '@jupyterlab/apputils';
 
@@ -335,15 +335,17 @@ export class GridStackWidget extends Widget {
       const x = Math.floor(
         (this.layout.columns * event.offsetX) / this.node.offsetWidth
       );
-      const w = this.layout.columns - x;
-      let h = 1;
+      let w = 2;
+      let h = 2;
       if (widget!.model.type === 'code') {
-        h = Math.ceil(
-          (widget!.node.scrollHeight - widget!.inputArea.node.scrollHeight) /
-            this.layout.cellHeight
-        );
+        // The constant 40, is the ~size of the toolbar in px
+        const rect = (widget as CodeCell).outputArea.node.getBoundingClientRect();
+        w = Math.ceil(rect.width / this.layout.grid.cellWidth());
+        h = Math.ceil((rect.height + 40) / this.layout.cellHeight);
       } else {
-        h = Math.ceil(widget!.node.scrollHeight / this.layout.cellHeight);
+        const rect = widget!.node.getBoundingClientRect();
+        w = Math.ceil(rect.width / this.layout.grid.cellWidth());
+        h = Math.ceil((rect.height + 40) / this.layout.cellHeight);
       }
 
       // Reset the shadow widget as the enter event is triggered when coming from a child
@@ -357,7 +359,7 @@ export class GridStackWidget extends Widget {
         this.layout.grid.update(item, {
           x,
           y,
-          w: Math.min(w, item.gridstackNode?.w ?? this.layout.columns),
+          w,
           h
         });
       } else {
@@ -398,6 +400,9 @@ export class GridStackWidget extends Widget {
     this.addClass('pr-DropTarget');
     event.dropAction = 'copy';
     if (this._shadowWidget) {
+      // We know that the widget exists as this is tested in `_isDroppable`
+      const widget = (event.source.parent as NotebookPanel).content.activeCell;
+
       const x = Math.floor(
         (this.layout.columns * event.offsetX) / this.node.offsetWidth
       );
@@ -405,7 +410,15 @@ export class GridStackWidget extends Widget {
         (event.offsetY + this.node.scrollTop) / this.layout.cellHeight
       );
 
-      let w = this.layout.columns - x;
+      let w = 2;
+      if (widget!.model.type === 'code') {
+        const rect = (widget as CodeCell).outputArea.node.getBoundingClientRect();
+        w = Math.ceil(rect.width / this.layout.grid.cellWidth());
+      } else {
+        const rect = widget!.node.getBoundingClientRect();
+        w = Math.ceil(rect.width / this.layout.grid.cellWidth());
+      }
+
       if (!this._shadowWidget.classList.contains('grid-stack-placeholder')) {
         // Don't expand the existing widget
         w = Math.min(
@@ -448,15 +461,17 @@ export class GridStackWidget extends Widget {
       const col = Math.floor(
         (this.layout.columns * event.offsetX) / this.node.offsetWidth
       );
-      const width = this.layout.columns - col;
+      let width = 1;
       let height = 1;
       if (widget!.model.type === 'code') {
-        height = Math.ceil(
-          (widget!.node.scrollHeight - widget!.inputArea.node.scrollHeight) /
-            this.layout.cellHeight
-        );
+        // The constant 40, is the ~size of the toolbar in px
+        const rect = (widget as CodeCell).outputArea.node.getBoundingClientRect();
+        width = Math.ceil(rect.width / this.layout.grid.cellWidth());
+        height = Math.ceil((rect.height + 40) / this.layout.cellHeight);
       } else {
-        height = Math.ceil(widget!.node.scrollHeight / this.layout.cellHeight);
+        const rect = widget!.node.getBoundingClientRect();
+        width = Math.ceil(rect.width / this.layout.grid.cellWidth());
+        height = Math.ceil((rect.height + 40) / this.layout.cellHeight);
       }
 
       const items = this.layout.gridItems;
