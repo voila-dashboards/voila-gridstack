@@ -329,7 +329,9 @@ export class GridStackWidget extends Widget {
         value => value.gridstackNode?.id === widget!.model.id
       );
 
-      const y = Math.floor(event.offsetY / this.layout.cellHeight);
+      const y = Math.floor(
+        (event.offsetY + this.node.scrollTop) / this.layout.cellHeight
+      );
       const x = Math.floor(
         (this.layout.columns * event.offsetX) / this.node.offsetWidth
       );
@@ -348,6 +350,7 @@ export class GridStackWidget extends Widget {
       this._resetShadowWidget();
       // Stop event on gridstack during drag and drop action
       this.layout.grid.el.style.pointerEvents = 'none';
+
       if (item) {
         // If the cell is already in the grid, so we need to move it.
         this._shadowWidget = item;
@@ -398,6 +401,9 @@ export class GridStackWidget extends Widget {
       const x = Math.floor(
         (this.layout.columns * event.offsetX) / this.node.offsetWidth
       );
+      const y = Math.floor(
+        (event.offsetY + this.node.scrollTop) / this.layout.cellHeight
+      );
 
       let w = this.layout.columns - x;
       if (!this._shadowWidget.classList.contains('grid-stack-placeholder')) {
@@ -410,7 +416,7 @@ export class GridStackWidget extends Widget {
 
       this.layout.grid.update(this._shadowWidget, {
         x,
-        y: Math.floor(event.offsetY / this.layout.cellHeight),
+        y,
         w
       });
     }
@@ -436,7 +442,9 @@ export class GridStackWidget extends Widget {
         return;
       }
 
-      const row = Math.floor(event.offsetY / this.layout.cellHeight);
+      const row = Math.floor(
+        (event.offsetY + this.node.scrollTop) / this.layout.cellHeight
+      );
       const col = Math.floor(
         (this.layout.columns * event.offsetX) / this.node.offsetWidth
       );
