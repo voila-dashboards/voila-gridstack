@@ -191,10 +191,6 @@ export class GridStackModel {
    */
   set info(info: DashboardView) {
     this._info = info;
-    /* const data = this._context.model.metadata.get('extensions') as Record<
-      string,
-      any
-    >; */
     this._mutex(() => {
       const data = this._context.model.sharedModel.getMetadata();
 
