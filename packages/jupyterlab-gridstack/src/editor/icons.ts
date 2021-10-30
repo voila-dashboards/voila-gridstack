@@ -6,15 +6,15 @@ import unPinIconSvgStr from '../../style/icons/unpin.svg';
 
 export const deleteIcon = new LabIcon({
   name: '@voila-dashboards/jupyterlab-gridstack:icon-delete',
-  svgstr: deleteIconSvgStr
+  svgstr: deleteIconSvgStr,
 });
 
 export const pinIcon = new LabIcon({
   name: '@voila-dashboards/jupyterlab-gridstack:icon-pin',
-  svgstr: pinIconSvgStr
+  svgstr: pinIconSvgStr,
 });
 
 export const unPinIcon = new LabIcon({
   name: '@voila-dashboards/jupyterlab-gridstack:icon-unPin',
-  svgstr: unPinIconSvgStr
+  svgstr: unPinIconSvgStr,
 });

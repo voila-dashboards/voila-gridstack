@@ -1,7 +1,7 @@
 import {
   INotebookModel,
   NotebookPanel,
-  StaticNotebook
+  StaticNotebook,
 } from '@jupyterlab/notebook';
 
 import {
@@ -11,7 +11,7 @@ import {
   MarkdownCell,
   MarkdownCellModel,
   RawCell,
-  RawCellModel
+  RawCellModel,
 } from '@jupyterlab/cells';
 
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
@@ -39,7 +39,7 @@ import {
   DashboardCellView,
   validateDashboardView,
   validateDashboardCellView,
-  CellChange
+  CellChange,
 } from '../format';
 
 export const VIEW = 'grid_default';
@@ -72,7 +72,7 @@ export class GridStackModel {
       type: 'grid',
       maxColumns: 12,
       cellMargin: 2,
-      defaultCellHeight: 40
+      defaultCellHeight: 40,
     };
 
     this._context.sessionContext.ready.then(() => {
@@ -87,7 +87,7 @@ export class GridStackModel {
         }, false);
       }
 
-      this._context.save().then(v => {
+      this._context.save().then((v) => {
         this._ready.emit(null);
       });
     });
@@ -194,9 +194,8 @@ export class GridStackModel {
     this._mutex(() => {
       const data = this._context.model.sharedModel.getMetadata();
 
-      (data as Record<string, any>).extensions.jupyter_dashboards.views[
-        VIEW
-      ] = this._info;
+      (data as Record<string, any>).extensions.jupyter_dashboards.views[VIEW] =
+        this._info;
       //this._context.model.metadata.set('extensions', data.extensions);
       this._context.model.sharedModel.setMetadata(data);
       this._context.model.dirty = true;
@@ -283,7 +282,7 @@ export class GridStackModel {
           this._context.model.dirty = true;
           this._cellRemoved.emit({
             id,
-            info: data.jupyter_dashboards.views[VIEW]
+            info: data.jupyter_dashboards.views[VIEW],
           });
         });
         break;
@@ -311,7 +310,7 @@ export class GridStackModel {
           this._context.model.dirty = true;
           this._cellPinned.emit({
             id,
-            info: data.jupyter_dashboards.views[VIEW]
+            info: data.jupyter_dashboards.views[VIEW],
           });
         });
         break;
@@ -337,13 +336,13 @@ export class GridStackModel {
           rendermime: this.rendermime,
           contentFactory: this.contentFactory,
           editorConfig: this._editorConfig.code,
-          updateEditorOnShow: true
+          updateEditorOnShow: true,
         });
 
         item = new SimplifiedOutputArea({
           model: codeCell.outputArea.model,
           rendermime: codeCell.outputArea.rendermime,
-          contentFactory: codeCell.outputArea.contentFactory
+          contentFactory: codeCell.outputArea.contentFactory,
         });
 
         break;
@@ -354,7 +353,7 @@ export class GridStackModel {
           rendermime: this.rendermime,
           contentFactory: this.contentFactory,
           editorConfig: this._editorConfig.markdown,
-          updateEditorOnShow: false
+          updateEditorOnShow: false,
         });
         markdownCell.inputHidden = false;
         markdownCell.rendered = true;
@@ -368,7 +367,7 @@ export class GridStackModel {
           model: cellModel as RawCellModel,
           contentFactory: this.contentFactory,
           editorConfig: this._editorConfig.raw,
-          updateEditorOnShow: false
+          updateEditorOnShow: false,
         });
         rawCell.inputHidden = false;
         Private.removeElements(rawCell.node, 'jp-Collapser');
@@ -381,7 +380,7 @@ export class GridStackModel {
     const options = {
       cellId: cellModel.id,
       cellWidget: item,
-      isLocked: locked
+      isLocked: locked,
     };
 
     const widget = new GridStackItemWidget(item, options);
@@ -404,7 +403,7 @@ export class GridStackModel {
       rendermime: this.rendermime,
       contentFactory: this.contentFactory,
       editorConfig: this._editorConfig.code,
-      updateEditorOnShow: true
+      updateEditorOnShow: true,
     });
 
     SimplifiedOutputArea.execute(
@@ -412,7 +411,7 @@ export class GridStackModel {
       codeCell.outputArea,
       this._context.sessionContext
     )
-      .then(resp => {
+      .then((resp) => {
         if (
           resp?.header.msg_type === 'execute_reply' &&
           resp.content.status === 'ok'
@@ -420,7 +419,7 @@ export class GridStackModel {
           (cell as CodeCellModel).executionCount = resp.content.execution_count;
         }
       })
-      .catch(reason => console.error(reason));
+      .catch((reason) => console.error(reason));
   }
 
   private readonly _mutex = createMutex();
@@ -448,17 +447,17 @@ export class GridStackModel {
           version: 1,
           activeView: VIEW,
           views: {
-            grid_default: this._info
-          }
-        }
+            grid_default: this._info,
+          },
+        },
       };
     } else if (!data.jupyter_dashboards) {
       data['jupyter_dashboards'] = {
         version: 1,
         activeView: VIEW,
         views: {
-          grid_default: this._info
-        }
+          grid_default: this._info,
+        },
       };
     } else if (!validateDashboardView(data.jupyter_dashboards.views[VIEW])) {
       data.jupyter_dashboards.views[VIEW] = this._info;
@@ -521,10 +520,10 @@ export class GridStackModel {
               col: null,
               width: 2,
               height: 2,
-              locked: true
-            }
-          }
-        }
+              locked: true,
+            },
+          },
+        },
       };
       this._mutex(() => {
         cell.sharedModel.setMetadata({ extensions: data });
@@ -539,9 +538,9 @@ export class GridStackModel {
             col: null,
             width: 2,
             height: 2,
-            locked: true
-          }
-        }
+            locked: true,
+          },
+        },
       };
       this._mutex(() => {
         cell.sharedModel.setMetadata({ extensions: data });
@@ -555,7 +554,7 @@ export class GridStackModel {
         col: null,
         width: 2,
         height: 2,
-        locked: true
+        locked: true,
       };
       this._mutex(() => {
         cell.sharedModel.setMetadata({ extensions: data });

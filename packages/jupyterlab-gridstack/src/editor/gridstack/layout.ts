@@ -47,9 +47,10 @@ export class GridStackLayout extends Layout {
         disableOneColumnMode: true,
         draggable: { handle: '.grid-item-toolbar' },
         resizable: { autoHide: true, handles: 'e, se, s, sw, w' },
-        alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        )
+        alwaysShowResizeHandle:
+          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+          ),
       },
       this._gridHost
     );
@@ -113,7 +114,7 @@ export class GridStackLayout extends Layout {
    */
   protected onUpdateRequest(msg: Message): void {
     const items = this._grid?.getGridItems();
-    items?.forEach(item => {
+    items?.forEach((item) => {
       this._grid.removeWidget(item, true, false);
       this._grid.addWidget(item);
     });
@@ -257,7 +258,7 @@ export class GridStackLayout extends Layout {
       width: info.width,
       height: info.height,
       locked: info.locked,
-      autoPosition: false
+      autoPosition: false,
     };
 
     if (info.row === null || info.col === null) {
@@ -284,13 +285,13 @@ export class GridStackLayout extends Layout {
    */
   updateGridItem(id: string, info: DashboardCellView): void {
     const items = this._grid.getGridItems();
-    const item = items?.find(value => value.gridstackNode?.id === id);
+    const item = items?.find((value) => value.gridstackNode?.id === id);
     this._grid.update(item!, {
       x: info.col,
       y: info.row,
       w: info.width,
       h: info.height,
-      locked: info.locked
+      locked: info.locked,
     });
   }
 
@@ -301,10 +302,10 @@ export class GridStackLayout extends Layout {
    */
   removeGridItem(id: string): void {
     const items = this._grid.getGridItems();
-    const item = items?.find(value => value.gridstackNode?.id === id);
+    const item = items?.find((value) => value.gridstackNode?.id === id);
 
     if (item) {
-      this._gridItems = this._gridItems.filter(obj => obj.cellId !== id);
+      this._gridItems = this._gridItems.filter((obj) => obj.cellId !== id);
       this._grid.removeWidget(item, true, false);
     }
 
@@ -324,7 +325,7 @@ export class GridStackLayout extends Layout {
    * Handle remove event messages sent from gridstack.
    */
   private _onRemoved(event: Event, items: GridStackNode[]): void {
-    items.forEach(el => {
+    items.forEach((el) => {
       //this._model.hideCell(el.id as string);
     });
   }

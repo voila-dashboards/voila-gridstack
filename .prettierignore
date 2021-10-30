@@ -1,5 +1,24 @@
+lint-staged.config.js
+.eslintrc.js
+
+package.json
+**/package.json
 node_modules
 **/node_modules
+**/build
 **/lib
-**/package.json
+**/mock_packages
 **/static
+**/typings
+**/schemas
+**/themes
+coverage
+*.map.js
+*.bundle.js
+
+# jetbrains IDE stuff
+.idea/
+
+# ms IDE stuff
+.history/
+.vscode/

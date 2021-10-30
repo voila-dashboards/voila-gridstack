@@ -6,10 +6,10 @@ import dashboard from '../style/icons/dashboard.svg';
 
 export const compactIcon = new LabIcon({
   name: '@voila-dashboards/jupyterlab-gridstack:icon-compact',
-  svgstr: compact
+  svgstr: compact,
 });
 
 export const dashboardIcon = new LabIcon({
   name: '@voila-dashboards/jupyterlab-gridstack:icon-dashboard',
-  svgstr: dashboard
+  svgstr: dashboard,
 });

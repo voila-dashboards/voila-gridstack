@@ -1,13 +1,13 @@
 import {
   JupyterFrontEnd,
-  JupyterFrontEndPlugin
+  JupyterFrontEndPlugin,
 } from '@jupyterlab/application';
 
 import { IJupyterWidgetRegistry } from '@jupyter-widgets/base';
 
 import {
   registerWidgetManager,
-  WidgetRenderer
+  WidgetRenderer,
 } from '@jupyter-widgets/jupyterlab-manager';
 
 import { VoilaGridStackPanel } from '../editor/panel';
@@ -39,7 +39,7 @@ export const widgets: JupyterFrontEndPlugin<void> = {
     if (!widgetRegistry) {
       return;
     }
-    voilaEditorTracker?.forEach(panel => {
+    voilaEditorTracker?.forEach((panel) => {
       registerWidgetManager(
         panel.context,
         panel.content.rendermime,
@@ -55,5 +55,5 @@ export const widgets: JupyterFrontEndPlugin<void> = {
       );
     });
     console.log(widgets.id, 'activated');
-  }
+  },
 };

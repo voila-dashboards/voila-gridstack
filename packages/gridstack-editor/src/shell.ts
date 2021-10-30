@@ -106,7 +106,7 @@ export class Shell extends Widget implements JupyterFrontEnd.IShell {
     if (title.icon instanceof LabIcon) {
       // bind an appropriate style to the icon
       title.icon = title.icon.bindprops({
-        stylesheet: 'mainAreaTab'
+        stylesheet: 'mainAreaTab',
       });
     } else if (typeof title.icon === 'string' || !title.icon) {
       // add some classes to help with displaying css background imgs

@@ -6,17 +6,17 @@ import { PageConfig, URLExt } from '@jupyterlab/coreutils';
 // Promise.allSettled polyfill, until our supported browsers implement it
 // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/allSettled
 if (Promise.allSettled === undefined) {
-  Promise.allSettled = promises =>
+  Promise.allSettled = (promises) =>
     Promise.all(
-      promises.map(promise =>
+      promises.map((promise) =>
         promise.then(
-          value => ({
+          (value) => ({
             status: 'fulfilled',
-            value
+            value,
           }),
-          reason => ({
+          (reason) => ({
             status: 'rejected',
-            reason
+            reason,
           })
         )
       )
@@ -76,9 +76,9 @@ async function main() {
       [
         '@jupyterlab/notebook-extension:factory',
         '@jupyterlab/notebook-extension:widget-factory',
-        '@jupyterlab/notebook-extension:tracker'
+        '@jupyterlab/notebook-extension:tracker',
       ].includes(id)
-    )
+    ),
   ];
 
   // This is all the data needed to load and activate plugins. This should be
@@ -92,7 +92,7 @@ async function main() {
   const federatedStylePromises = [];
 
   const extensions = await Promise.allSettled(
-    extension_data.map(async data => {
+    extension_data.map(async (data) => {
       await loadComponent(
         `${URLExt.join(
           PageConfig.getOption('fullLabextensionsUrl'),
@@ -105,7 +105,7 @@ async function main() {
     })
   );
 
-  extensions.forEach(p => {
+  extensions.forEach((p) => {
     if (p.status === 'rejected') {
       // There was an error loading the component
       console.error(p.reason);
@@ -130,7 +130,7 @@ async function main() {
   const federatedExtensions = await Promise.allSettled(
     federatedExtensionPromises
   );
-  federatedExtensions.forEach(p => {
+  federatedExtensions.forEach((p) => {
     if (p.status === 'fulfilled') {
       mods.push(p.value);
     } else {

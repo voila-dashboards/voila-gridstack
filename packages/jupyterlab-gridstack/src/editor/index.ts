@@ -1,7 +1,7 @@
 import {
   JupyterFrontEnd,
   JupyterFrontEndPlugin,
-  ILayoutRestorer
+  ILayoutRestorer,
 } from '@jupyterlab/application';
 
 import { NotebookPanel, StaticNotebook } from '@jupyterlab/notebook';
@@ -31,7 +31,7 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridStackTracker> = {
     NotebookPanel.IContentFactory,
     IMainMenu,
     IEditorServices,
-    IRenderMimeRegistry
+    IRenderMimeRegistry,
   ],
   optional: [ILayoutRestorer],
   activate: (
@@ -43,18 +43,18 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridStackTracker> = {
     restorer: ILayoutRestorer | null
   ) => {
     const tracker = new WidgetTracker<VoilaGridStackWidget>({
-      namespace: 'jupyterlab-gridstack'
+      namespace: 'jupyterlab-gridstack',
     });
 
     if (restorer) {
       restorer.restore(tracker, {
         command: 'docmanager:open',
-        args: panel => ({
+        args: (panel) => ({
           path: panel.context.path,
-          factory: 'Voila GridStack'
+          factory: 'Voila GridStack',
         }),
-        name: panel => panel.context.path,
-        when: app.serviceManager.ready
+        name: (panel) => panel.context.path,
+        when: app.serviceManager.ready,
       });
     }
 
@@ -68,7 +68,7 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridStackTracker> = {
       contentFactory,
       editorConfig: StaticNotebook.defaultEditorConfig,
       notebookConfig: StaticNotebook.defaultNotebookConfig,
-      mimeTypeService: editorServices.mimeTypeService
+      mimeTypeService: editorServices.mimeTypeService,
     });
 
     factory.widgetCreated.connect((sender, widget) => {
@@ -85,7 +85,7 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridStackTracker> = {
     mainMenu.editMenu.undoers.add({
       tracker,
       undo: (widget: any) => widget.undo(),
-      redo: (widget: any) => widget.redo()
+      redo: (widget: any) => widget.redo(),
     });
 
     app.docRegistry.addWidgetFactory(factory);
@@ -96,5 +96,5 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridStackTracker> = {
     );
 
     return tracker;
-  }
+  },
 };

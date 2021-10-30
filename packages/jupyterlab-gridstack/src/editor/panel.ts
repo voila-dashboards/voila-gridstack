@@ -1,7 +1,7 @@
 import {
   INotebookModel,
   NotebookPanel,
-  StaticNotebook
+  StaticNotebook,
 } from '@jupyterlab/notebook';
 
 import { Dialog, showDialog } from '@jupyterlab/apputils';
@@ -52,7 +52,7 @@ export class VoilaGridStackPanel extends Panel {
       contentFactory: this.contentFactory,
       mimeTypeService: this.mimeTypeService,
       editorConfig: this._editorConfig,
-      notebookConfig: this._notebookConfig
+      notebookConfig: this._notebookConfig,
     });
 
     this._gridstackWidget = new GridStackWidget(gridModel);
@@ -130,8 +130,8 @@ export class VoilaGridStackPanel extends Panel {
     showDialog({
       title: 'Compact the grid layout',
       body: 'Only unlocked cell will move.',
-      buttons: [Dialog.okButton()]
-    }).then(result => {
+      buttons: [Dialog.okButton()],
+    }).then((result) => {
       this._gridstackWidget?.compact();
     });
   }
@@ -151,8 +151,11 @@ export class VoilaGridStackPanel extends Panel {
       showDialog({
         title: 'Reload Notebook from Disk',
         body: 'Are you sure you want to reload the Notebook from the disk?',
-        buttons: [Dialog.cancelButton(), Dialog.warnButton({ label: 'Reload' })]
-      }).then(result => {
+        buttons: [
+          Dialog.cancelButton(),
+          Dialog.warnButton({ label: 'Reload' }),
+        ],
+      }).then((result) => {
         if (result.button.accept && !this._context.isDisposed) {
           this._context.revert();
         }

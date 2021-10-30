@@ -3,7 +3,7 @@ import { DocumentRegistry, ABCWidgetFactory } from '@jupyterlab/docregistry';
 import {
   INotebookModel,
   NotebookPanel,
-  StaticNotebook
+  StaticNotebook,
 } from '@jupyterlab/notebook';
 
 import { IEditorMimeTypeService } from '@jupyterlab/codeeditor';
@@ -98,7 +98,7 @@ export class VoilaGridStackWidgetFactory extends ABCWidgetFactory<
       editorConfig: source ? source.content.editorConfig : this._editorConfig,
       notebookConfig: source
         ? source.content.notebookConfig
-        : this._notebookConfig
+        : this._notebookConfig,
     };
 
     return new VoilaGridStackWidget(context, new VoilaGridStackPanel(options));

@@ -20,7 +20,8 @@ import { dashboardIcon } from '../../icons';
  * A WidgetExtension for Notebook's toolbar to open a `VoilaGridstack` widget.
  */
 export class EditorButton
-  implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel> {
+  implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>
+{
   /**
    * Instantiate a new NotebookButton.
    * @param commands The command registry.
@@ -43,10 +44,10 @@ export class EditorButton
             factory: 'Voila GridStack',
             options: {
               mode: 'split-right',
-              ref: panel.id
-            }
+              ref: panel.id,
+            },
           })
-          .then(widget => {
+          .then((widget) => {
             if (widget instanceof Widget) {
               // Remove the editor if the associated notebook is closed.
               panel.content.disposed.connect(() => {
@@ -54,7 +55,7 @@ export class EditorButton
               });
             }
           });
-      }
+      },
     });
     panel.toolbar.insertAfter('voila', 'jupyterlab-gridstack', button);
     return button;
@@ -67,7 +68,8 @@ export class EditorButton
  * A WidgetExtension for Notebook's toolbar to launch Voila.
  */
 export class VoilaButton
-  implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel> {
+  implements DocumentRegistry.IWidgetExtension<NotebookPanel, INotebookModel>
+{
   /**
    * Create a new extension object.
    */
@@ -82,7 +84,7 @@ export class VoilaButton
           '_blank'
         );
         win?.focus();
-      }
+      },
     });
     panel.toolbar.insertAfter('cellType', 'voila', button);
     return button;

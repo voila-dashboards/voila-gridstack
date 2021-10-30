@@ -11,7 +11,7 @@ const baseConfig = require('@jupyterlab/builder/lib/webpack.config.base');
 
 const data = require('./package.json');
 
-const names = Object.keys(data.dependencies).filter(name => {
+const names = Object.keys(data.dependencies).filter((name) => {
   const packageData = require(path.join(name, 'package.json'));
   return packageData.jupyterlab !== undefined;
 });
@@ -29,12 +29,12 @@ fs.copySync(index, path.resolve(buildDir, 'index.js'));
 
 const extras = Build.ensureAssets({
   packageNames: names,
-  output: buildDir
+  output: buildDir,
 });
 
 const singletons = {};
 
-data.jupyterlab.singletonPackages.forEach(element => {
+data.jupyterlab.singletonPackages.forEach((element) => {
   singletons[element] = { singleton: true };
 });
 
@@ -55,22 +55,22 @@ module.exports = [
       path: buildDir,
       library: {
         type: 'var',
-        name: ['_JUPYTERLAB', 'CORE_OUTPUT']
+        name: ['_JUPYTERLAB', 'CORE_OUTPUT'],
       },
-      filename: 'bundle.js'
+      filename: 'bundle.js',
     },
     plugins: [
       new ModuleFederationPlugin({
         library: {
           type: 'var',
-          name: ['_JUPYTERLAB', 'CORE_LIBRARY_FEDERATION']
+          name: ['_JUPYTERLAB', 'CORE_LIBRARY_FEDERATION'],
         },
         name: 'CORE_FEDERATION',
         shared: {
           ...data.resolutions,
-          ...singletons
-        }
-      })
-    ]
-  })
+          ...singletons,
+        },
+      }),
+    ],
+  }),
 ].concat(extras);

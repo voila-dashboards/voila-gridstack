@@ -1,6 +1,6 @@
 import {
   JupyterFrontEnd,
-  JupyterFrontEndPlugin
+  JupyterFrontEndPlugin,
 } from '@jupyterlab/application';
 
 import { PageConfig } from '@jupyterlab/coreutils';
@@ -18,7 +18,7 @@ export class App extends JupyterFrontEnd<IShell> {
    */
   constructor(options: App.IOptions = { shell: new Shell() }) {
     super({
-      shell: options.shell
+      shell: options.shell,
     });
   }
 
@@ -54,7 +54,7 @@ export class App extends JupyterFrontEnd<IShell> {
         hubHost: PageConfig.getOption('hubHost') || undefined,
         hubPrefix: PageConfig.getOption('hubPrefix') || undefined,
         hubUser: PageConfig.getOption('hubUser') || undefined,
-        hubServerName: PageConfig.getOption('hubServerName') || undefined
+        hubServerName: PageConfig.getOption('hubServerName') || undefined,
       },
       directories: {
         appSettings: PageConfig.getOption('appSettingsDir'),
@@ -64,8 +64,8 @@ export class App extends JupyterFrontEnd<IShell> {
         themes: PageConfig.getOption('themesDir'),
         userSettings: PageConfig.getOption('userSettingsDir'),
         serverRoot: PageConfig.getOption('serverRoot'),
-        workspaces: PageConfig.getOption('workspacesDir')
-      }
+        workspaces: PageConfig.getOption('workspacesDir'),
+      },
     };
   }
 
@@ -83,7 +83,7 @@ export class App extends JupyterFrontEnd<IShell> {
     if (!Array.isArray(data)) {
       data = [data];
     }
-    data.forEach(item => {
+    data.forEach((item) => {
       try {
         this.registerPlugin(item);
       } catch (error) {
@@ -98,7 +98,7 @@ export class App extends JupyterFrontEnd<IShell> {
    * @param mods - The plugin modules to register.
    */
   registerPluginModules(mods: App.IPluginModule[]): void {
-    mods.forEach(mod => {
+    mods.forEach((mod) => {
       this.registerPluginModule(mod);
     });
   }
