@@ -340,11 +340,13 @@ export class GridStackWidget extends Widget {
       if (widget!.model.type === 'code') {
         // The constant 40, is the ~size of the toolbar in px
         const rect = (widget as CodeCell).outputArea.node.getBoundingClientRect();
-        w = Math.ceil(rect.width / this.layout.grid.cellWidth());
+        const c = this.layout.columns - x;
+        w = Math.min(c, Math.ceil(rect.width / this.layout.grid.cellWidth()));
         h = Math.ceil((rect.height + 40) / this.layout.cellHeight);
       } else {
         const rect = widget!.node.getBoundingClientRect();
-        w = Math.ceil(rect.width / this.layout.grid.cellWidth());
+        const c = this.layout.columns - x;
+        w = Math.min(c, Math.ceil(rect.width / this.layout.grid.cellWidth()));
         h = Math.ceil((rect.height + 40) / this.layout.cellHeight);
       }
 
@@ -413,10 +415,12 @@ export class GridStackWidget extends Widget {
       let w = 2;
       if (widget!.model.type === 'code') {
         const rect = (widget as CodeCell).outputArea.node.getBoundingClientRect();
-        w = Math.ceil(rect.width / this.layout.grid.cellWidth());
+        const c = this.layout.columns - x;
+        w = Math.min(c, Math.ceil(rect.width / this.layout.grid.cellWidth()));
       } else {
         const rect = widget!.node.getBoundingClientRect();
-        w = Math.ceil(rect.width / this.layout.grid.cellWidth());
+        const c = this.layout.columns - x;
+        w = Math.min(c, Math.ceil(rect.width / this.layout.grid.cellWidth()));
       }
 
       if (!this._shadowWidget.classList.contains('grid-stack-placeholder')) {
@@ -466,11 +470,19 @@ export class GridStackWidget extends Widget {
       if (widget!.model.type === 'code') {
         // The constant 40, is the ~size of the toolbar in px
         const rect = (widget as CodeCell).outputArea.node.getBoundingClientRect();
-        width = Math.ceil(rect.width / this.layout.grid.cellWidth());
+        const c = this.layout.columns - col;
+        width = Math.min(
+          c,
+          Math.ceil(rect.width / this.layout.grid.cellWidth())
+        );
         height = Math.ceil((rect.height + 40) / this.layout.cellHeight);
       } else {
         const rect = widget!.node.getBoundingClientRect();
-        width = Math.ceil(rect.width / this.layout.grid.cellWidth());
+        const c = this.layout.columns - col;
+        width = Math.min(
+          c,
+          Math.ceil(rect.width / this.layout.grid.cellWidth())
+        );
         height = Math.ceil((rect.height + 40) / this.layout.cellHeight);
       }
 
