@@ -16,12 +16,11 @@
 }
 
 .grid-editor .jp-grid-helper {
-  width: 100%;
-  margin-top: 10px;
+  position: relative;
+  float: left;
+  z-index: 1000;
   text-align: center;
   color: var(--jp-ui-font-color2);
-  position: absolute;
-  top: 0px;
 }
 
 .grid-panel {

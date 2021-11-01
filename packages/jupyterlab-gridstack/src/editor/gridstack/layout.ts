@@ -102,9 +102,6 @@ export class GridStackLayout extends Layout {
   init(): void {
     super.init();
     this.parent!.node.appendChild(this._gridHost);
-    if (this._gridItems.length === 0) {
-      this._gridHost.insertAdjacentElement('beforebegin', this._helperMessage);
-    }
     // fake window resize event to resize bqplot
     window.dispatchEvent(new Event('resize'));
   }
@@ -124,18 +121,14 @@ export class GridStackLayout extends Layout {
    * Handle `resize-request` messages sent to the widget.
    */
   protected onResize(msg: Message): void {
-    const rect = this.parent!.node.getBoundingClientRect();
-    this._gridHost.style.minHeight = `${rect.height}px`;
-    this._grid.onParentResize();
+    this._prepareGrid();
   }
 
   /**
    * Handle `fit-request` messages sent to the widget.
    */
   protected onFitRequest(msg: Message): void {
-    const rect = this.parent!.node.getBoundingClientRect();
-    this._gridHost.style.minHeight = `${rect.height}px`;
-    this._grid.onParentResize();
+    this._prepareGrid();
   }
 
   /**
@@ -335,6 +328,20 @@ export class GridStackLayout extends Layout {
    */
   private _updateBackgroundSize(): void {
     this._gridHost.style.backgroundSize = `100px ${this.cellHeight}px, calc(100% / ${this.columns} + 0px) 100px, 20px 20px, 20px 20px`;
+  }
+
+  private _prepareGrid(): void {
+    const rect = this.parent!.node.getBoundingClientRect();
+    this._gridHost.style.minHeight = `${rect.height}px`;
+    if (this._gridItems.length === 0) {
+      const size = this._helperMessage.getBoundingClientRect();
+      const height = size.height === 0 ? 18 : size.height;
+      const width = size.width === 0 ? 350 : size.width;
+      this._helperMessage.style.top = `${(rect.height - height) / 2}px`;
+      this._helperMessage.style.left = `${(rect.width - width) / 2}px`;
+      this._gridHost.insertAdjacentElement('beforebegin', this._helperMessage);
+    }
+    this._grid.onParentResize();
   }
 
   private _margin: number;
