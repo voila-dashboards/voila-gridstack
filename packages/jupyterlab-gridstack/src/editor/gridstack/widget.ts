@@ -389,10 +389,17 @@ export class GridStackWidget extends Widget {
    */
   private _evtDragLeave(event: IDragEvent): void {
     this.removeClass('pr-DropTarget');
+
     // Reset only if the user move out of the editor - not when entering children
     if (!this._isPointerOnWidget(event)) {
+      // Clear scroll interval
+      if (this._scrollIntervalId) {
+        clearInterval(this._scrollIntervalId);
+        this._scrollIntervalId = null;
+      }
       this._resetShadowWidget();
     }
+
     event.preventDefault();
     event.stopPropagation();
   }
@@ -403,6 +410,9 @@ export class GridStackWidget extends Widget {
   private _evtDragOver(event: IDragEvent): void {
     this.addClass('pr-DropTarget');
     event.dropAction = 'copy';
+
+    this._scrollIfNeeded(event);
+
     if (this._shadowWidget) {
       // We know that the widget exists as this is tested in `_isDroppable`
       const widget = (event.source.parent as NotebookPanel).content.activeCell;
@@ -451,6 +461,12 @@ export class GridStackWidget extends Widget {
   private _evtDrop(event: IDragEvent): void {
     event.preventDefault();
     event.stopPropagation();
+
+    // Clear scroll interval
+    if (this._scrollIntervalId) {
+      clearInterval(this._scrollIntervalId);
+      this._scrollIntervalId = null;
+    }
     this._resetShadowWidget();
 
     if (event.proposedAction !== 'copy') {
@@ -621,16 +637,44 @@ export class GridStackWidget extends Widget {
     return { droppable: false };
   }
 
+  private _scrollIfNeeded(event: IDragEvent): boolean {
+    // Clear scroll interval
+    if (this._scrollIntervalId) {
+      clearInterval(this._scrollIntervalId);
+      this._scrollIntervalId = null;
+    }
+
+    const boundingBox = this.node.getBoundingClientRect();
+    const offset = 40;
+    // Strict because the drag leave event triggers when equals
+    // 5px of scroll bar at the right site
+    if (event.clientY < boundingBox.top + offset) {
+      this._scrollIntervalId = setInterval(() => {
+        this.node.scrollBy({ top: -20 });
+      }, 10);
+      return true;
+    } else if (event.clientY > boundingBox.bottom - offset) {
+      this._scrollIntervalId = setInterval(() => {
+        this.node.scrollBy({ top: 20 });
+      }, 10);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /**
    * Test if the mouse pointer for the event occurs within the widget
    */
   private _isPointerOnWidget(event: IDragEvent): boolean {
     const boundingBox = this.node.getBoundingClientRect();
+    // Strict because the drag leave event triggers when equals
+    // 5px of scroll bar at the right site
     return (
-      event.clientX >= boundingBox.left &&
-      event.clientX <= boundingBox.right &&
-      event.clientY >= boundingBox.top &&
-      event.clientY <= boundingBox.bottom
+      event.clientX > boundingBox.left &&
+      event.clientX < boundingBox.right - 5 &&
+      event.clientY > boundingBox.top &&
+      event.clientY < boundingBox.bottom
     );
   }
 
@@ -675,4 +719,5 @@ export class GridStackWidget extends Widget {
 
   private _model: GridStackModel;
   private _shadowWidget: GridItemHTMLElement | null = null;
+  private _scrollIntervalId: number | null = null;
 }
