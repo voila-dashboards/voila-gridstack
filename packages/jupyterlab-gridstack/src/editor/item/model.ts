@@ -5,7 +5,7 @@ import { Signal, ISignal } from '@lumino/signaling';
 export enum ItemState {
   CLOSED,
   LOCKED,
-  UNLOCKED
+  UNLOCKED,
 }
 
 export class GridStackItemModel {

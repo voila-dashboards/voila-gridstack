@@ -2,12 +2,12 @@ import {
   IRouter,
   JupyterFrontEnd,
   JupyterFrontEndPlugin,
-  Router
+  Router,
 } from '@jupyterlab/application';
 
 import {
   sessionContextDialogs,
-  ISessionContextDialogs
+  ISessionContextDialogs,
 } from '@jupyterlab/apputils';
 
 import { IEditorServices } from '@jupyterlab/codeeditor';
@@ -49,7 +49,7 @@ namespace CommandIDs {
 const codeEditorServices: JupyterFrontEndPlugin<IEditorServices> = {
   id: '@voila-dashboards/gridstack-editor:services',
   provides: IEditorServices,
-  activate: () => editorServices
+  activate: () => editorServices,
 };
 
 /**
@@ -63,12 +63,12 @@ const doc: JupyterFrontEndPlugin<IDocumentManager> = {
     const opener = {
       open: (widget: Widget, options: DocumentRegistry.IOpenOptions) => {
         app.shell.add(widget, 'main', options);
-      }
+      },
     };
     const docManager = new DocumentManager({
       registry: app.docRegistry,
       manager: app.serviceManager,
-      opener
+      opener,
     });
 
     app.commands.addCommand(CommandIDs.open, {
@@ -82,11 +82,11 @@ const doc: JupyterFrontEndPlugin<IDocumentManager> = {
         if (widget) {
           widget.title.closable = closable ?? true;
         }
-      }
+      },
     });
 
     return docManager;
-  }
+  },
 };
 
 /**
@@ -100,7 +100,7 @@ const paths: JupyterFrontEndPlugin<JupyterFrontEnd.IPaths> = {
     return (app as App).paths;
   },
   autoStart: true,
-  provides: JupyterFrontEnd.IPaths
+  provides: JupyterFrontEnd.IPaths,
 };
 
 /**
@@ -125,7 +125,7 @@ const router: JupyterFrontEndPlugin<IRouter> = {
     return router;
   },
   autoStart: true,
-  provides: IRouter
+  provides: IRouter,
 };
 
 /**
@@ -135,7 +135,7 @@ const sessionDialogs: JupyterFrontEndPlugin<ISessionContextDialogs> = {
   id: '@voila-dashboards/gridstack-editor:sessionDialogs',
   provides: ISessionContextDialogs,
   autoStart: true,
-  activate: () => sessionContextDialogs
+  activate: () => sessionContextDialogs,
 };
 
 /**
@@ -146,9 +146,9 @@ const shortcuts: JupyterFrontEndPlugin<void> = {
   activate: (app: JupyterFrontEnd<JupyterFrontEnd.IShell>): void => {
     // load the default notebook keybindings
     const bindings = trackerSettings['jupyter.lab.shortcuts'];
-    bindings.forEach(binding => app.commands.addKeyBinding(binding));
+    bindings.forEach((binding) => app.commands.addKeyBinding(binding));
   },
-  autoStart: true
+  autoStart: true,
 };
 
 /**
@@ -161,7 +161,7 @@ const translator: JupyterFrontEndPlugin<ITranslator> = {
     return translationManager;
   },
   autoStart: true,
-  provides: ITranslator
+  provides: ITranslator,
 };
 
 /**
@@ -189,19 +189,19 @@ const tree: JupyterFrontEndPlugin<void> = {
           commands.execute(CommandIDs.open, {
             path,
             factory: NOTEBOOK_FACTORY,
-            closable: false
+            closable: false,
           });
           commands.execute(CommandIDs.open, {
             path,
             factory: GRIDSTACK_EDITOR_FACTORY,
-            options: { mode: 'split-right' }
+            options: { mode: 'split-right' },
           });
         });
-      }
+      },
     });
 
     router.register({ command, pattern: treePattern });
-  }
+  },
 };
 
 const plugins = [
@@ -212,7 +212,7 @@ const plugins = [
   sessionDialogs,
   shortcuts,
   translator,
-  tree
+  tree,
 ];
 
 export default plugins;

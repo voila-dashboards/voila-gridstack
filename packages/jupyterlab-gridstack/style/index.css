@@ -11,17 +11,17 @@
 .grid-editor {
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   background-color: var(--jp-layout-color2);
 }
 
 .grid-editor .jp-grid-helper {
-  width: 100%;
-  margin-top: 10px;
+  position: relative;
+  float: left;
+  z-index: 1000;
   text-align: center;
   color: var(--jp-ui-font-color2);
-  position: absolute;
-  top: 0px;
 }
 
 .grid-panel {
