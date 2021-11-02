@@ -11,6 +11,8 @@ import json
 import os.path as osp
 from .server_extension import load_jupyter_server_extension  # noqa
 
+__version__ = "0.2.0"
+
 HERE = osp.abspath(osp.dirname(__file__))
 
 with open(osp.join(HERE, 'labextension', 'package.json')) as fid:

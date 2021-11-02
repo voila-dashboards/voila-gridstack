@@ -1,5 +1,7 @@
 # Changelog
 
+<!-- <START NEW CHANGELOG ENTRY> -->
+
 ## [0.2.0](https://github.com/voila-dashboards/voila-gridstack/tree/0.2.0) (2021-04-09)
 
 [Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/0.1.0...0.2.0)
@@ -47,6 +49,8 @@
 - Update environment.yml [\#81](https://github.com/voila-dashboards/voila-gridstack/pull/81) ([hbcarlos](https://github.com/hbcarlos))
 - Fix typo in README.md [\#80](https://github.com/voila-dashboards/voila-gridstack/pull/80) ([jtpio](https://github.com/jtpio))
 - Update Readme [\#78](https://github.com/voila-dashboards/voila-gridstack/pull/78) ([hbcarlos](https://github.com/hbcarlos))
+
+<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## [0.1.0](https://github.com/voila-dashboards/voila-gridstack/tree/0.1.0) (2021-01-07)
 

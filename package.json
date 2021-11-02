@@ -1,5 +1,7 @@
 {
+  "name": "@voila-dashboards/voila-gridstack-root",
   "private": true,
+  "version": "0.1.0",
   "homepage": "https://github.com/voila-dashboards/voila-gridstack",
   "repository": {
     "type": "git",
