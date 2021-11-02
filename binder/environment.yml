@@ -10,5 +10,4 @@ dependencies:
 - pandas
 - scipy
 - voila
-- voila-gridstack
 - jupyterlab

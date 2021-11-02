@@ -22,6 +22,8 @@ import { DashboardMetadataEditor } from '../components/metadata';
 
 import { CellChange } from '../format';
 
+const TOOLBAR_HEIGHT = 40;
+
 interface IDroppable {
   /**
    * Whether the content can be dropped
@@ -338,18 +340,17 @@ export class GridStackWidget extends Widget {
       let w = 2;
       let h = 2;
       if (widget!.model.type === 'code') {
-        // The constant 40, is the ~size of the toolbar in px
         const rect = (
           widget as CodeCell
         ).outputArea.node.getBoundingClientRect();
         const c = this.layout.columns - x;
         w = Math.min(c, Math.ceil(rect.width / this.layout.grid.cellWidth()));
-        h = Math.ceil((rect.height + 40) / this.layout.cellHeight);
+        h = Math.ceil((rect.height + TOOLBAR_HEIGHT) / this.layout.cellHeight);
       } else {
         const rect = widget!.node.getBoundingClientRect();
         const c = this.layout.columns - x;
         w = Math.min(c, Math.ceil(rect.width / this.layout.grid.cellWidth()));
-        h = Math.ceil((rect.height + 40) / this.layout.cellHeight);
+        h = Math.ceil((rect.height + TOOLBAR_HEIGHT) / this.layout.cellHeight);
       }
 
       // Reset the shadow widget as the enter event is triggered when coming from a child
@@ -488,7 +489,6 @@ export class GridStackWidget extends Widget {
       let width = 1;
       let height = 1;
       if (widget!.model.type === 'code') {
-        // The constant 40, is the ~size of the toolbar in px
         const rect = (
           widget as CodeCell
         ).outputArea.node.getBoundingClientRect();
@@ -497,7 +497,9 @@ export class GridStackWidget extends Widget {
           c,
           Math.ceil(rect.width / this.layout.grid.cellWidth())
         );
-        height = Math.ceil((rect.height + 40) / this.layout.cellHeight);
+        height = Math.ceil(
+          (rect.height + TOOLBAR_HEIGHT) / this.layout.cellHeight
+        );
       } else {
         const rect = widget!.node.getBoundingClientRect();
         const c = this.layout.columns - col;
@@ -505,7 +507,9 @@ export class GridStackWidget extends Widget {
           c,
           Math.ceil(rect.width / this.layout.grid.cellWidth())
         );
-        height = Math.ceil((rect.height + 40) / this.layout.cellHeight);
+        height = Math.ceil(
+          (rect.height + TOOLBAR_HEIGHT) / this.layout.cellHeight
+        );
       }
 
       const items = this.layout.gridItems;
