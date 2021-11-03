@@ -2,6 +2,22 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.3.0a0
+
+([Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/0.2.0...cda2348b88a7c664e2e69042bbb26d16e2e1ec02))
+
+### Maintenance and upkeep improvements
+
+- Rename master to main [#152](https://github.com/voila-dashboards/voila-gridstack/pull/152) ([@jtpio](https://github.com/jtpio))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/voila-dashboards/voila-gridstack/graphs/contributors?from=2021-04-09&to=2021-11-03&type=c))
+
+[@hbcarlos](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ahbcarlos+updated%3A2021-04-09..2021-11-03&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ajtpio+updated%3A2021-04-09..2021-11-03&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## [0.2.0](https://github.com/voila-dashboards/voila-gridstack/tree/0.2.0) (2021-04-09)
 
 [Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/0.1.0...0.2.0)
@@ -49,8 +65,6 @@
 - Update environment.yml [\#81](https://github.com/voila-dashboards/voila-gridstack/pull/81) ([hbcarlos](https://github.com/hbcarlos))
 - Fix typo in README.md [\#80](https://github.com/voila-dashboards/voila-gridstack/pull/80) ([jtpio](https://github.com/jtpio))
 - Update Readme [\#78](https://github.com/voila-dashboards/voila-gridstack/pull/78) ([hbcarlos](https://github.com/hbcarlos))
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## [0.1.0](https://github.com/voila-dashboards/voila-gridstack/tree/0.1.0) (2021-01-07)
 
