@@ -6,15 +6,40 @@
 
 ([Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/0.2.0...cda2348b88a7c664e2e69042bbb26d16e2e1ec02))
 
+### Enhancements made
+
+- Solves fixed layout on the template [#140](https://github.com/voila-dashboards/voila-gridstack/pull/140) ([@hbcarlos](https://github.com/hbcarlos))
+- Update to JupyterLab v3.1 and support RTC [#142](https://github.com/voila-dashboards/voila-gridstack/pull/142) ([@hbcarlos](https://github.com/hbcarlos))
+- Pin button in gridstack items [#116](https://github.com/voila-dashboards/voila-gridstack/pull/116) ([@hbcarlos](https://github.com/hbcarlos))
+
+### Bugs fixed
+
+- Small clean up and solves #150 [#151](https://github.com/voila-dashboards/voila-gridstack/pull/151) ([@hbcarlos](https://github.com/hbcarlos))
+
 ### Maintenance and upkeep improvements
 
 - Rename master to main [#152](https://github.com/voila-dashboards/voila-gridstack/pull/152) ([@jtpio](https://github.com/jtpio))
+- Add releaser config [#148](https://github.com/voila-dashboards/voila-gridstack/pull/148) ([@jtpio](https://github.com/jtpio))
+- Update to jupyter-packaging v0.10 [#145](https://github.com/voila-dashboards/voila-gridstack/pull/145) ([@hbcarlos](https://github.com/hbcarlos))
+- Update the Binder URL for the Voila badge [#125](https://github.com/voila-dashboards/voila-gridstack/pull/125) ([@jtpio](https://github.com/jtpio))
+
+### Other merged PRs
+
+- Bump tar from 4.4.13 to 4.4.15 [#141](https://github.com/voila-dashboards/voila-gridstack/pull/141) ([@dependabot](https://github.com/dependabot))
+- Bump postcss from 7.0.35 to 7.0.36 [#136](https://github.com/voila-dashboards/voila-gridstack/pull/136) ([@dependabot](https://github.com/dependabot))
+- Bump ws from 7.4.1 to 7.4.6 [#135](https://github.com/voila-dashboards/voila-gridstack/pull/135) ([@dependabot](https://github.com/dependabot))
+- Bump browserslist from 4.16.0 to 4.16.6 [#134](https://github.com/voila-dashboards/voila-gridstack/pull/134) ([@dependabot](https://github.com/dependabot))
+- Bump lodash from 4.17.20 to 4.17.21 [#133](https://github.com/voila-dashboards/voila-gridstack/pull/133) ([@dependabot](https://github.com/dependabot))
+- Bump hosted-git-info from 2.8.8 to 2.8.9 [#131](https://github.com/voila-dashboards/voila-gridstack/pull/131) ([@dependabot](https://github.com/dependabot))
+- Bump handlebars from 4.7.6 to 4.7.7 [#130](https://github.com/voila-dashboards/voila-gridstack/pull/130) ([@dependabot](https://github.com/dependabot))
+- Bump underscore from 1.12.0 to 1.13.1 [#129](https://github.com/voila-dashboards/voila-gridstack/pull/129) ([@dependabot](https://github.com/dependabot))
+- Bump ssri from 6.0.1 to 6.0.2 [#127](https://github.com/voila-dashboards/voila-gridstack/pull/127) ([@dependabot](https://github.com/dependabot))
 
 ### Contributors to this release
 
 ([GitHub contributors page for this release](https://github.com/voila-dashboards/voila-gridstack/graphs/contributors?from=2021-04-09&to=2021-11-03&type=c))
 
-[@hbcarlos](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ahbcarlos+updated%3A2021-04-09..2021-11-03&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ajtpio+updated%3A2021-04-09..2021-11-03&type=Issues)
+[@dependabot](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Adependabot+updated%3A2021-04-09..2021-11-02&type=Issues) | [@hbcarlos](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ahbcarlos+updated%3A2021-04-09..2021-11-02&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ajtpio+updated%3A2021-04-09..2021-11-02&type=Issues)
 
 <!-- <END NEW CHANGELOG ENTRY> -->
 
