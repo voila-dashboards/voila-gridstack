@@ -79,6 +79,18 @@ export class GridStackLayout extends Layout {
       }
     );
 
+    this._grid.on(
+      'resize',
+      (
+        event: Event,
+        item?: GridItemHTMLElement | GridStackNode | GridStackNode[]
+      ) => {
+        if (item && (item as GridItemHTMLElement).gridstackNode) {
+          this._onResize(event, (item as GridItemHTMLElement).gridstackNode!);
+        }
+      }
+    );
+
     this._grid.on('resizestop', (event, elem) => {
       window.dispatchEvent(new Event('resize'));
     });
@@ -121,6 +133,11 @@ export class GridStackLayout extends Layout {
    * Handle `resize-request` messages sent to the widget.
    */
   protected onResize(msg: Message): void {
+    // Using timeout to wait until the resize stop
+    // rerendering all the widgets every time uses
+    // too much resources
+    clearTimeout(this._resizeTimeout);
+    this._resizeTimeout = setTimeout(this._onResizeStops, 500);
     this._prepareGrid();
   }
 
@@ -324,6 +341,25 @@ export class GridStackLayout extends Layout {
   }
 
   /**
+   * Handle resize event messages sent from gridstack.
+   */
+  private _onResize(event: Event, item: GridStackNode): void {
+    const widget = this._gridItems.find((value) => value.cellId === item.id);
+    if (widget) {
+      MessageLoop.sendMessage(widget, Widget.Msg.UpdateRequest);
+    }
+  }
+
+  /**
+   * Handle resize-stop event messages in the layout.
+   */
+  private _onResizeStops = (): void => {
+    this._gridItems.forEach((item) => {
+      MessageLoop.sendMessage(item, Widget.Msg.UpdateRequest);
+    });
+  };
+
+  /**
    * Update background size style to fit new grid parameters
    */
   private _updateBackgroundSize(): void {
@@ -352,4 +388,5 @@ export class GridStackLayout extends Layout {
   private _gridItems: GridStackItemWidget[] = [];
   private _gridItemChanged = new Signal<this, GridStackNode[]>(this);
   private _helperMessage: HTMLElement;
+  private _resizeTimeout = 0;
 }
