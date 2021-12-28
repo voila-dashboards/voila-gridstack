@@ -2,7 +2,7 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
-## 0.3.0a0
+## [0.3.0a0](https://github.com/voila-dashboards/voila-gridstack/tree/v0.3.0a0) (2021-10-03)
 
 ([Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/0.2.0...cda2348b88a7c664e2e69042bbb26d16e2e1ec02))
 
