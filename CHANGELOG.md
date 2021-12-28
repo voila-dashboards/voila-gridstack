@@ -2,6 +2,22 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.3.0a1
+
+([Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/v0.3.0a0...b4010718a650269dc99d37c2248aedc203d40bc8))
+
+### Enhancements made
+
+- Support for voila v0.3 [#156](https://github.com/voila-dashboards/voila-gridstack/pull/156) ([@hbcarlos](https://github.com/hbcarlos))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/voila-dashboards/voila-gridstack/graphs/contributors?from=2021-11-03&to=2021-12-28&type=c))
+
+[@hbcarlos](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ahbcarlos+updated%3A2021-11-03..2021-12-28&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## [0.3.0a0](https://github.com/voila-dashboards/voila-gridstack/tree/v0.3.0a0) (2021-10-03)
 
 ([Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/0.2.0...cda2348b88a7c664e2e69042bbb26d16e2e1ec02))
@@ -40,8 +56,6 @@
 ([GitHub contributors page for this release](https://github.com/voila-dashboards/voila-gridstack/graphs/contributors?from=2021-04-09&to=2021-11-03&type=c))
 
 [@dependabot](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Adependabot+updated%3A2021-04-09..2021-11-02&type=Issues) | [@hbcarlos](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ahbcarlos+updated%3A2021-04-09..2021-11-02&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ajtpio+updated%3A2021-04-09..2021-11-02&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## [0.2.0](https://github.com/voila-dashboards/voila-gridstack/tree/0.2.0) (2021-04-09)
 
