@@ -11,7 +11,7 @@ import json
 import os.path as osp
 from .server_extension import load_jupyter_server_extension  # noqa
 
-__version__ = "0.3.0a0"
+__version__ = "0.3.0a1"
 
 HERE = osp.abspath(osp.dirname(__file__))
 
