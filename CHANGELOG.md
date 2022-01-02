@@ -2,6 +2,26 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.3.0a2
+
+([Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/v0.3.0a1...e1284e16aac0616dd44ce500f0969bcf7abb6c89))
+
+### Enhancements made
+
+- Resize widgets when resizing cells or document [#157](https://github.com/voila-dashboards/voila-gridstack/pull/157) ([@hbcarlos](https://github.com/hbcarlos))
+
+### Maintenance and upkeep improvements
+
+- Update gridstack [#159](https://github.com/voila-dashboards/voila-gridstack/pull/159) ([@hbcarlos](https://github.com/hbcarlos))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/voila-dashboards/voila-gridstack/graphs/contributors?from=2021-12-28&to=2022-01-02&type=c))
+
+[@hbcarlos](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ahbcarlos+updated%3A2021-12-28..2022-01-02&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.3.0a1
 
 ([Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/v0.3.0a0...b4010718a650269dc99d37c2248aedc203d40bc8))
@@ -15,8 +35,6 @@
 ([GitHub contributors page for this release](https://github.com/voila-dashboards/voila-gridstack/graphs/contributors?from=2021-11-03&to=2021-12-28&type=c))
 
 [@hbcarlos](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ahbcarlos+updated%3A2021-11-03..2021-12-28&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## [0.3.0a0](https://github.com/voila-dashboards/voila-gridstack/tree/v0.3.0a0) (2021-10-03)
 
