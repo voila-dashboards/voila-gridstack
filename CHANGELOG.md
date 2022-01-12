@@ -2,6 +2,22 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.3.0b1
+
+([Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/v0.3.0b0...42d8934c074fccd5d65ac25a35bbba2dc815d186))
+
+### Maintenance and upkeep improvements
+
+- Update gridstack v5 [#164](https://github.com/voila-dashboards/voila-gridstack/pull/164) ([@hbcarlos](https://github.com/hbcarlos))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/voila-dashboards/voila-gridstack/graphs/contributors?from=2022-01-06&to=2022-01-12&type=c))
+
+[@hbcarlos](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ahbcarlos+updated%3A2022-01-06..2022-01-12&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.3.0b0
 
 ([Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/v0.3.0a2...81c9d579ce17f32932b186e82298f8e81bc60a71))
@@ -15,8 +31,6 @@
 ([GitHub contributors page for this release](https://github.com/voila-dashboards/voila-gridstack/graphs/contributors?from=2022-01-02&to=2022-01-06&type=c))
 
 [@hbcarlos](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ahbcarlos+updated%3A2022-01-02..2022-01-06&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.3.0a2
 
