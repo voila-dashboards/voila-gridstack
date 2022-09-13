@@ -14,6 +14,10 @@ async def test_report_view(http_server_client, base_url):
     assert response.code == 200
     html_body = response.body.decode('utf-8')
 
+    print("*"*100)
+    print(html_body)
+    print("*"*100)
+
     parser = etree.HTMLParser()
     tree = etree.fromstring(html_body, parser=parser)
 
