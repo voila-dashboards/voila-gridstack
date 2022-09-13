@@ -1,7 +1,7 @@
 {%- extends 'lab/index.html.j2' -%}
 
 {% block html_head_css %}
-<link href="https://cdn.jsdelivr.net/npm/gridstack@5/dist/gridstack.min.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/gridstack@6.0.1/dist/gridstack.min.css" rel="stylesheet" />
 {{ super() }}
 
 <style>
@@ -39,6 +39,18 @@
     background: var(--jp-layout-color0);
 {% endif %}
     color: var(--jp-ui-font-color0);
+}
+
+.jp-OutputArea {
+    overflow-y: unset !important;
+}
+
+.jp-OutputArea-output {
+    overflow: unset !important;
+}
+
+.jp-OutputArea pre {
+    overflow: unset !important;
 }
 
 .ui-resizable-se {
