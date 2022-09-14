@@ -13,30 +13,12 @@ factory = "jupyter_packaging.npm_builder"
 build_cmd = "build:prod"
 npm = ["jlpm"]
 
-[tool.tbump.version]
-current = "0.3.0"
-regex = '''
-  (?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)
-  ((?P<channel>a|b|rc|.dev)(?P<release>\d+))?
-'''
-
-[[tool.tbump.file]]
-src = "voila_gridstack/__init__.py"
-
-[tool.tbump.git]
-message_template = "Bump to {new_version}"
-tag_template = "v{new_version}"
-
 [tool.jupyter-releaser]
 skip = ["check-links"]
 
 [tool.jupyter-releaser.hooks]
-before-bump-version = ["python -m pip install jupyterlab~=3.1"]
-before-build-npm = ["python -m pip install jupyterlab~=3.0", "jlpm clean", "jlpm build:prod"]
-before-build-python = ["jlpm clean"]
-
-[tool.jupyter-releaser.options]
-version-cmd = "python scripts/bump-version.py --force"
+before-build-npm = ["python -m pip install jupyterlab~=3.0", "jlpm clean", "jlpm", "jlpm build:prod"]
+before-build-python = ["jlpm clean:all"]
 
 [tool.check-manifest]
-ignore = ["assets/**", "binder/**", "examples/**", "packages/**", "scripts/**", "voila_gridstack/labextension/**", "yarn.lock", ".*", "*.json", "lint-staged.config.js"]
+ignore = ["assets/**", "binder/**", "examples/**", "scripts/**", "voila_gridstack/labextension/**", "yarn.lock", ".*", "package-lock.json", "lint-staged.config.js", "babel.config.js", "jest.config.js"]

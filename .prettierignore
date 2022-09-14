@@ -1,10 +1,10 @@
 lint-staged.config.js
+jest.config.js
 .eslintrc.js
 
 package.json
-**/package.json
 node_modules
-**/node_modules
+voila_gridstack
 **/build
 **/lib
 **/mock_packages
@@ -12,6 +12,7 @@ node_modules
 **/typings
 **/schemas
 **/themes
+**/__tests__
 coverage
 *.map.js
 *.bundle.js

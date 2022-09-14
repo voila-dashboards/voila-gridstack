@@ -1,23 +1,42 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const func = require('@jupyterlab/testutils/lib/jest-config');
-const upstream = func(__dirname);
+const jestJupyterLab = require('@jupyterlab/testutils/lib/jest-config');
 
-let local = {
-  preset: 'ts-jest/presets/js-with-babel',
-  transformIgnorePatterns: ['/node_modules/(?!(@jupyterlab/.*)/)'],
+const esModules = [
+  '@jupyterlab/',
+  'lib0',
+  'y\\-protocols',
+  'y\\-websocket',
+  'yjs',
+].join('|');
+
+const jlabConfig = jestJupyterLab(__dirname);
+
+const {
+  moduleFileExtensions,
+  moduleNameMapper,
+  preset,
+  setupFilesAfterEnv,
+  setupFiles,
+  testPathIgnorePatterns,
+  transform,
+} = jlabConfig;
+
+module.exports = {
+  moduleFileExtensions,
+  moduleNameMapper,
+  preset,
+  setupFilesAfterEnv,
+  setupFiles,
+  testPathIgnorePatterns,
+  transform,
+  automock: false,
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.d.ts'],
+  coverageDirectory: 'coverage',
+  coverageReporters: ['lcov', 'text'],
   globals: {
     'ts-jest': {
-      tsconfig: './tsconfig.test.json',
+      tsconfig: 'tsconfig.json',
     },
   },
-  transform: {
-    '\\.(ts|tsx)?$': 'ts-jest',
-    '\\.svg$': 'jest-raw-loader',
-  },
+  testRegex: 'src/.*/.*.spec.ts[x]?$',
+  transformIgnorePatterns: [`/node_modules/(?!${esModules}).+`],
 };
-
-Object.keys(local).forEach((option) => {
-  upstream[option] = local[option];
-});
-
-module.exports = upstream;

@@ -2,15 +2,13 @@ include LICENSE
 include *.md
 include pyproject.toml
 
-include ts*.json
-include install.json
 include package.json
+include install.json
+include ts*.json
+include yarn.lock
+include *.log
 
-graft etc
-graft share
-graft voila_gridstack/static
-graft voila_gridstack/labextension
-graft tests
+graft voila_gridstack
 
 # Javascript files
 graft src
@@ -18,6 +16,11 @@ graft style
 
 prune lib
 prune **/node_modules
+
+# Examples
+recursive-include examples
+
+prune binder
 
 # Patterns to exclude from any directory
 global-exclude *~

@@ -50,4 +50,4 @@ jobs:
         uses: jupyter-server/jupyter_releaser/.github/actions/check-release@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          version_spec: next
+          version_spec: patch

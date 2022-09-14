@@ -19,7 +19,6 @@ template = (HERE / PACKAGE / "template")
 
 # Representative files that should exist after a successful build
 ensured_targets = [
-    str(lab_extension_dest / "install.json"),
     str(lab_extension_dest / "package.json"),
     str(lab_extension_dest / "static" / "style.js"),
     str(nb_extension / "extension.js"),
