@@ -1,4 +1,4 @@
-import { validateDashboardCellView } from '../src/editor/format';
+import { validateDashboardCellView } from '../editor/format';
 
 describe('format', () => {
   it('should validate an empty dashboard cell view', () => {

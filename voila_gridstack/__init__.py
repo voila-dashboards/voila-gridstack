@@ -9,9 +9,9 @@
 
 import json
 import os.path as osp
-from .server_extension import load_jupyter_server_extension  # noqa
+from ._version import __version__
 
-__version__ = "0.3.0"
+from .server_extension import load_jupyter_server_extension  # noqa
 
 HERE = osp.abspath(osp.dirname(__file__))
 
@@ -29,6 +29,12 @@ def _jupyter_labextension_paths():
 def _jupyter_nbextension_paths():
     return [dict(
         section="notebook",
-        src="static",
+        src="nbextension",
         dest="voila-gridstack",
-        require="voila-gridstack/extension")]
+        require="voila-gridstack/extension"
+    )]
+
+def _jupyter_server_extension_points():
+    return [{
+        "module": "voila_gridstack"
+    }]

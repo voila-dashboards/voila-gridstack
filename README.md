@@ -113,10 +113,10 @@ To install this extension in development mode:
 conda activate voila-gridstack
 
 # link the local files
-jupyter nbextension install --sys-prefix --symlink --overwrite --py voila-gridstack
+jupyter nbextension install --sys-prefix --symlink --overwrite --py voila_gridstack
 
 # enable the extension
-jupyter nbextension enable --sys-prefix --py voila-gridstack
+jupyter nbextension enable --sys-prefix --py voila_gridstack
 
 # check the extension is installed and enabled
 jupyter nbextension list

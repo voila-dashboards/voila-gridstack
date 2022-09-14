@@ -14,21 +14,27 @@ PACKAGE = NAME.replace('-', '_')
 labext_name = "@voila-dashboards/jupyterlab-gridstack"
 lab_extension_dest = (HERE / PACKAGE / "labextension")
 
+nb_extension = (HERE / PACKAGE / "nbextension")
+template = (HERE / PACKAGE / "template")
+
 # Representative files that should exist after a successful build
 ensured_targets = [
+    str(lab_extension_dest / "install.json"),
     str(lab_extension_dest / "package.json"),
     str(lab_extension_dest / "static" / "style.js"),
-    str(HERE / "share/jupyter/nbconvert/templates/gridstack/gridstack.js.j2")
+    str(nb_extension / "extension.js"),
+    str(template / "gridstack.js.j2")
 ]
 
 data_files_spec = [
-    ("etc/jupyter/jupyter_server_config.d", "etc/jupyter/jupyter_server_config.d", "voila-gridstack.json"),
-    ("etc/jupyter/jupyter_notebook_config.d", "etc/jupyter/jupyter_notebook_config.d", "voila-gridstack.json"),
-    ("etc/jupyter/nbconfig/notebook.d", "etc/jupyter/nbconfig/notebook.d", "voila-gridstack.json"),
-    ("share/jupyter/nbextensions/voila-gridstack", f"{PACKAGE}/static", "**"),
-    ("share/jupyter/labextensions/%s" % labext_name, str(lab_extension_dest), "**"),
+    ("etc/jupyter/jupyter_server_config.d", f"{PACKAGE}/config", "jpserver-voila-gridstack.json"),
+    ("etc/jupyter/jupyter_notebook_config.d", f"{PACKAGE}/config", "nbserver-voila-gridstack.json"),
+    ("etc/jupyter/nbconfig/notebook.d", f"{PACKAGE}/config", "nb-voila-gridstack.json"),
+    
     ("share/jupyter/labextensions/%s" % labext_name, HERE, "install.json"),
-    ("share/jupyter/nbconvert/templates/gridstack", "share/jupyter/nbconvert/templates/gridstack", "**")
+    ("share/jupyter/labextensions/%s" % labext_name, str(lab_extension_dest), "**"),
+    ("share/jupyter/nbextensions/voila-gridstack", str(nb_extension), "**"),
+    ("share/jupyter/nbconvert/templates/gridstack", str(template), "**")
 ]
 
 try:

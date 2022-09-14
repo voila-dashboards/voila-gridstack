@@ -17,6 +17,10 @@
     "skipLibCheck": true,
     "strictNullChecks": true,
     "target": "es2017",
-    "types": []
-  }
+    "types": [],
+    "outDir": "lib",
+    "rootDir": "src"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["src/__test__"]
 }
