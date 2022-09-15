@@ -27,7 +27,9 @@ dynamic = ["version", "description", "authors", "urls", "keywords"]
 [project.optional-dependencies]
 dev = [
     "click",
-    "jupyter_releaser~=0.9"
+    "jupyter_releaser~=0.9",
+    "hatch",
+    "hatch-nodejs-version"
 ]
 test = [
     "ipykernel",

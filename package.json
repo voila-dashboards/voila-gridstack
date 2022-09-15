@@ -43,7 +43,7 @@
     "develop": "python scripts/develop.py --link",
     "eslint": "eslint . --ext .ts,.tsx --fix",
     "eslint:check": "eslint . --ext .ts,.tsx",
-    "install:dev": "jlpm run develop && jlpm run build:prod",
+    "install:dev": "jlpm run build:prod",
     "prepare": "jlpm run clean && jlpm run build:prod",
     "prettier": "prettier --write \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
     "prettier:check": "prettier --list-different \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
