@@ -10,7 +10,10 @@
     "url": "https://github.com/voila-dashboards/voila-gridstack/issues"
   },
   "license": "BSD-3-Clause",
-  "author": "Voila Development Team",
+  "author": {
+    "name": "Voila Development Team",
+    "email": ""
+  },
   "keywords": [
     "jupyter",
     "jupyterlab",
