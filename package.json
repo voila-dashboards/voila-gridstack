@@ -36,6 +36,7 @@
     "build:labextension:dev": "jupyter labextension build --development True .",
     "build:lib": "tsc",
     "build:prod": "jlpm run build:lib && jlpm run build:labextension",
+    "build:docs": "cd docs/ && make html",
     "clean": "jlpm run clean:lib",
     "clean:all": "jlpm run clean:lib && jlpm run clean:labextension",
     "clean:labextension": "rimraf ../../voila_gridstack/labextension",

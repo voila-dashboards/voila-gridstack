@@ -38,6 +38,11 @@ test = [
     "pytest",
     "pytest-tornasync",
 ]
+docs = [
+    "sphinx",
+    "myst-parser",
+    "pydata-sphinx-theme"
+]
 
 [tool.hatch.version]
 source = "nodejs"
