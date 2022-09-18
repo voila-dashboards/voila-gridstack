@@ -1,42 +1,90 @@
 [build-system]
-requires = ["jupyter_packaging~=0.10,<2", "jupyterlab~=3.1", "jupyterlab_widgets~=1.0", "voila>=0.2,<0.4"]
-build-backend = "jupyter_packaging.build_api"
+requires = ["hatchling>=1.9.0", "hatch-nodejs-version", "jupyterlab~=3.1", "jupyterlab_widgets~=1.0", "voila>=0.2,<0.4"]
+build-backend = "hatchling.build"
 
-[tool.jupyter-packaging.options]
-skip-if-exists = ["voila_gridstack/labextension/static/style.js"]
+[project]
+name = "voila-gridstack"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.7"
+dependencies = ["jupyterlab_widgets~=1.0", "voila>=0.2.0,<0.4.0"]
+classifiers = [
+    "Framework :: Jupyter",
+    "Framework :: Jupyter :: JupyterLab",
+    "Framework :: Jupyter :: JupyterLab :: 3",
+    "Framework :: Jupyter :: JupyterLab :: Extensions",
+    "Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+]
+dynamic = ["version", "description", "authors", "urls", "keywords"]
+
+[project.optional-dependencies]
+dev = [
+    "click",
+    "jupyter_releaser~=0.9",
+    "hatch",
+    "hatch-nodejs-version"
+]
+test = [
+    "ipykernel",
+    "lxml",
+    "nbconvert==6.5.0",
+    "pytest",
+    "pytest-tornasync",
+]
+docs = [
+    "sphinx",
+    "myst-parser",
+    "pydata-sphinx-theme"
+]
+
+[tool.hatch.version]
+source = "nodejs"
+
+[tool.hatch.metadata.hooks.nodejs]
+fields = ["description", "authors", "urls"]
+
+[tool.hatch.build.targets.wheel.shared-data]
+"voila_gridstack/config/jpserver-voila-gridstack.json" = "etc/jupyter/jupyter_server_config.d/jpserver-voila-gridstack.json"
+"voila_gridstack/config/nbserver-voila-gridstack.json" = "etc/jupyter/jupyter_notebook_config.d/nbserver-voila-gridstack.json"
+"voila_gridstack/config/nb-voila-gridstack.json" = "etc/jupyter/nbconfig/notebook.d/nb-voila-gridstack.json"
+"install.json" = "share/jupyter/labextensions/@voila-dashboards/jupyterlab-gridstack/install.json"
+"voila_gridstack/labextension" = "share/jupyter/labextensions/@voila-dashboards/jupyterlab-gridstack"
+"voila_gridstack/nbextension" = "share/jupyter/nbextensions/voila-gridstack"
+"voila_gridstack/template" = "share/jupyter/nbconvert/templates/gridstack"
+
+[tool.hatch.build.targets.sdist]
+exclude = [".github"]
+
+[tool.hatch.build.hooks.jupyter-builder]
+dependencies = ["hatch-jupyter-builder>=0.6.2"]
+build-function = "hatch_jupyter_builder.npm_builder"
 ensured-targets = ["voila_gridstack/labextension/static/style.js", "voila_gridstack/labextension/package.json"]
+skip-if-exists = ["voila_gridstack/labextension/static/style.js"]
 
-[tool.jupyter-packaging.builder]
-factory = "jupyter_packaging.npm_builder"
-
-[tool.jupyter-packaging.build-args]
+[tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 build_cmd = "build:prod"
 npm = ["jlpm"]
 
-[tool.tbump.version]
-current = "0.3.0"
-regex = '''
-  (?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)
-  ((?P<channel>a|b|rc|.dev)(?P<release>\d+))?
-'''
-
-[[tool.tbump.file]]
-src = "voila_gridstack/__init__.py"
-
-[tool.tbump.git]
-message_template = "Bump to {new_version}"
-tag_template = "v{new_version}"
+[tool.hatch.build.hooks.jupyter-builder.editable-build-kwargs]
+build_cmd = "install:dev"
+npm = ["jlpm"]
+source_dir = "src"
+build_dir = "voila_gridstack/labextension"
+force = true
 
 [tool.jupyter-releaser]
 skip = ["check-links"]
 
 [tool.jupyter-releaser.hooks]
-before-bump-version = ["python -m pip install jupyterlab~=3.1"]
-before-build-npm = ["python -m pip install jupyterlab~=3.0", "jlpm clean", "jlpm build:prod"]
-before-build-python = ["jlpm clean"]
+before-build-npm = ["python -m pip install jupyterlab~=3.0", "jlpm clean", "jlpm", "jlpm build:prod"]
+before-build-python = ["jlpm clean:all"]
 
 [tool.jupyter-releaser.options]
-version-cmd = "python scripts/bump-version.py --force"
-
-[tool.check-manifest]
-ignore = ["assets/**", "binder/**", "examples/**", "packages/**", "scripts/**", "voila_gridstack/labextension/**", "yarn.lock", ".*", "*.json", "lint-staged.config.js"]
+version_cmd = "hatch version"

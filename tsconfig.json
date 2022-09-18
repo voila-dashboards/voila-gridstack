@@ -17,6 +17,9 @@
     "skipLibCheck": true,
     "strictNullChecks": true,
     "target": "es2017",
-    "types": []
-  }
+    "types": ["jest"],
+    "outDir": "lib",
+    "rootDir": "src"
+  },
+  "include": ["src/**/*"]
 }

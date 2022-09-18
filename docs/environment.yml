@@ -1,0 +1,14 @@
+name: voila-gridstack-docs
+
+channels:
+  - conda-forge
+
+dependencies:
+  - mamba
+  - myst-parser
+  - pydata-sphinx-theme
+  #- pip:
+  #  - jupyterlite
+  #  - jupyterlite-sphinx
+  #  - jupyterlite-xeus-lua
+    

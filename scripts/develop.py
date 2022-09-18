@@ -12,7 +12,7 @@ from pathlib import Path
 
 HERE = Path(__file__).parent.parent.resolve()
 
-LOCAL_TEMPLATE_DIR  = ( HERE / "share/jupyter/nbconvert/templates/gridstack" )
+LOCAL_TEMPLATE_DIR  = ( HERE / "voila_gridstack/template" )
 SYS_TEMPLATE_DIR = Path(sys.prefix, "share/jupyter/nbconvert/templates/gridstack")
 
 def link():

@@ -47,5 +47,5 @@ jobs:
 
     - name: Test
       run: |
-        jlpm run build:test
+        jlpm && jlpm build
         jlpm run test

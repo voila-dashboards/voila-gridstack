@@ -14,9 +14,9 @@ from voila.handler import VoilaHandler
 from voila.configuration import VoilaConfiguration
 
 
-def load_jupyter_server_extension(server_app):
-    """ Extension to create an URL for voila-dashboard using GridStack, to be able to call it from Jupyter Notebook
-
+def _load_jupyter_server_extension(server_app):
+    """
+    Extension to create an URL for voila-dashboard using GridStack, to be able to call it from Jupyter Notebook
     """
 
     web_app = server_app.web_app
@@ -41,3 +41,4 @@ def load_jupyter_server_extension(server_app):
         }),
     ])
 
+load_jupyter_server_extension = _load_jupyter_server_extension
