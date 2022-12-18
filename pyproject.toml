@@ -83,7 +83,7 @@ force = true
 skip = ["check-links"]
 
 [tool.jupyter-releaser.hooks]
-before-build-npm = ["python -m pip install jupyterlab~=3.0", "jlpm clean", "jlpm", "jlpm build:prod"]
+before-build-npm = ["python -m pip install jupyterlab~=3.0", "jlpm", "jlpm build:prod"]
 before-build-python = ["jlpm clean:all"]
 
 [tool.jupyter-releaser.options]
