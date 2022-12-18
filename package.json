@@ -34,7 +34,7 @@
     "build": "jlpm run build:lib && jlpm run build:labextension:dev",
     "build:labextension": "jupyter labextension build .",
     "build:labextension:dev": "jupyter labextension build --development True .",
-    "build:lib": "tsc",
+    "build:lib": "tsc -b",
     "build:prod": "jlpm run build:lib && jlpm run build:labextension",
     "build:docs": "cd docs/ && make html",
     "clean": "jlpm run clean:lib",
