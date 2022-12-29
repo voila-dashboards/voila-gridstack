@@ -73,17 +73,14 @@ build_cmd = "build:prod"
 npm = ["jlpm"]
 
 [tool.hatch.build.hooks.jupyter-builder.editable-build-kwargs]
-build_cmd = "install:dev"
+build_cmd = "build"
 npm = ["jlpm"]
-source_dir = "src"
-build_dir = "voila_gridstack/labextension"
-force = true
 
 [tool.jupyter-releaser]
 skip = ["check-links"]
 
 [tool.jupyter-releaser.hooks]
-before-build-npm = ["python -m pip install jupyterlab~=3.0", "jlpm", "jlpm build:prod"]
+before-build-npm = ["python -m pip install jupyterlab~=3.1", "jlpm", "jlpm build:prod"]
 before-build-python = ["jlpm clean:all"]
 
 [tool.jupyter-releaser.options]
