@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling>=1.9.0", "hatch-nodejs-version", "jupyterlab~=3.1", "jupyterlab_widgets~=3.0", "voila>=0.2,<0.5"]
+requires = ["hatchling>=1.9.0", "hatch-nodejs-version", "jupyterlab~=3.6", "jupyterlab_widgets~=3.0", "voila>=0.2,<0.5"]
 build-backend = "hatchling.build"
 
 [project]
@@ -80,7 +80,7 @@ npm = ["jlpm"]
 skip = ["check-links"]
 
 [tool.jupyter-releaser.hooks]
-before-build-npm = ["python -m pip install jupyterlab~=3.1", "jlpm", "jlpm build:prod"]
+before-build-npm = ["python -m pip install jupyterlab~=3.6", "jlpm", "jlpm build:prod"]
 before-build-python = ["jlpm clean:all"]
 
 [tool.jupyter-releaser.options]

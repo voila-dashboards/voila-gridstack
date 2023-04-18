@@ -16,7 +16,7 @@ jobs:
       matrix:
         group: [check_release, link_check]
         python-version: ["3.9"]
-        node-version: ["14.x"]
+        node-version: ["18.x"]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
