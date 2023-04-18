@@ -2,6 +2,22 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.4.0a0
+
+([Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/v0.3.1...4f400370ffb47981b6f0f29c1d6bd1487723434e))
+
+### Maintenance and upkeep improvements
+
+- Update to lab 3.6 [#208](https://github.com/voila-dashboards/voila-gridstack/pull/208) ([@hbcarlos](https://github.com/hbcarlos))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/voila-dashboards/voila-gridstack/graphs/contributors?from=2022-12-29&to=2023-04-18&type=c))
+
+[@github-actions](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Agithub-actions+updated%3A2022-12-29..2023-04-18&type=Issues) | [@hbcarlos](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ahbcarlos+updated%3A2022-12-29..2023-04-18&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.3.1
 
 ([Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/@voila-dashboards/gridstack-editor@0.3.0...cca7c2fb316850774778719f78ec7be395874802))
@@ -42,8 +58,6 @@
 ([GitHub contributors page for this release](https://github.com/voila-dashboards/voila-gridstack/graphs/contributors?from=2022-03-30&to=2022-12-29&type=c))
 
 [@anick16](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Aanick16+updated%3A2022-03-30..2022-12-29&type=Issues) | [@dependabot](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Adependabot+updated%3A2022-03-30..2022-12-29&type=Issues) | [@github-actions](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Agithub-actions+updated%3A2022-03-30..2022-12-29&type=Issues) | [@hbcarlos](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ahbcarlos+updated%3A2022-03-30..2022-12-29&type=Issues) | [@martinRenou](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3AmartinRenou+updated%3A2022-03-30..2022-12-29&type=Issues) | [@SylvainCorlay](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3ASylvainCorlay+updated%3A2022-03-30..2022-12-29&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.3.0
 
