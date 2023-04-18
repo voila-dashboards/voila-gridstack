@@ -89,7 +89,7 @@ export class GridStackLayout extends Layout {
       }
     );
 
-    this._grid.on('resizestop', (event, elem) => {
+    this._grid.on('resizestop', (event: Event, elem: GridItemHTMLElement) => {
       window.dispatchEvent(new Event('resize'));
     });
   }

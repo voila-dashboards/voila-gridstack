@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling>=1.9.0", "hatch-nodejs-version", "jupyterlab~=3.1", "jupyterlab_widgets~=3.0", "voila>=0.2,<0.5"]
+requires = ["hatchling>=1.9.0", "hatch-nodejs-version", "jupyterlab~=3.6", "jupyterlab_widgets~=3.0", "voila>=0.2,<0.5"]
 build-backend = "hatchling.build"
 
 [project]
@@ -27,7 +27,7 @@ dynamic = ["version", "description", "authors", "urls", "keywords"]
 [project.optional-dependencies]
 dev = [
     "click",
-    "jupyter_releaser~=0.9",
+    "jupyter_releaser",
     "hatch",
     "hatch-nodejs-version"
 ]
@@ -50,6 +50,10 @@ source = "nodejs"
 [tool.hatch.metadata.hooks.nodejs]
 fields = ["description", "authors", "urls"]
 
+[tool.hatch.build.targets.sdist]
+artifacts = ["/voila_gridstack/labextension", "/voila_gridstack/nbextension", "/voila_gridstack/template", "/voila_gridstack/config"]
+exclude = ["/.github", "/binder", "node_modules"]
+
 [tool.hatch.build.targets.wheel.shared-data]
 "voila_gridstack/config/jpserver-voila-gridstack.json" = "etc/jupyter/jupyter_server_config.d/jpserver-voila-gridstack.json"
 "voila_gridstack/config/nbserver-voila-gridstack.json" = "etc/jupyter/jupyter_notebook_config.d/nbserver-voila-gridstack.json"
@@ -59,9 +63,6 @@ fields = ["description", "authors", "urls"]
 "voila_gridstack/nbextension" = "share/jupyter/nbextensions/voila-gridstack"
 "voila_gridstack/template" = "share/jupyter/nbconvert/templates/gridstack"
 
-[tool.hatch.build.targets.sdist]
-exclude = [".github"]
-
 [tool.hatch.build.hooks.jupyter-builder]
 dependencies = ["hatch-jupyter-builder>=0.6.2"]
 build-function = "hatch_jupyter_builder.npm_builder"
@@ -69,19 +70,28 @@ ensured-targets = ["voila_gridstack/labextension/static/style.js", "voila_gridst
 skip-if-exists = ["voila_gridstack/labextension/static/style.js"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
+npm = ["jlpm"]
 build_cmd = "build:prod"
-npm = ["jlpm"]
-
-[tool.hatch.build.hooks.jupyter-builder.editable-build-kwargs]
-build_cmd = "build"
-npm = ["jlpm"]
+editable_build_cmd = "install:extension"
 
 [tool.jupyter-releaser]
 skip = ["check-links"]
 
 [tool.jupyter-releaser.hooks]
-before-build-npm = ["python -m pip install jupyterlab~=3.1", "jlpm", "jlpm build:prod"]
-before-build-python = ["jlpm clean:all"]
+before-build-npm = [
+    "python -m pip install jupyterlab~=3.6",
+    "jlpm",
+    "jlpm build:prod"
+]
+before-build-python = [
+    # Build the assets
+    "jlpm build:prod",
+    # Clean the build artifacts to not include them in sdist
+    "jlpm clean:lib"
+]
 
 [tool.jupyter-releaser.options]
 version_cmd = "hatch version"
+
+[tool.check-wheel-contents]
+ignore = ["W002"]
