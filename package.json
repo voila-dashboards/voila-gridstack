@@ -77,7 +77,7 @@
         "@lumino/messaging": "^1.10.0",
         "@lumino/signaling": "^1.10.0",
         "@lumino/widgets": "^1.37.2",
-        "gridstack": "^6.0.1",
+        "gridstack": "^7.3.0",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
         "yjs": "^13.5.17"
