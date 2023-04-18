@@ -24,7 +24,7 @@ import { SimplifiedOutputArea } from '@jupyterlab/outputarea';
 
 import { IObservableUndoableList } from '@jupyterlab/observables';
 
-import { YNotebook, createMutex } from '@jupyterlab/shared-models';
+import { YNotebook, createMutex } from '@jupyter/ydoc';
 
 import { Widget } from '@lumino/widgets';
 
