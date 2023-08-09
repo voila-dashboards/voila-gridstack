@@ -71,7 +71,7 @@ By default the position of cells in the dashboard will be fixed. If you want the
 and resizable, you can launch voila with the `show_handles` resource set to `True`:
 
 ```
-voila --template=gridstack examples/ --VoilaConfiguration.resources='{"gridstack": {"show_handles": True}}'
+voila --template=gridstack examples/ --VoilaConfiguration.resources="{'gridstack': {'show_handles': True}}"
 ```
 
 Note, however, that the state of the dashboard can not be persisted in the notebook.
