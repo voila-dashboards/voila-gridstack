@@ -51,7 +51,7 @@ export class GridStackWidget extends Widget {
     this.addClass('grid-editor');
     this._model = model;
 
-    this.layout = new GridStackLayout(this._model.info);
+    this._gridlayout = new GridStackLayout(this._model.info);
     this.layout.gridItemChanged.connect(this._onGridItemChange, this);
 
     this._model.ready.connect(() => {
@@ -60,6 +60,27 @@ export class GridStackWidget extends Widget {
       this._model.cellPinned.connect(this._lockCell, this);
       this._model.contentChanged.connect(this._updateGridItems, this);
     });
+  }
+
+  get layout(): GridStackLayout {
+    return this._gridlayout;
+  }
+
+  set layout(value: GridStackLayout) {
+    if (this._gridlayout === value) {
+      return;
+    }
+    if (this.testFlag(Widget.Flag.DisallowLayout)) {
+      throw new Error('Cannot set widget layout.');
+    }
+    if (this._gridlayout) {
+      throw new Error('Cannot change widget layout.');
+    }
+    if (value!.parent) {
+      throw new Error('Cannot change layout parent.');
+    }
+    this._gridlayout = value;
+    value!.parent = this;
   }
 
   /**
@@ -733,8 +754,7 @@ export class GridStackWidget extends Widget {
     }
   }
 
-  //@ts-ignore
-  layout: GridStackLayout;
+  private _gridlayout: GridStackLayout;
 
   private _model: GridStackModel;
   private _shadowWidget: GridItemHTMLElement | null = null;
