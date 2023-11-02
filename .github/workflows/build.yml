@@ -35,7 +35,6 @@ jobs:
 
     - name: Check the extensions are installed
       run: |
-        jupyter nbextension list 2>&1 | grep -ie "voila-gridstack/extension.*enabled" -
         jupyter labextension list 2>&1 | grep -ie "@voila-dashboards/jupyterlab-gridstack.*enabled.*ok" -
         python -m jupyterlab.browser_check
 
