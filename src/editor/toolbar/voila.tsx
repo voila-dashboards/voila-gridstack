@@ -18,7 +18,7 @@ export default class Voila extends ReactWidget {
   render(): JSX.Element {
     const onClick = (): void => {
       const baseUrl = PageConfig.getBaseUrl();
-      const conf = '?voila-template=gridstack';
+      const conf = '?template=gridstack';
       const win = window.open(
         `${baseUrl}voila/render/${this._path + conf}`,
         '_blank'

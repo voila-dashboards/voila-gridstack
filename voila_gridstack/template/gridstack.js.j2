@@ -13,7 +13,8 @@
     const resize_workaround = debounce(() => {
         window.dispatchEvent(new Event('resize'));
     }, 100)
-    window.onload = function () {
+
+    const initGrid =  () => {
         GridStack.init({
             alwaysShowResizeHandle: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
             float: true,
@@ -50,6 +51,16 @@
 
         setCellNrs();
     }
+  const delay = async (ms = 1000) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+  window.onload = async function () {
+    const node = document.getElementById('rendered_cells');
+    while (!window.themeLoaded || !window.cellLoaded || node.offsetHeight < 30) {
+      await delay(100);
+    }
+    initGrid();
+  };
+
 </script>
 <script type="text/javascript">
   function updateConfig() {

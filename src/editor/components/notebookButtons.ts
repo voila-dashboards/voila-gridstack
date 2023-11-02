@@ -80,7 +80,7 @@ export class VoilaButton
       onClick: () => {
         const baseUrl = PageConfig.getBaseUrl();
         const win = window.open(
-          `${baseUrl}voila/render/${panel.context.path}?voila-template=gridstack`,
+          `${baseUrl}voila/render/${panel.context.path}?template=gridstack`,
           '_blank'
         );
         win?.focus();

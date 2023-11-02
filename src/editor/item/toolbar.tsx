@@ -34,14 +34,14 @@ export class GridStackItemToolbar extends ReactWidget {
       <>
         {this._model.isLocked ? (
           <button
-            className="bp3-button bp3-minimal jp-toolbar-button pin"
+            className="gridstack-toolbar-button jp-toolbar-button pin"
             onClick={() => this._model.unlock()}
           >
             <unPinIcon.react className="jp-react-button" />
           </button>
         ) : (
           <button
-            className="bp3-button bp3-minimal jp-toolbar-button pin"
+            className="gridstack-toolbar-button jp-toolbar-button pin"
             onClick={() => this._model.lock()}
           >
             <pinIcon.react className="jp-react-button" />
@@ -49,7 +49,7 @@ export class GridStackItemToolbar extends ReactWidget {
         )}
         <div className="grid-item-toolbar-spacer" />
         <button
-          className="bp3-button bp3-minimal jp-toolbar-button trash-can"
+          className="gridstack-toolbar-button jp-toolbar-button trash-can"
           onClick={() => this._model.close()}
         >
           <deleteIcon.react className="jp-react-button" />
