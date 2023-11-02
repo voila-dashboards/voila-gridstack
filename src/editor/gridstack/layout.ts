@@ -144,16 +144,16 @@ export class GridStackLayout extends Layout {
     this._prepareGrid();
   }
 
-    /**
+  /**
    * Create an iterator over the widgets in the layout.
    *
    * @returns A new iterator over the widgets in the layout.
    */
-    *[Symbol.iterator](): IterableIterator<Widget> {
-      for (const item of this._gridItems) {
-        yield item;
-      }
+  *[Symbol.iterator](): IterableIterator<Widget> {
+    for (const item of this._gridItems) {
+      yield item;
     }
+  }
 
   /**
    * Remove a widget from the layout.
