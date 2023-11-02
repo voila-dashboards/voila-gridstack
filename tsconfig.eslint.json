@@ -1,5 +1,7 @@
 {
   "extends": "./tsconfig",
   "include": ["src/**/*", "style/**/*"],
-  "types": ["jest"]
+  "compilerOptions": {
+    "types": ["jest"]
+  }
 }

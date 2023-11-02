@@ -181,8 +181,7 @@ export class GridStackWidget extends Widget {
       const model = cells.get(i);
       this._model.execute(model);
       const info = this._model.getCellInfo(model.id);
-
-      if (info && !info.hidden && model.value.text.length !== 0) {
+      if (info && !info.hidden && model.sharedModel.source.length !== 0) {
         const item = this._model.createCell(model, info.locked);
         this.layout.addGridItem(model.id, item, info);
       }
@@ -239,7 +238,12 @@ export class GridStackWidget extends Widget {
       const item = items?.find((value) => value.gridstackNode?.id === model.id);
 
       // If the cell is not in gridstack but it should add to gridstack
-      if (!item && info && !info.hidden && model.value.text.length !== 0) {
+      if (
+        !item &&
+        info &&
+        !info.hidden &&
+        model.sharedModel.source.length !== 0
+      ) {
         // Add this cell to the gridstack
         if (
           model.type === 'code' &&
@@ -269,12 +273,22 @@ export class GridStackWidget extends Widget {
         }
       }
 
-      if (item && info && !info.hidden && model.value.text.length !== 0) {
+      if (
+        item &&
+        info &&
+        !info.hidden &&
+        model.sharedModel.source.length !== 0
+      ) {
         this.layout.updateGridItem(model.id, info);
         continue;
       }
 
-      if (item && info && !info.hidden && model.value.text.length === 0) {
+      if (
+        item &&
+        info &&
+        !info.hidden &&
+        model.sharedModel.source.length === 0
+      ) {
         this._model.hideCell(model.id);
         this.layout.removeGridItem(model.id);
         continue;
@@ -546,7 +560,7 @@ export class GridStackWidget extends Widget {
           this.layout.addGridItem(widget.model.id, item, info);
         } else if (
           widget.model.type !== 'code' &&
-          widget.model.value.text.length !== 0
+          widget.model.sharedModel.source.length !== 0
         ) {
           info.hidden = false;
           info.col = col;
@@ -622,7 +636,7 @@ export class GridStackWidget extends Widget {
           return { droppable: true };
         } else if (
           widget.model.type !== 'code' &&
-          widget.model.value.text.length !== 0
+          widget.model.sharedModel.source.length !== 0
         ) {
           return { droppable: true };
         } else {
@@ -719,6 +733,7 @@ export class GridStackWidget extends Widget {
     }
   }
 
+  //@ts-ignore
   layout: GridStackLayout;
 
   private _model: GridStackModel;
