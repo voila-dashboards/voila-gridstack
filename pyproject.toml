@@ -1,5 +1,11 @@
 [build-system]
-requires = ["hatchling>=1.9.0", "hatch-nodejs-version", "jupyterlab~=3.6", "jupyterlab_widgets~=3.0", "voila>=0.2,<0.5"]
+requires = [
+    "hatchling>=1.9.0",
+    "hatch-nodejs-version",
+    "jupyterlab>=4.0.0,<5",
+    "jupyterlab_widgets~=3.0",
+    "voila>=0.2,<0.6",
+]
 build-backend = "hatchling.build"
 
 [project]
@@ -7,11 +13,11 @@ name = "voila-gridstack"
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.7"
-dependencies = ["jupyterlab_widgets~=3.0", "voila>=0.2.0,<0.5.0"]
+dependencies = ["jupyterlab_widgets~=3.0", "voila>=0.2,<0.6"]
 classifiers = [
     "Framework :: Jupyter",
     "Framework :: Jupyter :: JupyterLab",
-    "Framework :: Jupyter :: JupyterLab :: 3",
+    "Framework :: Jupyter :: JupyterLab :: 4",
     "Framework :: Jupyter :: JupyterLab :: Extensions",
     "Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt",
     "License :: OSI Approved :: BSD License",
@@ -25,24 +31,9 @@ classifiers = [
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
 [project.optional-dependencies]
-dev = [
-    "click",
-    "jupyter_releaser",
-    "hatch",
-    "hatch-nodejs-version"
-]
-test = [
-    "ipykernel",
-    "lxml",
-    "nbconvert==6.5.0",
-    "pytest",
-    "pytest-tornasync",
-]
-docs = [
-    "sphinx",
-    "myst-parser",
-    "pydata-sphinx-theme"
-]
+dev = ["click", "jupyter_releaser", "hatch", "hatch-nodejs-version"]
+test = ["ipykernel", "lxml", "nbconvert==6.5.0", "pytest", "pytest-tornasync"]
+docs = ["sphinx", "myst-parser", "pydata-sphinx-theme"]
 
 [tool.hatch.version]
 source = "nodejs"
@@ -51,7 +42,12 @@ source = "nodejs"
 fields = ["description", "authors", "urls"]
 
 [tool.hatch.build.targets.sdist]
-artifacts = ["/voila_gridstack/labextension", "/voila_gridstack/nbextension", "/voila_gridstack/template", "/voila_gridstack/config"]
+artifacts = [
+    "/voila_gridstack/labextension",
+    "/voila_gridstack/nbextension",
+    "/voila_gridstack/template",
+    "/voila_gridstack/config",
+]
 exclude = ["/.github", "/binder", "node_modules"]
 
 [tool.hatch.build.targets.wheel.shared-data]
@@ -66,7 +62,10 @@ exclude = ["/.github", "/binder", "node_modules"]
 [tool.hatch.build.hooks.jupyter-builder]
 dependencies = ["hatch-jupyter-builder>=0.6.2"]
 build-function = "hatch_jupyter_builder.npm_builder"
-ensured-targets = ["voila_gridstack/labextension/static/style.js", "voila_gridstack/labextension/package.json"]
+ensured-targets = [
+    "voila_gridstack/labextension/static/style.js",
+    "voila_gridstack/labextension/package.json",
+]
 skip-if-exists = ["voila_gridstack/labextension/static/style.js"]
 
 [tool.hatch.build.hooks.jupyter-builder.build-kwargs]
@@ -81,13 +80,13 @@ skip = ["check-links"]
 before-build-npm = [
     "python -m pip install jupyterlab~=3.6",
     "jlpm",
-    "jlpm build:prod"
+    "jlpm build:prod",
 ]
 before-build-python = [
     # Build the assets
     "jlpm build:prod",
     # Clean the build artifacts to not include them in sdist
-    "jlpm clean:lib"
+    "jlpm clean:lib",
 ]
 
 [tool.jupyter-releaser.options]

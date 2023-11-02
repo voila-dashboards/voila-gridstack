@@ -1,7 +1,5 @@
 import { Layout, Widget } from '@lumino/widgets';
 
-import { IIterator, ArrayIterator } from '@lumino/algorithm';
-
 import { Signal, ISignal } from '@lumino/signaling';
 
 import { Message, MessageLoop } from '@lumino/messaging';
@@ -146,12 +144,16 @@ export class GridStackLayout extends Layout {
     this._prepareGrid();
   }
 
-  /**
+    /**
    * Create an iterator over the widgets in the layout.
+   *
+   * @returns A new iterator over the widgets in the layout.
    */
-  iter(): IIterator<Widget> {
-    return new ArrayIterator(this._gridItems);
-  }
+    *[Symbol.iterator](): IterableIterator<Widget> {
+      for (const item of this._gridItems) {
+        yield item;
+      }
+    }
 
   /**
    * Remove a widget from the layout.

@@ -6,7 +6,10 @@ import {
   StaticNotebook,
 } from '@jupyterlab/notebook';
 
-import { IEditorMimeTypeService } from '@jupyterlab/codeeditor';
+import {
+  IEditorFactoryService,
+  IEditorMimeTypeService,
+} from '@jupyterlab/codeeditor';
 
 import { IRenderMimeRegistry } from '@jupyterlab/rendermime';
 
@@ -32,7 +35,10 @@ export class VoilaGridStackWidgetFactory extends ABCWidgetFactory<
     super(options);
     this.rendermime = options.rendermime;
     this.contentFactory =
-      options.contentFactory || NotebookPanel.defaultContentFactory;
+      options.contentFactory ||
+      new NotebookPanel.ContentFactory({
+        editorFactory: options.editorFactoryService.newInlineEditor,
+      });
     this.mimeTypeService = options.mimeTypeService;
     this._editorConfig =
       options.editorConfig || StaticNotebook.defaultEditorConfig;
@@ -128,6 +134,11 @@ export namespace VoilaGridStackWidgetFactory {
      * The service used to look up mime types.
      */
     mimeTypeService: IEditorMimeTypeService;
+
+    /**
+     * The service used to create default panel.
+     */
+    editorFactoryService: IEditorFactoryService;
 
     /**
      * The notebook cell editor configuration.

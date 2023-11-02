@@ -20,6 +20,11 @@ import { IVoilaGridStackTracker, VoilaGridStackWidget } from './widget';
 
 import { VoilaButton, EditorButton } from './components/notebookButtons';
 
+export namespace CommandIDs {
+  export const undo = 'grideditor:undo';
+
+  export const redo = 'grideditor:redo';
+}
 /**
  * The main editor plugin.
  */
@@ -45,6 +50,7 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridStackTracker> = {
     const tracker = new WidgetTracker<VoilaGridStackWidget>({
       namespace: 'jupyterlab-gridstack',
     });
+    const { commands } = app;
 
     if (restorer) {
       restorer.restore(tracker, {
@@ -69,6 +75,7 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridStackTracker> = {
       editorConfig: StaticNotebook.defaultEditorConfig,
       notebookConfig: StaticNotebook.defaultNotebookConfig,
       mimeTypeService: editorServices.mimeTypeService,
+      editorFactoryService: editorServices.factoryService,
     });
 
     factory.widgetCreated.connect((sender, widget) => {
@@ -81,11 +88,44 @@ export const editor: JupyterFrontEndPlugin<IVoilaGridStackTracker> = {
       app.commands.notifyCommandChanged();
     });
 
+    const isEnabled = () => {
+      const widget = tracker.currentWidget;
+
+      if (!widget) {
+        return false;
+      }
+      return true;
+    };
+
+    commands.addCommand(CommandIDs.redo, {
+      execute: () => {
+        const widget = tracker.currentWidget;
+        if (!widget) {
+          return;
+        }
+        widget.redo();
+      },
+      isEnabled,
+    });
+
+    commands.addCommand(CommandIDs.undo, {
+      execute: () => {
+        const widget = tracker.currentWidget;
+        if (!widget) {
+          return;
+        }
+        widget.undo();
+      },
+      isEnabled,
+    });
+
     // Add undo/redo hooks to the edit menu.
-    mainMenu.editMenu.undoers.add({
-      tracker,
-      undo: (widget: any) => widget.undo(),
-      redo: (widget: any) => widget.redo(),
+    mainMenu.editMenu.undoers.undo.add({
+      id: CommandIDs.undo,
+    });
+    // Add undo/redo hooks to the edit menu.
+    mainMenu.editMenu.undoers.redo.add({
+      id: CommandIDs.redo,
     });
 
     app.docRegistry.addWidgetFactory(factory);

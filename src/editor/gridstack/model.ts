@@ -1,4 +1,5 @@
 import {
+  CellList,
   INotebookModel,
   NotebookPanel,
   StaticNotebook,
@@ -21,8 +22,6 @@ import { IEditorMimeTypeService } from '@jupyterlab/codeeditor';
 import { DocumentRegistry } from '@jupyterlab/docregistry';
 
 import { SimplifiedOutputArea } from '@jupyterlab/outputarea';
-
-import { IObservableUndoableList } from '@jupyterlab/observables';
 
 import { YNotebook, createMutex } from '@jupyter/ydoc';
 
@@ -205,7 +204,7 @@ export class GridStackModel {
   /**
    * The Notebook's cells.
    */
-  get cells(): IObservableUndoableList<ICellModel> {
+  get cells(): CellList {
     return this._context.model.cells;
   }
 
@@ -336,7 +335,6 @@ export class GridStackModel {
           rendermime: this.rendermime,
           contentFactory: this.contentFactory,
           editorConfig: this._editorConfig.code,
-          updateEditorOnShow: true,
         });
 
         item = new SimplifiedOutputArea({
@@ -353,7 +351,6 @@ export class GridStackModel {
           rendermime: this.rendermime,
           contentFactory: this.contentFactory,
           editorConfig: this._editorConfig.markdown,
-          updateEditorOnShow: false,
         });
         markdownCell.inputHidden = false;
         markdownCell.rendered = true;
@@ -367,7 +364,6 @@ export class GridStackModel {
           model: cellModel as RawCellModel,
           contentFactory: this.contentFactory,
           editorConfig: this._editorConfig.raw,
-          updateEditorOnShow: false,
         });
         rawCell.inputHidden = false;
         Private.removeElements(rawCell.node, 'jp-Collapser');
@@ -403,11 +399,10 @@ export class GridStackModel {
       rendermime: this.rendermime,
       contentFactory: this.contentFactory,
       editorConfig: this._editorConfig.code,
-      updateEditorOnShow: true,
     });
 
     SimplifiedOutputArea.execute(
-      cell.value.text,
+      cell.sharedModel.source,
       codeCell.outputArea,
       this._context.sessionContext
     )
