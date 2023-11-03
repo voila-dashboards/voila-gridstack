@@ -95,7 +95,7 @@
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-react": "^7.26.1",
         "husky": "^3",
-        "jest": "^26.4.2",
+        "jest": "^29.0.0",
         "jest-junit": "^11.1.0",
         "jest-raw-loader": "^1.0.1",
         "jest-summary-reporter": "^0.0.2",
@@ -104,7 +104,7 @@
         "prettier": "^2.4.1",
         "rimraf": "^3.0.2",
         "shell-quote": "^1.7.2",
-        "ts-jest": "^26.4.4",
+        "ts-jest": "^29.0.0",
         "typescript": "~5.0.2"
     },
     "publishConfig": {
