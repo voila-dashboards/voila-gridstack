@@ -3,16 +3,17 @@ from lxml import etree
 import pytest
 from conftest import BASE_DIR
 
+
 @pytest.fixture
 def voila_args():
-    nb_path = os.path.join(BASE_DIR, 'nb_report.ipynb')
-    return [nb_path, '--VoilaTest.config_file_paths=[]']
+    nb_path = os.path.join(BASE_DIR, "nb_report.ipynb")
+    return [nb_path, "--VoilaTest.config_file_paths=[]"]
 
 
 async def test_report_view(http_server_client, base_url):
     response = await http_server_client.fetch(base_url)
     assert response.code == 200
-    html_body = response.body.decode('utf-8')
+    html_body = response.body.decode("utf-8")
 
     parser = etree.HTMLParser()
     tree = etree.fromstring(html_body, parser=parser)
@@ -26,7 +27,9 @@ async def test_report_view(http_server_client, base_url):
     header = tree.xpath("//*[contains(text(), 'Graphics')]")
     assert header
 
-    circle_tag = tree.xpath("//svg/circle")
+    circle_tag = tree.xpath(
+        "//script[contains(text(), 'image/svg+xml') and contains(text(), 'hsl')]"
+    )
     assert circle_tag
 
     voila_caption_tag = tree.xpath("//p[contains(text(), 'Voilà logo')]")

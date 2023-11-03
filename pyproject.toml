@@ -32,7 +32,7 @@ dynamic = ["version", "description", "authors", "urls", "keywords"]
 
 [project.optional-dependencies]
 dev = ["click", "jupyter_releaser", "hatch", "hatch-nodejs-version"]
-test = ["ipykernel", "lxml", "nbconvert==6.5.0", "pytest", "pytest-tornasync"]
+test = ["ipykernel", "lxml", "nbconvert>=6.4.5,<8", "pytest", "pytest-tornasync"]
 docs = ["sphinx", "myst-parser", "pydata-sphinx-theme"]
 
 [tool.hatch.version]
