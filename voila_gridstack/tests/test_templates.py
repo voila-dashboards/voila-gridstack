@@ -25,7 +25,7 @@ async def test_template_test(http_server_client, base_url):
     assert elem.attrib['gs-y'] == '0'
 
     # test cell "2"
-    elem = tree.xpath("//pre[text()='2']/ancestor::div[@class='grid-stack-item']")[0]
+    elem = tree.xpath("//script[contains(text(), '2') and contains(text(), 'text/plain')]/ancestor::div[@class='grid-stack-item']")[0]
     assert elem.attrib['gs-w'] == '4'
     assert elem.attrib['gs-h'] == '4'
     assert elem.attrib['gs-x'] == '6'

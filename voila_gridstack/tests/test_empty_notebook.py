@@ -16,14 +16,13 @@ async def test_render_without_metadata(http_server_client, base_url):
 
     parser = etree.HTMLParser()
     tree = etree.fromstring(html_body, parser=parser)
-
     text_elem = tree.xpath("//pre[text()='Hi !\n']")
     assert text_elem
 
     hidden_elem = tree.xpath("//*[text()='This is a hidden cell.']")
     assert hidden_elem
 
-    expr_elem = tree.xpath("//pre[text()='2']")
+    expr_elem = tree.xpath("//script[contains(text(), '2') and contains(text(), 'text/plain')]")
     assert expr_elem
 
     md_elem = tree.xpath("//h1[text()='This is markdown']")
