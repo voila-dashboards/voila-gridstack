@@ -1,0 +1,24 @@
+{
+  "name": "voila-gridstack-ui-tests",
+  "version": "1.0.0",
+  "description": "Voila gridstack Ui Tests",
+  "private": true,
+  "scripts": {
+    "copy": "rimraf exampes && copyup ../examples/* ui-tests",
+    "start": "jlpm copy && jupyter labextension disable '@jupyterlab/apputils-extension:announcements' && jupyter lab --config jupyter_server_test_config.py",
+    "start:detached": "yarn run start&",
+    "test": "npx playwright test",
+    "test:debug": "PWDEBUG=1 npx playwright test",
+    "test:report": "http-server ./playwright-report -a localhost -o",
+    "test:update": "npx playwright test --update-snapshots"
+  },
+  "author": "Project Jupyter",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "@jupyterlab/galata": "^5.0.0-beta.0"
+  },
+  "devDependencies": {
+    "copyfiles": "^2.4.1",
+    "rimraf": "^3.0.2"
+  }
+}

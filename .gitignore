@@ -116,3 +116,9 @@ _temp_extension
 junit.xml
 [uU]ntitled*
 .yarn/
+
+ui-tests/playwright-report
+ui-tests/test-results
+ui-tests/benchmark-results
+ui-tests/jlab_root
+ui-tests/examples
