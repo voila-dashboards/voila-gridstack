@@ -35,7 +35,7 @@ jobs:
           python -m pip install ".[test]"
           jlpm run build
           jlpm run develop
-          jupyter labextension develop . --overwrite
+          jupyter labextension list
           cd ui-tests
           jlpm install
 
