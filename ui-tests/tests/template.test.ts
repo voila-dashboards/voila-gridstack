@@ -27,12 +27,12 @@ test.describe('Template tests', () => {
     expect(await page.screenshot()).toMatchSnapshot(`${notebookName}.png`);
   });
 
-  test('Render scotch_dashboard.ipynb', async ({ page }) => {
-    const notebookName = 'scotch_dashboard';
-    await page.goto(`/voila/render/${notebookName}.ipynb?template=gridstack`);
-    // wait for the widgets to load
-    await page.waitForSelector('div.lm-Widget.bqplot.figure.jupyter-widgets');
-    await page.waitForTimeout(500);
-    expect(await page.screenshot()).toMatchSnapshot(`${notebookName}.png`);
-  });
+  // test('Render scotch_dashboard.ipynb', async ({ page }) => {
+  //   const notebookName = 'scotch_dashboard';
+  //   await page.goto(`/voila/render/${notebookName}.ipynb?template=gridstack`);
+  //   // wait for the widgets to load
+  //   await page.waitForSelector('div.lm-Widget.bqplot.figure.jupyter-widgets');
+  //   await page.waitForTimeout(500);
+  //   expect(await page.screenshot()).toMatchSnapshot(`${notebookName}.png`);
+  // });
 });

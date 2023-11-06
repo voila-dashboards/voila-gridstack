@@ -56,8 +56,10 @@
   window.onload = async function () {
     const node = document.getElementById('rendered_cells');
     while (!window.themeLoaded || !window.cellLoaded || node.offsetHeight < 30) {
+      console.log('waiting', window.themeLoaded, window.cellLoaded, node.offsetHeight)
       await delay(100);
     }
+    console.log('done', window.themeLoaded, window.cellLoaded, node.offsetHeight)
     initGrid();
   };
 
