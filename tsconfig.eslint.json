@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig",
-  "include": ["src/**/*", "style/**/*"],
+  "include": ["src/**/*", "style/**/*", "ui-tests/**/*"],
   "compilerOptions": {
     "types": ["jest"]
   }
