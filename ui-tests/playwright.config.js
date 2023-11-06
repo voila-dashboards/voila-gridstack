@@ -6,7 +6,7 @@ module.exports = {
     trace: 'on-first-retry',
     video: 'retain-on-failure',
   },
-  retries: 0,
+  retries: 1,
   expect: {
     toMatchSnapshot: {
       maxDiffPixelRatio: 0.01,
