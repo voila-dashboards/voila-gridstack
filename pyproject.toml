@@ -54,6 +54,7 @@ source = "nodejs"
 [tool.hatch.metadata.hooks.nodejs]
 fields = ["description", "authors", "urls"]
 
+
 [tool.hatch.build.targets.sdist]
 artifacts = [
     "/voila_gridstack/labextension",
@@ -61,7 +62,7 @@ artifacts = [
     "/voila_gridstack/template",
     "/voila_gridstack/config",
 ]
-exclude = ["/.github", "/binder", "node_modules"]
+exclude = ["/.github", "/binder", "node_modules", "assets", "docs", "examples"]
 
 [tool.hatch.build.targets.wheel.shared-data]
 "voila_gridstack/config/jpserver-voila-gridstack.json" = "etc/jupyter/jupyter_server_config.d/jpserver-voila-gridstack.json"
