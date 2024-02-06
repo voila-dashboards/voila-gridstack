@@ -2,6 +2,36 @@
 
 <!-- <START NEW CHANGELOG ENTRY> -->
 
+## 0.4.0
+
+([Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/v0.4.0a0...b99a21a8ad74a59ce9d55ecc217fbd58c52eaa2a))
+
+### Enhancements made
+
+- Lab 4 Voila 0.5 migration [#216](https://github.com/voila-dashboards/voila-gridstack/pull/216) ([@trungleduc](https://github.com/trungleduc))
+
+### Maintenance and upkeep improvements
+
+- Add releaser CI scripts [#217](https://github.com/voila-dashboards/voila-gridstack/pull/217) ([@trungleduc](https://github.com/trungleduc))
+- Lab 4 Voila 0.5 migration [#216](https://github.com/voila-dashboards/voila-gridstack/pull/216) ([@trungleduc](https://github.com/trungleduc))
+
+### Documentation improvements
+
+- Correct README.md [#213](https://github.com/voila-dashboards/voila-gridstack/pull/213) ([@jpjon](https://github.com/jpjon))
+
+### Other merged PRs
+
+- Bump webpack from 5.74.0 to 5.76.1 [#206](https://github.com/voila-dashboards/voila-gridstack/pull/206) ([@dependabot](https://github.com/dependabot))
+- Bump json5 from 1.0.1 to 1.0.2 [#202](https://github.com/voila-dashboards/voila-gridstack/pull/202) ([@dependabot](https://github.com/dependabot))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/voila-dashboards/voila-gridstack/graphs/contributors?from=2023-04-18&to=2024-02-06&type=c))
+
+[@dependabot](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Adependabot+updated%3A2023-04-18..2024-02-06&type=Issues) | [@github-actions](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Agithub-actions+updated%3A2023-04-18..2024-02-06&type=Issues) | [@jpjon](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ajpjon+updated%3A2023-04-18..2024-02-06&type=Issues) | [@jtpio](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ajtpio+updated%3A2023-04-18..2024-02-06&type=Issues) | [@martinRenou](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3AmartinRenou+updated%3A2023-04-18..2024-02-06&type=Issues) | [@trungleduc](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Atrungleduc+updated%3A2023-04-18..2024-02-06&type=Issues)
+
+<!-- <END NEW CHANGELOG ENTRY> -->
+
 ## 0.4.0a0
 
 ([Full Changelog](https://github.com/voila-dashboards/voila-gridstack/compare/v0.3.1...4f400370ffb47981b6f0f29c1d6bd1487723434e))
@@ -15,8 +45,6 @@
 ([GitHub contributors page for this release](https://github.com/voila-dashboards/voila-gridstack/graphs/contributors?from=2022-12-29&to=2023-04-18&type=c))
 
 [@github-actions](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Agithub-actions+updated%3A2022-12-29..2023-04-18&type=Issues) | [@hbcarlos](https://github.com/search?q=repo%3Avoila-dashboards%2Fvoila-gridstack+involves%3Ahbcarlos+updated%3A2022-12-29..2023-04-18&type=Issues)
-
-<!-- <END NEW CHANGELOG ENTRY> -->
 
 ## 0.3.1
 
