@@ -2121,20 +2121,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jupyter/ydoc@npm:~1.0.2":
-  version: 1.0.2
-  resolution: "@jupyter/ydoc@npm:1.0.2"
-  dependencies:
-    "@jupyterlab/nbformat": ^3.0.0 || ^4.0.0-alpha.21 || ^4.0.0
-    "@lumino/coreutils": ^1.11.0 || ^2.0.0
-    "@lumino/disposable": ^1.10.0 || ^2.0.0
-    "@lumino/signaling": ^1.10.0 || ^2.0.0
-    y-protocols: ^1.0.5
-    yjs: ^13.5.40
-  checksum: 739f9630940466b3cfcd7b742dd06479f81772ca13f863d057af0bbb5e318829506969066ab72977e7c721644982b5c8f88cf44e1ae81955ed1c27e87632d1f2
-  languageName: node
-  linkType: hard
-
 "@jupyterlab/application@npm:^3.0.0 || ^4.0.0, @jupyterlab/application@npm:^4.0.0, @jupyterlab/application@npm:^4.0.7":
   version: 4.0.7
   resolution: "@jupyterlab/application@npm:4.0.7"
@@ -3662,7 +3648,7 @@ __metadata:
     "@babel/preset-env": ^7.10.2
     "@jupyter-widgets/base": ^6.0.6
     "@jupyter-widgets/jupyterlab-manager": ^5.0.9
-    "@jupyter/ydoc": ~1.0.2
+    "@jupyter/ydoc": ^1.0.2
     "@jupyterlab/application": ^4.0.0
     "@jupyterlab/apputils": ^4.0.0
     "@jupyterlab/builder": ^4.0.0
