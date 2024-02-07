@@ -15,7 +15,7 @@
   "author": "Project Jupyter",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "@jupyterlab/galata": "^5.0.0-beta.0"
+    "@jupyterlab/galata": "^5.1.0"
   },
   "devDependencies": {
     "copyfiles": "^2.4.1",
